@@ -26,6 +26,7 @@ import com.google.api.ads.adwords.axis.v201802.cm.CampaignServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.Selector;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
+import com.google.api.ads.adwords.lib.selectorfields.v201802.cm.BudgetField;
 import com.google.api.ads.adwords.lib.selectorfields.v201802.cm.CampaignField;
 import com.google.api.ads.common.lib.auth.OfflineCredentials;
 import com.google.api.ads.common.lib.auth.OfflineCredentials.Api;
@@ -121,7 +122,11 @@ public class GetCampaigns {
     // Create selector.
     SelectorBuilder builder = new SelectorBuilder();
     Selector selector = builder
-        .fields(CampaignField.Id, CampaignField.Name)
+        .fields(CampaignField.Id, 
+        		CampaignField.Name, 
+        		CampaignField.StartDate,
+        		CampaignField.EndDate,
+        		BudgetField.Amount)
         .orderAscBy(CampaignField.Name)
         .offset(offset)
         .limit(PAGE_SIZE)
@@ -135,8 +140,14 @@ public class GetCampaigns {
       // Display campaigns.
       if (page.getEntries() != null) {
         for (Campaign campaign : page.getEntries()) {
-          System.out.printf("Campaign with name '%s' and ID %d was found.%n", campaign.getName(),
-              campaign.getId());
+          //System.out.printf("Campaign with name '%s' and ID %d was found.%n", campaign.getName(),
+          //    campaign.getId());
+          System.out.println("Campanha");
+          System.out.println("Nome: " + campaign.getName());
+          System.out.println("Data Ini: " + campaign.getStartDate());
+          System.out.println("Data Final: " + campaign.getEndDate());
+          System.out.println("Orçamento: " + campaign.getBudget().getAmount().getMicroAmount()/1000);
+          
         }
       } else {
         System.out.println("No campaigns were found.");
