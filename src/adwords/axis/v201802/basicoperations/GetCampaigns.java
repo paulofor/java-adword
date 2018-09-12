@@ -126,6 +126,7 @@ public class GetCampaigns {
         		CampaignField.Name, 
         		CampaignField.StartDate,
         		CampaignField.EndDate,
+        		CampaignField.BiddingStrategyType,
         		BudgetField.Amount)
         .orderAscBy(CampaignField.Name)
         .offset(offset)
@@ -147,6 +148,7 @@ public class GetCampaigns {
           System.out.println("Data Ini: " + campaign.getStartDate());
           System.out.println("Data Final: " + campaign.getEndDate());
           System.out.println("Orçamento: " + campaign.getBudget().getAmount().getMicroAmount()/1000);
+          System.out.println("CampaignField.BiddingStrategyType: " + campaign.getBiddingStrategyConfiguration().getBiddingStrategyType());
           
         }
       } else {

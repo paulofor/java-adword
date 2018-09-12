@@ -40,13 +40,65 @@ public class CampanhaAdsService extends AdsService {
 	@Override
 	protected void runExample(AdWordsServicesInterface adWordsServices,
 			AdWordsSession session) throws RemoteException, ApiException {
-		BudgetServiceInterface budgetService = adWordsServices.get(session, BudgetServiceInterface.class);
+
+
+		CampaignServiceInterface campaignService = adWordsServices.get(session,
+				CampaignServiceInterface.class);
+
+
+		BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
+		biddingStrategyConfiguration.setBiddingStrategyType(BiddingStrategyType.TARGET_SPEND);
+
+		Money budgetAmount = new Money();
+		budgetAmount.setMicroAmount(1_100_000L);
+		Budget budget = new Budget();
+		//budget.setName("Bud_" + System.currentTimeMillis());
+		//budget.setAmount(budgetAmount);
+		
+		//BudgetOperation budgetOperation = new BudgetOperation();
+		//budgetOperation.setOperand(budget);
+		//budgetOperation.setOperator(Operator.ADD);
+
+		//BudgetServiceInterface budgetService = adWordsServices.get(session,	BudgetServiceInterface.class);
+		// Add the budget
+		//Long budgetId = budgetService.mutate(new BudgetOperation[] { budgetOperation }).getValue(0).getBudgetId();
+		//budget.setBudgetId(budgetId);
+		
+		Campaign campaign = new Campaign();
+		campaign.setName(campanha.getNome() + "__" + System.currentTimeMillis());
+		campaign.setStatus(CampaignStatus.PAUSED);
+		campaign.setStartDate(new DateTime().plusDays(1).toString("yyyyMMdd"));
+		campaign.setEndDate(new DateTime().plusDays(8).toString("yyyyMMdd"));
+		campaign.setAdvertisingChannelType(AdvertisingChannelType.SEARCH);
+		campaign.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
+		campaign.setBudget(budget);
+
+		// Create operations.
+		CampaignOperation operation = new CampaignOperation();
+		operation.setOperand(campaign);
+		operation.setOperator(Operator.ADD);
+		CampaignOperation[] operations = new CampaignOperation[] { operation };
+
+		// Add campaigns.
+		CampaignReturnValue result = campaignService.mutate(operations);
+
+		// Display campaigns.
+		for (Campaign campaignResult : result.getValue()) {
+			System.out.printf("Campanha com nome '%s' e ID %d foi criada.%n", campaignResult.getName(), campaignResult.getId());
+		}
+
+	}
+
+	protected void runExample2(AdWordsServicesInterface adWordsServices,
+			AdWordsSession session) throws RemoteException, ApiException {
+		BudgetServiceInterface budgetService = adWordsServices.get(session,	BudgetServiceInterface.class);
 
 		// Create a budget, which can be shared by multiple campaigns.
 		Budget sharedBudget = new Budget();
-		sharedBudget.setName("Bud_" +campanha.getNome());
+		sharedBudget.setName("Bud_" + campanha.getNome());
+
 		Money budgetAmount = new Money();
-		budgetAmount.setMicroAmount(1_000_000L);
+		budgetAmount.setMicroAmount(1_100_000L);
 		sharedBudget.setAmount(budgetAmount);
 		sharedBudget.setDeliveryMethod(BudgetBudgetDeliveryMethod.STANDARD);
 
@@ -85,7 +137,8 @@ public class CampanhaAdsService extends AdsService {
 		// You can optionally provide these field(s).
 		campaign.setStartDate(new DateTime().plusDays(1).toString("yyyyMMdd"));
 		campaign.setEndDate(new DateTime().plusDays(8).toString("yyyyMMdd"));
-		campaign.setFrequencyCap(new FrequencyCap(5L, TimeUnit.DAY,	Level.ADGROUP));
+		campaign.setFrequencyCap(new FrequencyCap(5L, TimeUnit.DAY,
+				Level.ADGROUP));
 
 		// Only the budgetId should be sent, all other fields will be ignored by
 		// CampaignService.
@@ -105,7 +158,8 @@ public class CampanhaAdsService extends AdsService {
 
 		// Set options that are not required.
 		GeoTargetTypeSetting geoTarget = new GeoTargetTypeSetting();
-		geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.DONT_CARE);
+		geoTarget
+				.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.DONT_CARE);
 		campaign.setSettings(new Setting[] { geoTarget });
 
 		// Create operations.
@@ -120,7 +174,9 @@ public class CampanhaAdsService extends AdsService {
 
 		// Display campaigns.
 		for (Campaign campaignResult : result.getValue()) {
-			System.out.printf("Campanha com nome name '%s' e ID %d foi criada.%n", campaignResult.getName(), campaignResult.getId());
+			System.out.printf(
+					"Campanha com nome name '%s' e ID %d foi criada.%n",
+					campaignResult.getName(), campaignResult.getId());
 		}
 
 	}
