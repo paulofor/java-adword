@@ -1,14 +1,10 @@
-package br.com.digicom;
-
-import static com.google.api.ads.common.lib.utils.Builder.DEFAULT_CONFIGURATION_FILENAME;
+package br.com.digicom.adsservice;
 
 import java.rmi.RemoteException;
 
 import org.joda.time.DateTime;
 
-import com.google.api.ads.adwords.axis.factory.AdWordsServices;
 import com.google.api.ads.adwords.axis.v201802.cm.AdvertisingChannelType;
-import com.google.api.ads.adwords.axis.v201802.cm.ApiError;
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
 import com.google.api.ads.adwords.axis.v201802.cm.BiddingStrategyConfiguration;
 import com.google.api.ads.adwords.axis.v201802.cm.BiddingStrategyType;
@@ -33,97 +29,24 @@ import com.google.api.ads.adwords.axis.v201802.cm.Setting;
 import com.google.api.ads.adwords.axis.v201802.cm.TimeUnit;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
-import com.google.api.ads.common.lib.auth.OfflineCredentials;
-import com.google.api.ads.common.lib.auth.OfflineCredentials.Api;
-import com.google.api.ads.common.lib.conf.ConfigurationLoadException;
-import com.google.api.ads.common.lib.exception.OAuthException;
-import com.google.api.ads.common.lib.exception.ValidationException;
-import com.google.api.client.auth.oauth2.Credential;
 
-public class CriaCampanhaMain {
+import br.com.digicom.AdsService;
+import br.com.digicom.modelo.CampanhaAds;
 
-	public static void main(String[] args) {
-		AdWordsSession session;
-		try {
-			// Generate a refreshable OAuth2 credential.
-			Credential oAuth2Credential = new OfflineCredentials.Builder()
-					.forApi(Api.ADWORDS).fromFile().build()
-					.generateCredential();
+public class CampanhaAdsService extends AdsService {
 
-			// Construct an AdWordsSession.
-			session = new AdWordsSession.Builder().fromFile()
-					.withOAuth2Credential(oAuth2Credential).build();
-		} catch (ConfigurationLoadException cle) {
-			System.err.printf("Failed to load configuration from the %s file. Exception: %s%n",	DEFAULT_CONFIGURATION_FILENAME, cle);
-			return;
-		} catch (ValidationException ve) {
-			System.err.printf(
-					"Invalid configuration in the %s file. Exception: %s%n",
-					DEFAULT_CONFIGURATION_FILENAME, ve);
-			return;
-		} catch (OAuthException oe) {
-			System.err.printf(
-					"Failed to create OAuth credentials. Check OAuth settings in the %s file. "
-							+ "Exception: %s%n",
-					DEFAULT_CONFIGURATION_FILENAME, oe);
-			return;
-		}
+	private CampanhaAds campanha = null;
 
-		AdWordsServicesInterface adWordsServices = AdWordsServices
-				.getInstance();
-
-		try {
-			runExample(adWordsServices, session);
-		} catch (ApiException apiException) {
-			// ApiException is the base class for most exceptions thrown by an
-			// API request. Instances
-			// of this exception have a message and a collection of ApiErrors
-			// that indicate the
-			// type and underlying cause of the exception. Every exception
-			// object in the adwords.axis
-			// packages will return a meaningful value from toString
-			//
-			// ApiException extends RemoteException, so this catch block must
-			// appear before the
-			// catch block for RemoteException.
-			System.err
-					.println("Request failed due to ApiException. Underlying ApiErrors:");
-			if (apiException.getErrors() != null) {
-				int i = 0;
-				for (ApiError apiError : apiException.getErrors()) {
-					System.err.printf("  Error %d: %s%n", i++, apiError);
-				}
-			}
-		} catch (RemoteException re) {
-			System.err.printf(
-					"Request failed unexpectedly due to RemoteException: %s%n",
-					re);
-		}
-	}
-
-	/**
-	 * Runs the example.
-	 * 
-	 * @param adWordsServices
-	 *            the services factory.
-	 * @param session
-	 *            the session.
-	 * @throws ApiException
-	 *             if the API request failed with one or more service errors.
-	 * @throws RemoteException
-	 *             if the API request failed due to other errors.
-	 */
-	public static void runExample(AdWordsServicesInterface adWordsServices,
-			AdWordsSession session) throws RemoteException {
-		// Get the BudgetService.
-		BudgetServiceInterface budgetService = adWordsServices.get(session,
-				BudgetServiceInterface.class);
+	@Override
+	protected void runExample(AdWordsServicesInterface adWordsServices,
+			AdWordsSession session) throws RemoteException, ApiException {
+		BudgetServiceInterface budgetService = adWordsServices.get(session, BudgetServiceInterface.class);
 
 		// Create a budget, which can be shared by multiple campaigns.
 		Budget sharedBudget = new Budget();
-		sharedBudget.setName("Interplanetary Cruise #" + System.currentTimeMillis());
+		sharedBudget.setName("Bud_" +campanha.getNome());
 		Money budgetAmount = new Money();
-		budgetAmount.setMicroAmount(50_000_000L);
+		budgetAmount.setMicroAmount(1_000_000L);
 		sharedBudget.setAmount(budgetAmount);
 		sharedBudget.setDeliveryMethod(BudgetBudgetDeliveryMethod.STANDARD);
 
@@ -142,7 +65,7 @@ public class CriaCampanhaMain {
 
 		// Create campaign.
 		Campaign campaign = new Campaign();
-		campaign.setName("Interplanetary Cruise #" + System.currentTimeMillis());
+		campaign.setName(campanha.getNome());
 
 		// Recommendation: Set the campaign to PAUSED when creating it to
 		// prevent
@@ -182,35 +105,13 @@ public class CriaCampanhaMain {
 
 		// Set options that are not required.
 		GeoTargetTypeSetting geoTarget = new GeoTargetTypeSetting();
-		geoTarget
-				.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.DONT_CARE);
+		geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.DONT_CARE);
 		campaign.setSettings(new Setting[] { geoTarget });
 
-		// You can create multiple campaigns in a single request.
-		/*
-		Campaign campaign2 = new Campaign();
-		campaign2.setName("Interplanetary Cruise banner #"
-				+ System.currentTimeMillis());
-		campaign2.setStatus(CampaignStatus.PAUSED);
-		BiddingStrategyConfiguration biddingStrategyConfiguration2 = new BiddingStrategyConfiguration();
-		biddingStrategyConfiguration2
-				.setBiddingStrategyType(BiddingStrategyType.MANUAL_CPC);
-		campaign2
-				.setBiddingStrategyConfiguration(biddingStrategyConfiguration2);
-
-		Budget budget2 = new Budget();
-		budget2.setBudgetId(budgetId);
-		campaign2.setBudget(budget2);
-
-		campaign2.setAdvertisingChannelType(AdvertisingChannelType.DISPLAY);
-		*/
 		// Create operations.
 		CampaignOperation operation = new CampaignOperation();
 		operation.setOperand(campaign);
 		operation.setOperator(Operator.ADD);
-		//CampaignOperation operation2 = new CampaignOperation();
-		//operation2.setOperand(campaign2);
-		//operation2.setOperator(Operator.ADD);
 
 		CampaignOperation[] operations = new CampaignOperation[] { operation };
 
@@ -219,8 +120,15 @@ public class CriaCampanhaMain {
 
 		// Display campaigns.
 		for (Campaign campaignResult : result.getValue()) {
-			System.out.printf("Campanha com nome name '%s' e ID %d foi criada.%n",	campaignResult.getName(), campaignResult.getId());
+			System.out.printf("Campanha com nome name '%s' e ID %d foi criada.%n", campaignResult.getName(), campaignResult.getId());
 		}
+
+	}
+
+	public void cria(CampanhaAds campanha) {
+		// TODO Auto-generated method stub
+		this.campanha = campanha;
+		super.executa();
 	}
 
 }
