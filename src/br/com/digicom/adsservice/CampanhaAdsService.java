@@ -27,6 +27,7 @@ import com.google.api.ads.adwords.axis.v201802.cm.NetworkSetting;
 import com.google.api.ads.adwords.axis.v201802.cm.Operator;
 import com.google.api.ads.adwords.axis.v201802.cm.Setting;
 import com.google.api.ads.adwords.axis.v201802.cm.TimeUnit;
+import com.google.api.ads.adwords.axis.v201806.cm.Location;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 
@@ -42,8 +43,7 @@ public class CampanhaAdsService extends AdsService {
 			AdWordsSession session) throws RemoteException, ApiException {
 
 
-		CampaignServiceInterface campaignService = adWordsServices.get(session,
-				CampaignServiceInterface.class);
+		CampaignServiceInterface campaignService = adWordsServices.get(session,	CampaignServiceInterface.class);
 
 
 		BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
@@ -52,17 +52,11 @@ public class CampanhaAdsService extends AdsService {
 		Money budgetAmount = new Money();
 		budgetAmount.setMicroAmount(1_100_000L);
 		Budget budget = new Budget();
-		//budget.setName("Bud_" + System.currentTimeMillis());
-		//budget.setAmount(budgetAmount);
+		budget.setAmount(budgetAmount);
+		budget.setIsExplicitlyShared(false);
 		
-		//BudgetOperation budgetOperation = new BudgetOperation();
-		//budgetOperation.setOperand(budget);
-		//budgetOperation.setOperator(Operator.ADD);
-
-		//BudgetServiceInterface budgetService = adWordsServices.get(session,	BudgetServiceInterface.class);
-		// Add the budget
-		//Long budgetId = budgetService.mutate(new BudgetOperation[] { budgetOperation }).getValue(0).getBudgetId();
-		//budget.setBudgetId(budgetId);
+		Long budgetId = this.criaBudget(budget, adWordsServices, session);
+		budget.setBudgetId(budgetId);
 		
 		Campaign campaign = new Campaign();
 		campaign.setName(campanha.getNome() + "__" + System.currentTimeMillis());
@@ -72,6 +66,17 @@ public class CampanhaAdsService extends AdsService {
 		campaign.setAdvertisingChannelType(AdvertisingChannelType.SEARCH);
 		campaign.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
 		campaign.setBudget(budget);
+		
+		// Localizacao
+	    GeoTargetTypeSetting geoTarget = new GeoTargetTypeSetting();
+	    geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.LOCATION_OF_PRESENCE);
+	    campaign.setSettings(new Setting[] {geoTarget});
+	    
+	    Location california = new Location();
+	    california.setId(21137L);
+	    List<Criterion> criteria = Lists.<Criterion>newArrayList(california);
+
+
 
 		// Create operations.
 		CampaignOperation operation = new CampaignOperation();
@@ -89,6 +94,19 @@ public class CampanhaAdsService extends AdsService {
 
 	}
 
+	private Long criaBudget(Budget budget,AdWordsServicesInterface adWordsServices,	AdWordsSession session) throws RemoteException, ApiException {
+		BudgetOperation budgetOperation = new BudgetOperation();
+		budgetOperation.setOperand(budget);
+		budgetOperation.setOperator(Operator.ADD);
+
+		BudgetServiceInterface budgetService = adWordsServices.get(session,	BudgetServiceInterface.class);
+		// Add the budget
+		Long budgetId = budgetService.mutate(new BudgetOperation[] { budgetOperation }).getValue(0).getBudgetId();
+		return budgetId;
+	}
+	
+	
+	
 	protected void runExample2(AdWordsServicesInterface adWordsServices,
 			AdWordsSession session) throws RemoteException, ApiException {
 		BudgetServiceInterface budgetService = adWordsServices.get(session,	BudgetServiceInterface.class);

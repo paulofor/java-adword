@@ -9,7 +9,7 @@ public class CriadorAnuncio {
 	
 	public static void main(String[] args) {
 		CampanhaAds campanha = new CampanhaAds();
-		campanha.setNome("Primeira");
+		campanha.setNome("Campanha_Exemplo");
 		CampanhaAdsService servico = new CampanhaAdsService();
 		servico.cria(campanha);
 	}

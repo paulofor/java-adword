@@ -127,7 +127,7 @@ public class GetCampaigns {
         		CampaignField.StartDate,
         		CampaignField.EndDate,
         		CampaignField.BiddingStrategyType,
-        		BudgetField.Amount)
+          		BudgetField.Amount)
         .orderAscBy(CampaignField.Name)
         .offset(offset)
         .limit(PAGE_SIZE)
