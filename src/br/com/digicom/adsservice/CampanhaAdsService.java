@@ -1,6 +1,8 @@
 package br.com.digicom.adsservice;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
@@ -27,9 +29,15 @@ import com.google.api.ads.adwords.axis.v201802.cm.NetworkSetting;
 import com.google.api.ads.adwords.axis.v201802.cm.Operator;
 import com.google.api.ads.adwords.axis.v201802.cm.Setting;
 import com.google.api.ads.adwords.axis.v201802.cm.TimeUnit;
-import com.google.api.ads.adwords.axis.v201806.cm.Location;
+import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterion;
+import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionOperation;
+import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionReturnValue;
+import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionServiceInterface;
+import com.google.api.ads.adwords.axis.v201802.cm.Criterion;
+import com.google.api.ads.adwords.axis.v201802.cm.Location;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
+import com.google.api.client.util.Lists;
 
 import br.com.digicom.AdsService;
 import br.com.digicom.modelo.CampanhaAds;
@@ -69,14 +77,9 @@ public class CampanhaAdsService extends AdsService {
 		
 		// Localizacao
 	    GeoTargetTypeSetting geoTarget = new GeoTargetTypeSetting();
-	    geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.LOCATION_OF_PRESENCE);
+	    geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.AREA_OF_INTEREST);
 	    campaign.setSettings(new Setting[] {geoTarget});
 	    
-	    Location california = new Location();
-	    california.setId(21137L);
-	    List<Criterion> criteria = Lists.<Criterion>newArrayList(california);
-
-
 
 		// Create operations.
 		CampaignOperation operation = new CampaignOperation();
@@ -90,8 +93,34 @@ public class CampanhaAdsService extends AdsService {
 		// Display campaigns.
 		for (Campaign campaignResult : result.getValue()) {
 			System.out.printf("Campanha com nome '%s' e ID %d foi criada.%n", campaignResult.getName(), campaignResult.getId());
+			this.criaSegmentacaoLocal(campaignResult.getId(), adWordsServices, session);
 		}
 
+	}
+	
+	
+	// Portuguese,pt,1014
+	private void criaSegmentacaoLocal(Long idCampanha, AdWordsServicesInterface adWordsServices, AdWordsSession session) throws ApiException, RemoteException {
+		CampaignCriterionServiceInterface campaignCriterionService = adWordsServices.get(session,	CampaignCriterionServiceInterface.class);
+		
+		// Create locations. The IDs can be found in the documentation or
+		// retrieved with the LocationCriterionService.
+
+		Location pais = new Location();
+		pais.setId(2076L);
+
+		List operations = new ArrayList();
+		for (Criterion criterion : new Criterion[] {pais}) {
+		  CampaignCriterionOperation operation = new CampaignCriterionOperation();
+		  CampaignCriterion campaignCriterion = new CampaignCriterion();
+		  campaignCriterion.setCampaignId(idCampanha);
+		  campaignCriterion.setCriterion(criterion);
+		  operation.setOperand(campaignCriterion);
+		  operation.setOperator(Operator.ADD);
+		  operations.add(operation);
+		}
+
+		CampaignCriterionReturnValue result = campaignCriterionService.mutate((CampaignCriterionOperation[]) operations.toArray(new CampaignCriterionOperation[operations.size()]));
 	}
 
 	private Long criaBudget(Budget budget,AdWordsServicesInterface adWordsServices,	AdWordsSession session) throws RemoteException, ApiException {
@@ -176,8 +205,7 @@ public class CampanhaAdsService extends AdsService {
 
 		// Set options that are not required.
 		GeoTargetTypeSetting geoTarget = new GeoTargetTypeSetting();
-		geoTarget
-				.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.DONT_CARE);
+		geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.DONT_CARE);
 		campaign.setSettings(new Setting[] { geoTarget });
 
 		// Create operations.
