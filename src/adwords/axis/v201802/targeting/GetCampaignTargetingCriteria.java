@@ -27,12 +27,21 @@ import com.google.api.ads.adwords.axis.v201802.cm.Selector;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import com.google.api.ads.adwords.lib.selectorfields.v201802.cm.CampaignCriterionField;
+import com.google.api.ads.adwords.lib.selectorfields.v201802.cm.CampaignField;
 import com.google.api.ads.common.lib.auth.OfflineCredentials;
 import com.google.api.ads.common.lib.auth.OfflineCredentials.Api;
 import com.google.api.ads.common.lib.conf.ConfigurationLoadException;
 import com.google.api.ads.common.lib.exception.OAuthException;
 import com.google.api.ads.common.lib.exception.ValidationException;
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.Authenticator.RequestorType;
 import java.rmi.RemoteException;
 
 /**
@@ -47,6 +56,7 @@ public class GetCampaignTargetingCriteria {
   private static final int PAGE_SIZE = 100;
 
   public static void main(String[] args) {
+	  setProxy();
     AdWordsSession session;
     try {
       // Generate a refreshable OAuth2 credential.
@@ -153,4 +163,34 @@ public class GetCampaignTargetingCriteria {
       selector = builder.increaseOffsetBy(PAGE_SIZE).build();
     } while (offset < page.getTotalNumEntries());
   }
+  
+  
+  
+  protected static HttpTransport setProxy() {
+		System.setProperty("https.proxyHost", "10.21.7.10");
+		System.setProperty("https.proxyPort", "82");
+		System.setProperty("https.proxyUser", "tr626987");
+		System.setProperty("https.proxyPassword", "eureka07");
+
+		System.setProperty("http.proxyHost", "10.21.7.10");
+		System.setProperty("http.proxyPort", "82");
+		System.setProperty("http.proxyUser", "tr626987");
+		System.setProperty("http.proxyPassword", "eureka07");
+		
+		
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.21.7.10", 82));
+		HttpTransport httpTransport = new NetHttpTransport.Builder().setProxy(proxy).build();
+		Authenticator.setDefault(new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				// check that the pasword-requesting site is the proxy server
+				if (this.getRequestingHost().contains("10.21.7.10") && this.getRequestingPort() == 82
+						&& this.getRequestorType().equals(RequestorType.PROXY)) {
+					return new PasswordAuthentication("tr626987", "eureka07".toCharArray());
+				}
+				return super.getPasswordAuthentication();
+			}
+		});
+		return httpTransport;
+	}
 }

@@ -22,6 +22,7 @@ import com.google.api.ads.adwords.axis.v201802.cm.CampaignStatus;
 import com.google.api.ads.adwords.axis.v201802.cm.FrequencyCap;
 import com.google.api.ads.adwords.axis.v201802.cm.GeoTargetTypeSetting;
 import com.google.api.ads.adwords.axis.v201802.cm.GeoTargetTypeSettingPositiveGeoTargetType;
+import com.google.api.ads.adwords.axis.v201802.cm.Language;
 import com.google.api.ads.adwords.axis.v201802.cm.Level;
 import com.google.api.ads.adwords.axis.v201802.cm.ManualCpcBiddingScheme;
 import com.google.api.ads.adwords.axis.v201802.cm.Money;
@@ -108,9 +109,12 @@ public class CampanhaAdsService extends AdsService {
 
 		Location pais = new Location();
 		pais.setId(2076L);
+		Language lingua = new Language();
+		lingua.setId(1014L);
+		
 
 		List operations = new ArrayList();
-		for (Criterion criterion : new Criterion[] {pais}) {
+		for (Criterion criterion : new Criterion[] {pais,lingua}) {
 		  CampaignCriterionOperation operation = new CampaignCriterionOperation();
 		  CampaignCriterion campaignCriterion = new CampaignCriterion();
 		  campaignCriterion.setCampaignId(idCampanha);

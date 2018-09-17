@@ -26,11 +26,17 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeToken
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.Authenticator.RequestorType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,8 +69,9 @@ public class GetRefreshToken {
 
   private static Credential getOAuth2Credential(GoogleClientSecrets clientSecrets)
       throws IOException {
+	  HttpTransport trans = setProxy();
     GoogleAuthorizationCodeFlow authorizationFlow = new GoogleAuthorizationCodeFlow.Builder(
-        new NetHttpTransport(),
+    		trans,
         new JacksonFactory(),
         clientSecrets,
         SCOPES)
@@ -133,6 +140,7 @@ public class GetRefreshToken {
       credential = getOAuth2Credential(clientSecrets);
     } catch (IOException ioe) {
       System.err.printf("Failed to generate credentials. Exception: %s%n", ioe);
+      ioe.printStackTrace();
       return;
     }
 
@@ -142,4 +150,33 @@ public class GetRefreshToken {
     System.out.printf("In your ads.properties file, modify:%n%napi.adwords.refreshToken=%s%n", 
         credential.getRefreshToken());
   }
+  
+  
+  protected static HttpTransport setProxy() {
+		System.setProperty("https.proxyHost", "10.21.7.10");
+		System.setProperty("https.proxyPort", "82");
+		System.setProperty("https.proxyUser", "tr626987");
+		System.setProperty("https.proxyPassword", "eureka07");
+
+		System.setProperty("http.proxyHost", "10.21.7.10");
+		System.setProperty("http.proxyPort", "82");
+		System.setProperty("http.proxyUser", "tr626987");
+		System.setProperty("http.proxyPassword", "eureka07");
+		
+		
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.21.7.10", 82));
+		HttpTransport httpTransport = new NetHttpTransport.Builder().setProxy(proxy).build();
+		Authenticator.setDefault(new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				// check that the pasword-requesting site is the proxy server
+				if (this.getRequestingHost().contains("10.21.7.10") && this.getRequestingPort() == 82
+						&& this.getRequestorType().equals(RequestorType.PROXY)) {
+					return new PasswordAuthentication("tr626987", "eureka07".toCharArray());
+				}
+				return super.getPasswordAuthentication();
+			}
+		});
+		return httpTransport;
+	}
 }
