@@ -6,6 +6,12 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import com.beust.jcommander.Parameter;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroup;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupOperation;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupReturnValue;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupServiceInterface;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupStatus;
 import com.google.api.ads.adwords.axis.v201802.cm.AdvertisingChannelType;
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
 import com.google.api.ads.adwords.axis.v201802.cm.BiddingStrategyConfiguration;
@@ -38,8 +44,11 @@ import com.google.api.ads.adwords.axis.v201802.cm.Criterion;
 import com.google.api.ads.adwords.axis.v201802.cm.Location;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
+import com.google.api.ads.adwords.lib.utils.examples.ArgumentNames;
+import com.google.api.ads.common.lib.utils.examples.CodeSampleParams;
 import com.google.api.client.util.Lists;
 
+import adwords.axis.v201802.basicoperations.AddAdGroups.AddAdGroupsParams;
 import br.com.digicom.AdsService;
 import br.com.digicom.modelo.CampanhaAds;
 
@@ -48,12 +57,10 @@ public class CampanhaAdsService extends AdsService {
 	private CampanhaAds campanha = null;
 
 	@Override
-	protected void runExample(AdWordsServicesInterface adWordsServices,
-			AdWordsSession session) throws RemoteException, ApiException {
+	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session)
+			throws RemoteException, ApiException {
 
-
-		CampaignServiceInterface campaignService = adWordsServices.get(session,	CampaignServiceInterface.class);
-
+		CampaignServiceInterface campaignService = adWordsServices.get(session, CampaignServiceInterface.class);
 
 		BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
 		biddingStrategyConfiguration.setBiddingStrategyType(BiddingStrategyType.TARGET_SPEND);
@@ -63,10 +70,10 @@ public class CampanhaAdsService extends AdsService {
 		Budget budget = new Budget();
 		budget.setAmount(budgetAmount);
 		budget.setIsExplicitlyShared(false);
-		
+
 		Long budgetId = this.criaBudget(budget, adWordsServices, session);
 		budget.setBudgetId(budgetId);
-		
+
 		Campaign campaign = new Campaign();
 		campaign.setName(campanha.getNome() + "__" + System.currentTimeMillis());
 		campaign.setStatus(CampaignStatus.PAUSED);
@@ -75,12 +82,11 @@ public class CampanhaAdsService extends AdsService {
 		campaign.setAdvertisingChannelType(AdvertisingChannelType.SEARCH);
 		campaign.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
 		campaign.setBudget(budget);
-		
+
 		// Localizacao
-	    GeoTargetTypeSetting geoTarget = new GeoTargetTypeSetting();
-	    geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.AREA_OF_INTEREST);
-	    campaign.setSettings(new Setting[] {geoTarget});
-	    
+		GeoTargetTypeSetting geoTarget = new GeoTargetTypeSetting();
+		geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.AREA_OF_INTEREST);
+		campaign.setSettings(new Setting[] { geoTarget });
 
 		// Create operations.
 		CampaignOperation operation = new CampaignOperation();
@@ -95,15 +101,16 @@ public class CampanhaAdsService extends AdsService {
 		for (Campaign campaignResult : result.getValue()) {
 			System.out.printf("Campanha com nome '%s' e ID %d foi criada.%n", campaignResult.getName(), campaignResult.getId());
 			this.criaSegmentacaoLocal(campaignResult.getId(), adWordsServices, session);
+			this.criarGrupoAnuncio(campaignResult.getId(), adWordsServices, session);
 		}
 
 	}
-	
-	
+
 	// Portuguese,pt,1014
-	private void criaSegmentacaoLocal(Long idCampanha, AdWordsServicesInterface adWordsServices, AdWordsSession session) throws ApiException, RemoteException {
-		CampaignCriterionServiceInterface campaignCriterionService = adWordsServices.get(session,	CampaignCriterionServiceInterface.class);
-		
+	private void criaSegmentacaoLocal(Long idCampanha, AdWordsServicesInterface adWordsServices, AdWordsSession session)
+			throws ApiException, RemoteException {
+		CampaignCriterionServiceInterface campaignCriterionService = adWordsServices.get(session, CampaignCriterionServiceInterface.class);
+
 		// Create locations. The IDs can be found in the documentation or
 		// retrieved with the LocationCriterionService.
 
@@ -111,41 +118,73 @@ public class CampanhaAdsService extends AdsService {
 		pais.setId(2076L);
 		Language lingua = new Language();
 		lingua.setId(1014L);
-		
 
 		List operations = new ArrayList();
-		for (Criterion criterion : new Criterion[] {pais,lingua}) {
-		  CampaignCriterionOperation operation = new CampaignCriterionOperation();
-		  CampaignCriterion campaignCriterion = new CampaignCriterion();
-		  campaignCriterion.setCampaignId(idCampanha);
-		  campaignCriterion.setCriterion(criterion);
-		  operation.setOperand(campaignCriterion);
-		  operation.setOperator(Operator.ADD);
-		  operations.add(operation);
+		for (Criterion criterion : new Criterion[] { pais, lingua }) {
+			CampaignCriterionOperation operation = new CampaignCriterionOperation();
+			CampaignCriterion campaignCriterion = new CampaignCriterion();
+			campaignCriterion.setCampaignId(idCampanha);
+			campaignCriterion.setCriterion(criterion);
+			operation.setOperand(campaignCriterion);
+			operation.setOperator(Operator.ADD);
+			operations.add(operation);
 		}
 
-		CampaignCriterionReturnValue result = campaignCriterionService.mutate((CampaignCriterionOperation[]) operations.toArray(new CampaignCriterionOperation[operations.size()]));
+		CampaignCriterionReturnValue result = campaignCriterionService.mutate(
+				(CampaignCriterionOperation[]) operations.toArray(new CampaignCriterionOperation[operations.size()]));
 	}
 
-	private Long criaBudget(Budget budget,AdWordsServicesInterface adWordsServices,	AdWordsSession session) throws RemoteException, ApiException {
+	private Long criaBudget(Budget budget, AdWordsServicesInterface adWordsServices, AdWordsSession session)
+			throws RemoteException, ApiException {
 		BudgetOperation budgetOperation = new BudgetOperation();
 		budgetOperation.setOperand(budget);
 		budgetOperation.setOperator(Operator.ADD);
 
-		BudgetServiceInterface budgetService = adWordsServices.get(session,	BudgetServiceInterface.class);
+		BudgetServiceInterface budgetService = adWordsServices.get(session, BudgetServiceInterface.class);
 		// Add the budget
 		Long budgetId = budgetService.mutate(new BudgetOperation[] { budgetOperation }).getValue(0).getBudgetId();
 		return budgetId;
 	}
-	
-	private void criarGrupoAnuncio(AdWordsServicesInterface adWordsServices,AdWordsSession session) throws RemoteException, ApiException {
-		 
+
+	private static class AddAdGroupsParams extends CodeSampleParams {
+		@Parameter(names = ArgumentNames.CAMPAIGN_ID, required = true)
+		private Long campaignId;
 	}
-	
-	
-	protected void runExample2(AdWordsServicesInterface adWordsServices,
-			AdWordsSession session) throws RemoteException, ApiException {
-		BudgetServiceInterface budgetService = adWordsServices.get(session,	BudgetServiceInterface.class);
+
+	private void criarGrupoAnuncio(Long idCampanha, AdWordsServicesInterface adWordsServices, AdWordsSession session)
+			throws RemoteException, ApiException {
+		AddAdGroupsParams params = new AddAdGroupsParams();
+
+		params.campaignId = idCampanha;
+		// Get the AdGroupService.
+	    AdGroupServiceInterface adGroupService = adWordsServices.get(session, AdGroupServiceInterface.class);
+
+	    // Create ad group.
+	    AdGroup adGroup = new AdGroup();
+	    adGroup.setName("Earth to Mars Cruises #" + System.currentTimeMillis());
+	    adGroup.setStatus(AdGroupStatus.ENABLED);
+	    adGroup.setCampaignId(idCampanha);
+	    
+	    AdGroupOperation operation = new AdGroupOperation();
+	    operation.setOperand(adGroup);
+	    operation.setOperator(Operator.ADD);
+
+	    AdGroupOperation[] operations = new AdGroupOperation[] {operation};
+
+	    // Add ad groups.
+	    AdGroupReturnValue result = adGroupService.mutate(operations);
+
+	    // Display new ad groups.
+	    for (AdGroup adGroupResult : result.getValue()) {
+	      System.out.printf("Ad group with name '%s' and ID %d was added.%n",
+	          adGroupResult.getName(), adGroupResult.getId());
+	    }
+
+	}
+
+	protected void runExample2(AdWordsServicesInterface adWordsServices, AdWordsSession session)
+			throws RemoteException, ApiException {
+		BudgetServiceInterface budgetService = adWordsServices.get(session, BudgetServiceInterface.class);
 
 		// Create a budget, which can be shared by multiple campaigns.
 		Budget sharedBudget = new Budget();
@@ -161,13 +200,10 @@ public class CampanhaAdsService extends AdsService {
 		budgetOperation.setOperator(Operator.ADD);
 
 		// Add the budget
-		Long budgetId = budgetService
-				.mutate(new BudgetOperation[] { budgetOperation }).getValue(0)
-				.getBudgetId();
+		Long budgetId = budgetService.mutate(new BudgetOperation[] { budgetOperation }).getValue(0).getBudgetId();
 
 		// Get the CampaignService.
-		CampaignServiceInterface campaignService = adWordsServices.get(session,
-				CampaignServiceInterface.class);
+		CampaignServiceInterface campaignService = adWordsServices.get(session, CampaignServiceInterface.class);
 
 		// Create campaign.
 		Campaign campaign = new Campaign();
@@ -191,8 +227,7 @@ public class CampanhaAdsService extends AdsService {
 		// You can optionally provide these field(s).
 		campaign.setStartDate(new DateTime().plusDays(1).toString("yyyyMMdd"));
 		campaign.setEndDate(new DateTime().plusDays(8).toString("yyyyMMdd"));
-		campaign.setFrequencyCap(new FrequencyCap(5L, TimeUnit.DAY,
-				Level.ADGROUP));
+		campaign.setFrequencyCap(new FrequencyCap(5L, TimeUnit.DAY, Level.ADGROUP));
 
 		// Only the budgetId should be sent, all other fields will be ignored by
 		// CampaignService.
@@ -227,9 +262,8 @@ public class CampanhaAdsService extends AdsService {
 
 		// Display campaigns.
 		for (Campaign campaignResult : result.getValue()) {
-			System.out.printf(
-					"Campanha com nome name '%s' e ID %d foi criada.%n",
-					campaignResult.getName(), campaignResult.getId());
+			System.out.printf("Campanha com nome name '%s' e ID %d foi criada.%n", campaignResult.getName(),
+					campaignResult.getId());
 		}
 
 	}

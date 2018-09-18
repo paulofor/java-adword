@@ -57,7 +57,7 @@ import java.rmi.RemoteException;
  */
 public class AddAdGroups {
 
-  private static class AddAdGroupsParams extends CodeSampleParams {
+  public static class AddAdGroupsParams extends CodeSampleParams {
     @Parameter(names = ArgumentNames.CAMPAIGN_ID, required = true)
     private Long campaignId;
   }
@@ -139,8 +139,7 @@ public class AddAdGroups {
       AdWordsServicesInterface adWordsServices, AdWordsSession session, long campaignId)
       throws RemoteException {
     // Get the AdGroupService.
-    AdGroupServiceInterface adGroupService =
-        adWordsServices.get(session, AdGroupServiceInterface.class);
+    AdGroupServiceInterface adGroupService = adWordsServices.get(session, AdGroupServiceInterface.class);
 
     // Create ad group.
     AdGroup adGroup = new AdGroup();
