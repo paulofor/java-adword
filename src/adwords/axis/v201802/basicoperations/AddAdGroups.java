@@ -100,7 +100,7 @@ public class AddAdGroups {
     if (!params.parseArguments(args)) {
       // Either pass the required parameters for this example on the command line, or insert them
       // into the code here. See the parameter class definition above for descriptions.
-      params.campaignId = Long.parseLong("INSERT_CAMPAIGN_ID_HERE");
+      params.campaignId = Long.parseLong("1565825730");
     }
 
     try {

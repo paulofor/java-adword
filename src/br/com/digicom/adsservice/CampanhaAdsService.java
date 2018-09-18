@@ -138,6 +138,9 @@ public class CampanhaAdsService extends AdsService {
 		return budgetId;
 	}
 	
+	private void criarGrupoAnuncio(AdWordsServicesInterface adWordsServices,AdWordsSession session) throws RemoteException, ApiException {
+		 
+	}
 	
 	
 	protected void runExample2(AdWordsServicesInterface adWordsServices,

@@ -103,8 +103,8 @@ public class AddCampaignGroupsAndPerformanceTargets {
       // Either pass the required parameters for this example on the command line, or insert them
       // into the code here. See the parameter class definition above for descriptions.
       params.campaignIds = Arrays.asList(
-          Long.valueOf("INSERT_CAMPAIGN_ID_HERE"),
-          Long.valueOf("INSERT_CAMPAIGN_ID_HERE"));
+          Long.valueOf("1565666809"),
+          Long.valueOf("1565806497"));
     }
 
     try {
