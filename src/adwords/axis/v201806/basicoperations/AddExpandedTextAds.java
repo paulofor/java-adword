@@ -95,7 +95,7 @@ public class AddExpandedTextAds {
     if (!params.parseArguments(args)) {
       // Either pass the required parameters for this example on the command line, or insert them
       // into the code here. See the parameter class definition above for descriptions.
-      params.adGroupId = Long.parseLong("INSERT_AD_GROUP_ID_HERE");
+      params.adGroupId = Long.parseLong("60582547158");
     }
 
     try {
@@ -144,6 +144,7 @@ public class AddExpandedTextAds {
       ExpandedTextAd expandedTextAd = new ExpandedTextAd();
       expandedTextAd.setHeadlinePart1(String.format("Cruise #%d to Mars", i));
       expandedTextAd.setHeadlinePart2("Best Space Cruise Line");
+      
       expandedTextAd.setDescription("Buy your tickets now!");
       expandedTextAd.setFinalUrls(new String[] {"http://www.example.com/" + i});
 
