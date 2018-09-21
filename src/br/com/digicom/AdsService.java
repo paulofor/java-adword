@@ -95,6 +95,7 @@ public abstract class AdsService {
 			// ApiException extends RemoteException, so this catch block must
 			// appear before the
 			// catch block for RemoteException.
+			apiException.printStackTrace();
 			System.err.println("Request failed due to ApiException. Underlying ApiErrors:");
 			if (apiException.getErrors() != null) {
 				int i = 0;

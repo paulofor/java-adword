@@ -59,7 +59,7 @@ public class CampanhaAdsService extends AdsService {
 	@Override
 	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session)
 			throws RemoteException, ApiException {
-
+		
 		CampaignServiceInterface campaignService = adWordsServices.get(session, CampaignServiceInterface.class);
 
 		BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
@@ -151,6 +151,11 @@ public class CampanhaAdsService extends AdsService {
 		private Long campaignId;
 	}
 
+	private void criaAnuncio() {
+		
+	}
+	
+	
 	private void criarGrupoAnuncio(Long idCampanha, AdWordsServicesInterface adWordsServices, AdWordsSession session)
 			throws RemoteException, ApiException {
 		AddAdGroupsParams params = new AddAdGroupsParams();
@@ -161,7 +166,7 @@ public class CampanhaAdsService extends AdsService {
 
 	    // Create ad group.
 	    AdGroup adGroup = new AdGroup();
-	    adGroup.setName("Earth to Mars Cruises #" + System.currentTimeMillis());
+	    adGroup.setName("Grupo Unico" + System.currentTimeMillis());
 	    adGroup.setStatus(AdGroupStatus.ENABLED);
 	    adGroup.setCampaignId(idCampanha);
 	    
@@ -176,8 +181,7 @@ public class CampanhaAdsService extends AdsService {
 
 	    // Display new ad groups.
 	    for (AdGroup adGroupResult : result.getValue()) {
-	      System.out.printf("Ad group with name '%s' and ID %d was added.%n",
-	          adGroupResult.getName(), adGroupResult.getId());
+	      System.out.printf("Ad group with name '%s' and ID %d was added.%n", adGroupResult.getName(), adGroupResult.getId());
 	    }
 
 	}
@@ -271,6 +275,7 @@ public class CampanhaAdsService extends AdsService {
 	public void cria(CampanhaAds campanha) {
 		// TODO Auto-generated method stub
 		this.campanha = campanha;
+		this.setProxy();
 		super.executa();
 	}
 
