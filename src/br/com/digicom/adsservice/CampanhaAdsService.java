@@ -1,5 +1,8 @@
 package br.com.digicom.adsservice;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +17,17 @@ import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdOperation;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdReturnValue;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdStatus;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupCriterion;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupCriterionOperation;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupCriterionReturnValue;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupCriterionServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupOperation;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupReturnValue;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupStatus;
 import com.google.api.ads.adwords.axis.v201802.cm.AdvertisingChannelType;
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
+import com.google.api.ads.adwords.axis.v201802.cm.BiddableAdGroupCriterion;
 import com.google.api.ads.adwords.axis.v201802.cm.BiddingStrategyConfiguration;
 import com.google.api.ads.adwords.axis.v201802.cm.BiddingStrategyType;
 import com.google.api.ads.adwords.axis.v201802.cm.Budget;
@@ -35,10 +43,13 @@ import com.google.api.ads.adwords.axis.v201802.cm.ExpandedTextAd;
 import com.google.api.ads.adwords.axis.v201802.cm.FrequencyCap;
 import com.google.api.ads.adwords.axis.v201802.cm.GeoTargetTypeSetting;
 import com.google.api.ads.adwords.axis.v201802.cm.GeoTargetTypeSettingPositiveGeoTargetType;
+import com.google.api.ads.adwords.axis.v201802.cm.Keyword;
+import com.google.api.ads.adwords.axis.v201802.cm.KeywordMatchType;
 import com.google.api.ads.adwords.axis.v201802.cm.Language;
 import com.google.api.ads.adwords.axis.v201802.cm.Level;
 import com.google.api.ads.adwords.axis.v201802.cm.ManualCpcBiddingScheme;
 import com.google.api.ads.adwords.axis.v201802.cm.Money;
+import com.google.api.ads.adwords.axis.v201802.cm.NegativeAdGroupCriterion;
 import com.google.api.ads.adwords.axis.v201802.cm.NetworkSetting;
 import com.google.api.ads.adwords.axis.v201802.cm.Operator;
 import com.google.api.ads.adwords.axis.v201802.cm.Setting;
@@ -49,6 +60,7 @@ import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionReturnValue;
 import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.Criterion;
 import com.google.api.ads.adwords.axis.v201802.cm.Location;
+import com.google.api.ads.adwords.axis.v201802.cm.UrlList;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import com.google.api.ads.adwords.lib.utils.examples.ArgumentNames;
@@ -56,6 +68,7 @@ import com.google.api.ads.common.lib.utils.examples.CodeSampleParams;
 import com.google.api.client.util.Lists;
 
 import adwords.axis.v201802.basicoperations.AddAdGroups.AddAdGroupsParams;
+
 import br.com.digicom.AdsService;
 import br.com.digicom.modelo.CampanhaAds;
 
@@ -68,19 +81,23 @@ public class CampanhaAdsService extends AdsService {
 			ApiException {
 
 		CampaignServiceInterface campaignService = adWordsServices.get(session, CampaignServiceInterface.class);
-
+		
+		// BiddingStrategyConfiguration
 		BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
 		biddingStrategyConfiguration.setBiddingStrategyType(BiddingStrategyType.TARGET_SPEND);
-
+		
+		// Money
 		Money budgetAmount = new Money();
 		budgetAmount.setMicroAmount(1_100_000L);
+		
+		// Budget
 		Budget budget = new Budget();
 		budget.setAmount(budgetAmount);
 		budget.setIsExplicitlyShared(false);
-
 		Long budgetId = this.criaBudget(budget, adWordsServices, session);
 		budget.setBudgetId(budgetId);
-
+		
+		// Campaign
 		Campaign campaign = new Campaign();
 		campaign.setName(campanha.getNome() + "__" + System.currentTimeMillis());
 		campaign.setStatus(CampaignStatus.PAUSED);
@@ -92,19 +109,15 @@ public class CampanhaAdsService extends AdsService {
 
 		// Localizacao
 		GeoTargetTypeSetting geoTarget = new GeoTargetTypeSetting();
-		geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.AREA_OF_INTEREST);
+		geoTarget.setPositiveGeoTargetType(GeoTargetTypeSettingPositiveGeoTargetType.LOCATION_OF_PRESENCE);
 		campaign.setSettings(new Setting[] { geoTarget });
 
-		// Create operations.
+
 		CampaignOperation operation = new CampaignOperation();
 		operation.setOperand(campaign);
 		operation.setOperator(Operator.ADD);
 		CampaignOperation[] operations = new CampaignOperation[] { operation };
-
-		// Add campaigns.
 		CampaignReturnValue result = campaignService.mutate(operations);
-
-		// Display campaigns.
 		for (Campaign campaignResult : result.getValue()) {
 			System.out.printf("Campanha com nome '%s' e ID %d foi criada.%n", campaignResult.getName(),
 					campaignResult.getId());
@@ -165,6 +178,11 @@ public class CampanhaAdsService extends AdsService {
 		private Long adGroupId;
 	}
 
+	private static class AddKeywordsParams extends CodeSampleParams {
+		@Parameter(names = ArgumentNames.AD_GROUP_ID, required = true)
+		private Long adGroupId;
+	}
+
 	private void criaAnuncio(Long idGrupo, AdWordsServicesInterface adWordsServices, AdWordsSession session)
 			throws ApiException, RemoteException {
 
@@ -211,6 +229,60 @@ public class CampanhaAdsService extends AdsService {
 
 	}
 
+	private void criaPalavraChave(Long idGrupo, AdWordsServicesInterface adWordsServices, AdWordsSession session)
+			throws ApiException, RemoteException {
+		AddKeywordsParams params = new AddKeywordsParams();
+		params.adGroupId = idGrupo;
+		AdGroupCriterionServiceInterface adGroupCriterionService = adWordsServices.get(session,
+				AdGroupCriterionServiceInterface.class);
+		// Create keywords.
+		Keyword keyword1 = new Keyword();
+		keyword1.setText("aumentar vendas");
+		keyword1.setMatchType(KeywordMatchType.BROAD);
+
+		//Keyword keyword2 = new Keyword();
+		//keyword2.setText("space hotel");
+		//keyword2.setMatchType(KeywordMatchType.EXACT);
+		
+		// Create biddable ad group criterion.
+		BiddableAdGroupCriterion keywordBiddableAdGroupCriterion1 = new BiddableAdGroupCriterion();
+		keywordBiddableAdGroupCriterion1.setAdGroupId(idGrupo);
+		keywordBiddableAdGroupCriterion1.setCriterion(keyword1);
+		//NegativeAdGroupCriterion keywordNegativeAdGroupCriterion2 = new NegativeAdGroupCriterion();
+		//keywordNegativeAdGroupCriterion2.setAdGroupId(idGrupo);
+		//keywordNegativeAdGroupCriterion2.setCriterion(keyword2);
+
+		/*	
+		 * String encodedFinalUrl =
+		 * String.format("http://example.com/mars/cruise/?kw=%s",
+		 * URLEncoder.encode(keyword1.getText(), UTF_8.name()));
+		 * keywordBiddableAdGroupCriterion1.setFinalUrls(new UrlList(new
+		 * String[] {encodedFinalUrl}));
+		 */
+		// Create operations.
+		AdGroupCriterionOperation keywordAdGroupCriterionOperation1 = new AdGroupCriterionOperation();
+		keywordAdGroupCriterionOperation1.setOperand(keywordBiddableAdGroupCriterion1);
+		keywordAdGroupCriterionOperation1.setOperator(Operator.ADD);
+		//AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new AdGroupCriterionOperation();
+		//keywordAdGroupCriterionOperation2.setOperand(keywordNegativeAdGroupCriterion2);
+		//keywordAdGroupCriterionOperation2.setOperator(Operator.ADD);
+
+		AdGroupCriterionOperation[] operations = new AdGroupCriterionOperation[] { keywordAdGroupCriterionOperation1 };
+
+		// Add keywords.
+		AdGroupCriterionReturnValue result = adGroupCriterionService.mutate(operations);
+
+		// Display results.
+		for (AdGroupCriterion adGroupCriterionResult : result.getValue()) {
+			System.out.printf("Keyword ad group criterion with ad group ID %d, criterion ID %d, "
+					+ "text '%s', and match type '%s' was added.%n", adGroupCriterionResult.getAdGroupId(),
+					adGroupCriterionResult.getCriterion().getId(),
+					((Keyword) adGroupCriterionResult.getCriterion()).getText(),
+					((Keyword) adGroupCriterionResult.getCriterion()).getMatchType());
+		}
+
+	}
+
 	private void criarGrupoAnuncio(Long idCampanha, AdWordsServicesInterface adWordsServices, AdWordsSession session)
 			throws RemoteException, ApiException {
 		AddAdGroupsParams params = new AddAdGroupsParams();
@@ -239,6 +311,7 @@ public class CampanhaAdsService extends AdsService {
 			System.out.printf("Ad group with name '%s' and ID %d was added.%n", adGroupResult.getName(),
 					adGroupResult.getId());
 			this.criaAnuncio(adGroupResult.getId(), adWordsServices, session);
+			this.criaPalavraChave(adGroupResult.getId(), adWordsServices, session);
 		}
 
 	}

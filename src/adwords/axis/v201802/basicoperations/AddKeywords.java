@@ -102,7 +102,7 @@ public class AddKeywords {
     if (!params.parseArguments(args)) {
       // Either pass the required parameters for this example on the command line, or insert them
       // into the code here. See the parameter class definition above for descriptions.
-      params.adGroupId = Long.parseLong("INSERT_AD_GROUP_ID_HERE");
+      params.adGroupId = Long.parseLong("64979255888");
     }
 
     try {
