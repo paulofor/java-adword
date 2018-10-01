@@ -1,6 +1,8 @@
 package br.com.digicom.modelo;
 
-public class CampanhaAds {
+import com.strongloop.android.loopback.Model;
+
+public class CampanhaAds extends Model{
 	
 	
 	private String nome;

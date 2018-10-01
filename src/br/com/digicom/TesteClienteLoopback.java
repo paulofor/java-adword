@@ -1,13 +1,14 @@
 package br.com.digicom;
 
-import com.google.common.collect.ImmutableMap;
+import br.com.digicom.modelo.AnuncioAds;
+import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.repositorio.RepositorioBase;
+
 import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.ModelRepository;
+import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.remoting.Repository;
-
-import com.strongloop.android.remoting.adapters.Adapter.Callback;
-import com.strongloop.android.remoting.adapters.RestAdapter;
-import com.strongloop.android.remoting.adapters.RestContractItem;
 
 public class TesteClienteLoopback {
 
@@ -16,33 +17,21 @@ public class TesteClienteLoopback {
 
 	public static void main(String[] args) {
 		System.out.println("Ola Mundo");
-		RestAdapter adapter = new RestAdapter("http://example.com");
-		ModelRepository productRepository = adapter.createRepository("product");
-		Model pen = productRepository.createModel(ImmutableMap.of("name", "Awesome Pen"));
-		//adapter = new RestAdapter("http://validacao.kinghost.net:21101");
-		//adapter.invokeStaticMethod("simple.getSecret", null, expectJsonResponse("shhh!"));
-		
-		getLoopBackAdapter();
+		RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
+		RepositorioBase.AnuncioAdRepository rep = adapter.createRepository(RepositorioBase.AnuncioAdRepository.class);
+		rep.findById(4, new ObjectCallback<AnuncioAds>() { 
+            @Override 
+            public void onSuccess(AnuncioAds model) { 
+            	System.out.println("Sucesso: " + model.getTitulo1());
+            }
+			@Override
+			public void onError(Throwable t) {
+				// TODO Auto-generated method stub
+				t.printStackTrace();
+			} 
+        }); 
+
 	}
-	
 
-    public static RestAdapter getLoopBackAdapter() {
-        if (adapter == null) {
-            // Instantiate the shared RestAdapter. In most circumstances,
-            // you'll do this only once; putting that reference in a singleton
-            // is recommended for the sake of simplicity.
-            // However, some applications will need to talk to more than one
-            // server - create as many Adapters as you need.
-            adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
-            ModelRepository productRepository = adapter.createRepository("product");
-            Model pen = productRepository.createModel(ImmutableMap.of("name", "Awesome Pen"));
-
-            // This boilerplate is required for Lesson Three.
-            adapter.getContract().addItem(new RestContractItem("locations/nearby", "GET"),"location.nearby");
-        }
-        return adapter;
-    }
-
-	
 
 }
