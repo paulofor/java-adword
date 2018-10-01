@@ -38,6 +38,7 @@
 	<classpathentry kind="lib" path="lib/java-json.jar"/>
 	<classpathentry kind="lib" path="lib/evo-inflector-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/async-http-client-1.7.4.jar"/>
+	<classpathentry kind="lib" path="lib/async-http-client-1.9.38.jar"/>
+	<classpathentry kind="lib" path="lib/netty-3.10.5.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
