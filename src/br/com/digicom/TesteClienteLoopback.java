@@ -18,10 +18,10 @@ public class TesteClienteLoopback {
 	public static void main(String[] args) {
 		System.out.println("Ola Mundo");
 		RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
-		RepositorioBase.AnuncioAdRepository rep = adapter.createRepository(RepositorioBase.AnuncioAdRepository.class);
-		rep.findById(4, new ObjectCallback<AnuncioAds>() { 
+		RepositorioBase.CampanhaAdRepository rep = adapter.createRepository(RepositorioBase.CampanhaAdRepository.class);
+		rep.listaPendente(new ObjectCallback<CampanhaAds>() { 
             @Override 
-            public void onSuccess(AnuncioAds model) { 
+            public void onSuccess(CampanhaAds model) { 
             	System.out.println("Sucesso: " + model);
             }
 			@Override

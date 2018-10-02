@@ -22,9 +22,10 @@ public class RepositorioBase {
 		public void listaPendente(final ObjectCallback<CampanhaAds> callback) {
 	        Map<String, Object> params = new HashMap<String, Object>();
 	        //params.put("id", id);
-	        invokeStaticMethod("listaPendente", params,
+	        invokeStaticMethod("listaParaPublicar", params,
 	                new JsonObjectParser<CampanhaAds>(this, callback));
 	    }
+		
 	}
 	
 	public static class AnuncioAdRepository extends ModelRepository<AnuncioAds> {
