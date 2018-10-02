@@ -133,7 +133,7 @@ public class ModelRepository<T extends Model> extends RestRepository<T> {
      * @param id The id to search for.
      * @param callback The callback to be executed when finished.
      */
-    public void findById(Object id, final ObjectCallback<T> callback) {
+	public void findById(Object id, final ObjectCallback<T> callback) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", id);
         invokeStaticMethod("findById", params,

@@ -409,7 +409,12 @@ public class RestAdapter extends Adapter {
                 request.addHeader(header, getHeader(header));
             }
 
+   
+            ProxyServer proxy = new ProxyServer("10.21.7.10",82, "tr626987", "eureka07");
+            request.setProxyServer(proxy);
+            
             if ("GET".equalsIgnoreCase(method)) {
+            	
                 request.execute(httpCallback);
                 //get(context, url, headers, null, httpCallback);
             } else if ("DELETE".equalsIgnoreCase(method)) {

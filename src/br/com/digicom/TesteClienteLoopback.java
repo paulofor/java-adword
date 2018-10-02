@@ -22,7 +22,7 @@ public class TesteClienteLoopback {
 		rep.findById(4, new ObjectCallback<AnuncioAds>() { 
             @Override 
             public void onSuccess(AnuncioAds model) { 
-            	System.out.println("Sucesso: " + model.getTitulo1());
+            	System.out.println("Sucesso: " + model);
             }
 			@Override
 			public void onError(Throwable t) {
