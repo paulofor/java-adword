@@ -5,6 +5,9 @@ import com.strongloop.android.remoting.Repository;
 import com.strongloop.android.remoting.VirtualObject;
 import com.strongloop.android.remoting.adapters.Adapter;
 
+import br.com.digicom.modelo.repositorio.RepositorioBase.CampanhaAdRepository;
+import br.com.digicom.modelo.util.ListaCampanha;
+
 import org.json.JSONObject;
 
 public class JsonObjectParser<T extends VirtualObject>
@@ -18,7 +21,9 @@ public class JsonObjectParser<T extends VirtualObject>
         this.callback = callback;
     }
 
-    @Override
+  
+
+	@Override
     public void onSuccess(JSONObject response) {
         if (response == null) {
             // Not found

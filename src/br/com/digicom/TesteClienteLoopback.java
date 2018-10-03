@@ -3,6 +3,7 @@ package br.com.digicom;
 import br.com.digicom.modelo.AnuncioAds;
 import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.repositorio.RepositorioBase;
+import br.com.digicom.modelo.util.ListaCampanha;
 
 import com.strongloop.android.loopback.Model;
 import com.strongloop.android.loopback.ModelRepository;
@@ -19,7 +20,9 @@ public class TesteClienteLoopback {
 		System.out.println("Ola Mundo");
 		RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
 		RepositorioBase.CampanhaAdRepository rep = adapter.createRepository(RepositorioBase.CampanhaAdRepository.class);
-		rep.listaPendente(new ObjectCallback<CampanhaAds>() { 
+		
+		
+		rep.findById(1, new ObjectCallback<CampanhaAds>() { 
             @Override 
             public void onSuccess(CampanhaAds model) { 
             	System.out.println("Sucesso: " + model);
@@ -29,8 +32,25 @@ public class TesteClienteLoopback {
 				// TODO Auto-generated method stub
 				t.printStackTrace();
 			} 
-        }); 
-
+        });
+     
+		
+		/*
+		rep.listaPendente(new ObjectCallback<CampanhaAds>() { 
+            @Override 
+            public void onSuccess(CampanhaAds model) { 
+            	System.out.println("Sucesso: " + model);
+            	System.out.println("Lista Campanha: " + model.getListaCampanha());
+            }
+			@Override
+			public void onError(Throwable t) {
+				// TODO Auto-generated method stub
+				t.printStackTrace();
+			} 
+        });
+        */
+        
+		
 	}
 
 

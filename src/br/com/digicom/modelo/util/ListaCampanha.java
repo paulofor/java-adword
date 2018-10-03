@@ -6,6 +6,5 @@ import com.strongloop.android.loopback.Model;
 
 public class ListaCampanha extends Model {
 	
-	private CampanhaAds[] listaCampanha ;
-
+	
 }

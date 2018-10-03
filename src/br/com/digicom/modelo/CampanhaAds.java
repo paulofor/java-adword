@@ -19,7 +19,16 @@ public class CampanhaAds extends Model{
 	private Integer paginaValidacaoWebId;
 	private Integer modeloCampanhaId;
 	
-	
+	private String listaCampanha ;
+
+	public String getListaCampanha() {
+		return listaCampanha;
+	}
+
+	public void setListaCampanha(String listaCampanha) {
+		this.listaCampanha = listaCampanha;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -126,6 +135,10 @@ public class CampanhaAds extends Model{
 		this.nome = nome;
 	}
 
+	
+	public String toString() {
+		return "nome: " + this.nome + " , id: " + this.id;
+	}
 	
 
 }

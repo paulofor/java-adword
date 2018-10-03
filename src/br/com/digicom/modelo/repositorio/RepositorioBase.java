@@ -1,17 +1,18 @@
 package br.com.digicom.modelo.repositorio;
 
 
-import br.com.digicom.modelo.AnuncioAds;
-import br.com.digicom.modelo.CampanhaAds;
-import br.com.digicom.modelo.ModeloCampanhaAds;
-import br.com.digicom.modelo.PalavraChaveAds;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import com.strongloop.android.loopback.ModelRepository;
 import com.strongloop.android.loopback.callbacks.JsonObjectParser;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
+import com.strongloop.android.remoting.adapters.RestContractItem;
+
+import br.com.digicom.modelo.AnuncioAds;
+import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.ModeloCampanhaAds;
+import br.com.digicom.modelo.PalavraChaveAds;
 
 public class RepositorioBase {
 
@@ -20,6 +21,8 @@ public class RepositorioBase {
 			super("CampanhaAd", CampanhaAds.class);
 		}
 		public void listaPendente(final ObjectCallback<CampanhaAds> callback) {
+			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaPublicar","GET");
+			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAd.listaParaPublicar");
 	        Map<String, Object> params = new HashMap<String, Object>();
 	        //params.put("id", id);
 	        invokeStaticMethod("listaParaPublicar", params,

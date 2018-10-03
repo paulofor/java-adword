@@ -28,6 +28,7 @@ public class BeanUtil {
 
             // Try to use the exact setter
             if (value != null) {
+            	// String entrando aqui !!!!!
                 try {
                     if (includeSuperClasses) {
                         setter = objectClass.getMethod(setterName, value.getClass());
