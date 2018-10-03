@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.strongloop.android.loopback.ModelRepository;
+import com.strongloop.android.loopback.callbacks.JsonArrayParser;
 import com.strongloop.android.loopback.callbacks.JsonObjectParser;
+import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.loopback.callbacks.ObjectCallback;
 import com.strongloop.android.remoting.adapters.RestContractItem;
 
@@ -20,13 +22,13 @@ public class RepositorioBase {
 		public CampanhaAdRepository() {
 			super("CampanhaAd", CampanhaAds.class);
 		}
-		public void listaPendente(final ObjectCallback<CampanhaAds> callback) {
+		public void listaPendente(final ListCallback<CampanhaAds> callback) {
 			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaPublicar","GET");
 			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAd.listaParaPublicar");
 	        Map<String, Object> params = new HashMap<String, Object>();
 	        //params.put("id", id);
 	        invokeStaticMethod("listaParaPublicar", params,
-	                new JsonObjectParser<CampanhaAds>(this, callback));
+	                new JsonArrayParser<CampanhaAds>(this, callback));
 	    }
 		
 	}

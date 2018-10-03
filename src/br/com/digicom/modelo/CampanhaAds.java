@@ -1,9 +1,16 @@
 package br.com.digicom.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.strongloop.android.loopback.Model;
+import com.strongloop.android.remoting.BeanUtil;
 
 public class CampanhaAds extends Model{
 	
+	
+	private List<AnuncioAds> anuncioAds;
 	
 	private String nome;
 	private Integer id;
@@ -20,6 +27,22 @@ public class CampanhaAds extends Model{
 	private Integer modeloCampanhaId;
 	
 	private String listaCampanha ;
+
+	
+	
+	
+	public List<AnuncioAds> getAnuncioAds() {
+		return anuncioAds;
+	}
+
+	public void setAnuncioAds(List<AnuncioAds> anuncioAds) {
+		this.anuncioAds = new ArrayList<AnuncioAds>();
+		for (int i=0; i<anuncioAds.size(); i++) {
+			Object objeto = new AnuncioAds();
+			BeanUtil.setProperties(objeto, (Map<String, ? extends Object>) anuncioAds.get(i), true);
+			this.anuncioAds.add((AnuncioAds) objeto);
+		}
+	}
 
 	public String getListaCampanha() {
 		return listaCampanha;
