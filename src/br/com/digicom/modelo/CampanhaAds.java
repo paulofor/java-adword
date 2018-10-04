@@ -11,6 +11,7 @@ public class CampanhaAds extends Model{
 	
 	
 	private List<AnuncioAds> anuncioAds;
+	private List<PalavraChaveAds> palavraChaveAds;
 	
 	private String nome;
 	private Integer id;
@@ -29,10 +30,22 @@ public class CampanhaAds extends Model{
 	private String listaCampanha ;
 
 	
-	
-	
 	public List<AnuncioAds> getAnuncioAds() {
-		return anuncioAds;
+		return palavraChaveAds;
+	}
+
+	public void setAnuncioAds(List<PalavraChaveAds> palavraChaveAds) {
+		this.palavraChaveAds = new ArrayList<PalavraChaveAds>();
+		for (int i=0; i<anuncioAds.size(); i++) {
+			Object objeto = new PalavraChaveAds();
+			BeanUtil.setProperties(objeto, (Map<String, ? extends Object>) palavraChaveAds.get(i), true);
+			this.palavraChaveAds.add((PalavraChaveAds) objeto);
+		}
+	}
+
+	
+	public List<AnuncioAds> getPalavraChaveAds() {
+		return palavraChaveAds;
 	}
 
 	public void setAnuncioAds(List<AnuncioAds> anuncioAds) {
