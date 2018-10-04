@@ -8,6 +8,7 @@ public class PalavraChaveAds extends Model {
 	private Integer id;
 	private String palavra;
 	private Integer ganhoDorMySqlId;
+	
 	public Integer getId() {
 		return id;
 	}

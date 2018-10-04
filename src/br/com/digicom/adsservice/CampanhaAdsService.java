@@ -231,12 +231,15 @@ public class CampanhaAdsService extends AdsService {
 
 	}
 
-	private void criaPalavraChave(Long idGrupo, AdWordsServicesInterface adWordsServices, AdWordsSession session)
+	private void criaPalavraChave(CampanhaAds campanha,Long idGrupo, AdWordsServicesInterface adWordsServices, AdWordsSession session)
 			throws ApiException, RemoteException {
 		AddKeywordsParams params = new AddKeywordsParams();
 		params.adGroupId = idGrupo;
 		AdGroupCriterionServiceInterface adGroupCriterionService = adWordsServices.get(session,
 				AdGroupCriterionServiceInterface.class);
+		
+		List<AdGroupCriterionOperation> listaOperacao = new ArrayList<AdGroupCriterionOperation>();
+		
 		// Create keywords.
 		Keyword keyword1 = new Keyword();
 		keyword1.setText("aumentar vendas");
@@ -271,7 +274,8 @@ public class CampanhaAdsService extends AdsService {
 		// keywordAdGroupCriterionOperation2.setOperand(keywordNegativeAdGroupCriterion2);
 		// keywordAdGroupCriterionOperation2.setOperator(Operator.ADD);
 
-		AdGroupCriterionOperation[] operations = new AdGroupCriterionOperation[] { keywordAdGroupCriterionOperation1 };
+		//AdGroupCriterionOperation[] operations = new AdGroupCriterionOperation[] { keywordAdGroupCriterionOperation1 };
+		AdGroupCriterionOperation[] operations = listaOperacao.toArray(AdGroupCriterionOperation.class);
 
 		// Add keywords.
 		AdGroupCriterionReturnValue result = adGroupCriterionService.mutate(operations);

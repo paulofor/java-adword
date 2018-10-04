@@ -30,11 +30,11 @@ public class CampanhaAds extends Model{
 	private String listaCampanha ;
 
 	
-	public List<AnuncioAds> getAnuncioAds() {
-		return palavraChaveAds;
+	public List<PalavraChaveAds> getPalavraChaveAds() {
+		return this.palavraChaveAds;
 	}
 
-	public void setAnuncioAds(List<PalavraChaveAds> palavraChaveAds) {
+	public void setPalavraChaveAds(List<PalavraChaveAds> palavraChaveAds) {
 		this.palavraChaveAds = new ArrayList<PalavraChaveAds>();
 		for (int i=0; i<anuncioAds.size(); i++) {
 			Object objeto = new PalavraChaveAds();
@@ -44,8 +44,8 @@ public class CampanhaAds extends Model{
 	}
 
 	
-	public List<AnuncioAds> getPalavraChaveAds() {
-		return palavraChaveAds;
+	public List<AnuncioAds> getAnuncioAds() {
+		return anuncioAds;
 	}
 
 	public void setAnuncioAds(List<AnuncioAds> anuncioAds) {
