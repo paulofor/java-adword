@@ -28,15 +28,24 @@ public class CampanhaAds extends Model{
 	private Integer modeloCampanhaId;
 	
 	private String listaCampanha ;
+	private String urlAlvo;
 
 	
+	public String getUrlAlvo() {
+		return urlAlvo;
+	}
+
+	public void setUrlAlvo(String urlAlvo) {
+		this.urlAlvo = urlAlvo;
+	}
+
 	public List<PalavraChaveAds> getPalavraChaveAds() {
 		return this.palavraChaveAds;
 	}
 
 	public void setPalavraChaveAds(List<PalavraChaveAds> palavraChaveAds) {
 		this.palavraChaveAds = new ArrayList<PalavraChaveAds>();
-		for (int i=0; i<anuncioAds.size(); i++) {
+		for (int i=0; i<palavraChaveAds.size(); i++) {
 			Object objeto = new PalavraChaveAds();
 			BeanUtil.setProperties(objeto, (Map<String, ? extends Object>) palavraChaveAds.get(i), true);
 			this.palavraChaveAds.add((PalavraChaveAds) objeto);

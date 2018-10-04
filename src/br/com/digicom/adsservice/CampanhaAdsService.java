@@ -72,6 +72,7 @@ import adwords.axis.v201802.basicoperations.AddAdGroups.AddAdGroupsParams;
 import br.com.digicom.AdsService;
 import br.com.digicom.modelo.AnuncioAds;
 import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.PalavraChaveAds;
 
 public class CampanhaAdsService extends AdsService {
 
@@ -201,7 +202,7 @@ public class CampanhaAdsService extends AdsService {
 			expandedTextAd.setHeadlinePart1(anuncio.getTitulo1());
 			expandedTextAd.setHeadlinePart2(anuncio.getTitulo2());
 			expandedTextAd.setDescription(anuncio.getDescricao1());
-			expandedTextAd.setFinalUrls(new String[] { "http://www.example.com/" });
+			expandedTextAd.setFinalUrls(new String[] { campanha.getUrlAlvo() });
 
 			// Create ad group ad.
 			AdGroupAd expandedTextAdGroupAd = new AdGroupAd();
@@ -219,8 +220,7 @@ public class CampanhaAdsService extends AdsService {
 			operations.add(adGroupAdOperation);
 		}
 		// Add ads.
-		AdGroupAdReturnValue result = adGroupAdService.mutate(operations.toArray(new AdGroupAdOperation[operations
-				.size()]));
+		AdGroupAdReturnValue result = adGroupAdService.mutate(operations.toArray(new AdGroupAdOperation[operations.size()]));
 
 		// Display ads.
 		for (AdGroupAd adGroupAdResult : result.getValue()) {
@@ -231,51 +231,55 @@ public class CampanhaAdsService extends AdsService {
 
 	}
 
-	private void criaPalavraChave(CampanhaAds campanha,Long idGrupo, AdWordsServicesInterface adWordsServices, AdWordsSession session)
-			throws ApiException, RemoteException {
+	private void criaPalavraChave(CampanhaAds campanha, Long idGrupo, AdWordsServicesInterface adWordsServices,
+			AdWordsSession session) throws ApiException, RemoteException {
 		AddKeywordsParams params = new AddKeywordsParams();
 		params.adGroupId = idGrupo;
 		AdGroupCriterionServiceInterface adGroupCriterionService = adWordsServices.get(session,
 				AdGroupCriterionServiceInterface.class);
-		
+
 		List<AdGroupCriterionOperation> listaOperacao = new ArrayList<AdGroupCriterionOperation>();
-		
-		// Create keywords.
-		Keyword keyword1 = new Keyword();
-		keyword1.setText("aumentar vendas");
-		keyword1.setMatchType(KeywordMatchType.BROAD);
 
-		// Keyword keyword2 = new Keyword();
-		// keyword2.setText("space hotel");
-		// keyword2.setMatchType(KeywordMatchType.EXACT);
+		for (PalavraChaveAds palavra : campanha.getPalavraChaveAds()) {
+			// Create keywords.
+			Keyword keyword1 = new Keyword();
+			keyword1.setText(palavra.getPalavra());
+			keyword1.setMatchType(KeywordMatchType.BROAD);
 
-		// Create biddable ad group criterion.
-		BiddableAdGroupCriterion keywordBiddableAdGroupCriterion1 = new BiddableAdGroupCriterion();
-		keywordBiddableAdGroupCriterion1.setAdGroupId(idGrupo);
-		keywordBiddableAdGroupCriterion1.setCriterion(keyword1);
-		// NegativeAdGroupCriterion keywordNegativeAdGroupCriterion2 = new
-		// NegativeAdGroupCriterion();
-		// keywordNegativeAdGroupCriterion2.setAdGroupId(idGrupo);
-		// keywordNegativeAdGroupCriterion2.setCriterion(keyword2);
+			// Keyword keyword2 = new Keyword();
+			// keyword2.setText("space hotel");
+			// keyword2.setMatchType(KeywordMatchType.EXACT);
 
-		/*
-		 * String encodedFinalUrl =
-		 * String.format("http://example.com/mars/cruise/?kw=%s",
-		 * URLEncoder.encode(keyword1.getText(), UTF_8.name()));
-		 * keywordBiddableAdGroupCriterion1.setFinalUrls(new UrlList(new
-		 * String[] {encodedFinalUrl}));
-		 */
-		// Create operations.
-		AdGroupCriterionOperation keywordAdGroupCriterionOperation1 = new AdGroupCriterionOperation();
-		keywordAdGroupCriterionOperation1.setOperand(keywordBiddableAdGroupCriterion1);
-		keywordAdGroupCriterionOperation1.setOperator(Operator.ADD);
+			// Create biddable ad group criterion.
+			BiddableAdGroupCriterion keywordBiddableAdGroupCriterion1 = new BiddableAdGroupCriterion();
+			keywordBiddableAdGroupCriterion1.setAdGroupId(idGrupo);
+			keywordBiddableAdGroupCriterion1.setCriterion(keyword1);
+			// NegativeAdGroupCriterion keywordNegativeAdGroupCriterion2 = new
+			// NegativeAdGroupCriterion();
+			// keywordNegativeAdGroupCriterion2.setAdGroupId(idGrupo);
+			// keywordNegativeAdGroupCriterion2.setCriterion(keyword2);
+
+			/*
+			 * String encodedFinalUrl =
+			 * String.format("http://example.com/mars/cruise/?kw=%s",
+			 * URLEncoder.encode(keyword1.getText(), UTF_8.name()));
+			 * keywordBiddableAdGroupCriterion1.setFinalUrls(new UrlList(new
+			 * String[] {encodedFinalUrl}));
+			 */
+			// Create operations.
+			AdGroupCriterionOperation keywordAdGroupCriterionOperation1 = new AdGroupCriterionOperation();
+			keywordAdGroupCriterionOperation1.setOperand(keywordBiddableAdGroupCriterion1);
+			keywordAdGroupCriterionOperation1.setOperator(Operator.ADD);
+			listaOperacao.add(keywordAdGroupCriterionOperation1);
+		}
 		// AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new
 		// AdGroupCriterionOperation();
 		// keywordAdGroupCriterionOperation2.setOperand(keywordNegativeAdGroupCriterion2);
 		// keywordAdGroupCriterionOperation2.setOperator(Operator.ADD);
 
-		//AdGroupCriterionOperation[] operations = new AdGroupCriterionOperation[] { keywordAdGroupCriterionOperation1 };
-		AdGroupCriterionOperation[] operations = listaOperacao.toArray(AdGroupCriterionOperation.class);
+		// AdGroupCriterionOperation[] operations = new
+		// AdGroupCriterionOperation[] { keywordAdGroupCriterionOperation1 };
+		AdGroupCriterionOperation[] operations = listaOperacao.toArray(new AdGroupCriterionOperation[0]);
 
 		// Add keywords.
 		AdGroupCriterionReturnValue result = adGroupCriterionService.mutate(operations);
@@ -291,8 +295,8 @@ public class CampanhaAdsService extends AdsService {
 
 	}
 
-	private void criarGrupoAnuncio(CampanhaAds campanha, Long idCampanha, AdWordsServicesInterface adWordsServices, AdWordsSession session)
-			throws RemoteException, ApiException {
+	private void criarGrupoAnuncio(CampanhaAds campanha, Long idCampanha, AdWordsServicesInterface adWordsServices,
+			AdWordsSession session) throws RemoteException, ApiException {
 		AddAdGroupsParams params = new AddAdGroupsParams();
 
 		params.campaignId = idCampanha;
@@ -318,8 +322,8 @@ public class CampanhaAdsService extends AdsService {
 		for (AdGroup adGroupResult : result.getValue()) {
 			System.out.printf("Ad group with name '%s' and ID %d was added.%n", adGroupResult.getName(),
 					adGroupResult.getId());
-			this.criaAnuncio(campanha,adGroupResult.getId(), adWordsServices, session);
-			this.criaPalavraChave(adGroupResult.getId(), adWordsServices, session);
+			this.criaAnuncio(campanha, adGroupResult.getId(), adWordsServices, session);
+			this.criaPalavraChave(campanha, adGroupResult.getId(), adWordsServices, session);
 		}
 
 	}
