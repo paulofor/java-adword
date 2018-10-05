@@ -1,16 +1,15 @@
 package br.com.digicom.adsservice;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import java.net.URLEncoder;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
 
 import com.beust.jcommander.Parameter;
-import com.google.api.ads.adwords.axis.factory.AdWordsServices;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroup;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAd;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdOperation;
@@ -35,10 +34,15 @@ import com.google.api.ads.adwords.axis.v201802.cm.BudgetBudgetDeliveryMethod;
 import com.google.api.ads.adwords.axis.v201802.cm.BudgetOperation;
 import com.google.api.ads.adwords.axis.v201802.cm.BudgetServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.Campaign;
+import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterion;
+import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionOperation;
+import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionReturnValue;
+import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.CampaignOperation;
 import com.google.api.ads.adwords.axis.v201802.cm.CampaignReturnValue;
 import com.google.api.ads.adwords.axis.v201802.cm.CampaignServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.CampaignStatus;
+import com.google.api.ads.adwords.axis.v201802.cm.Criterion;
 import com.google.api.ads.adwords.axis.v201802.cm.ExpandedTextAd;
 import com.google.api.ads.adwords.axis.v201802.cm.FrequencyCap;
 import com.google.api.ads.adwords.axis.v201802.cm.GeoTargetTypeSetting;
@@ -47,27 +51,17 @@ import com.google.api.ads.adwords.axis.v201802.cm.Keyword;
 import com.google.api.ads.adwords.axis.v201802.cm.KeywordMatchType;
 import com.google.api.ads.adwords.axis.v201802.cm.Language;
 import com.google.api.ads.adwords.axis.v201802.cm.Level;
+import com.google.api.ads.adwords.axis.v201802.cm.Location;
 import com.google.api.ads.adwords.axis.v201802.cm.ManualCpcBiddingScheme;
 import com.google.api.ads.adwords.axis.v201802.cm.Money;
-import com.google.api.ads.adwords.axis.v201802.cm.NegativeAdGroupCriterion;
 import com.google.api.ads.adwords.axis.v201802.cm.NetworkSetting;
 import com.google.api.ads.adwords.axis.v201802.cm.Operator;
 import com.google.api.ads.adwords.axis.v201802.cm.Setting;
 import com.google.api.ads.adwords.axis.v201802.cm.TimeUnit;
-import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterion;
-import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionOperation;
-import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionReturnValue;
-import com.google.api.ads.adwords.axis.v201802.cm.CampaignCriterionServiceInterface;
-import com.google.api.ads.adwords.axis.v201802.cm.Criterion;
-import com.google.api.ads.adwords.axis.v201802.cm.Location;
-import com.google.api.ads.adwords.axis.v201802.cm.UrlList;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import com.google.api.ads.adwords.lib.utils.examples.ArgumentNames;
 import com.google.api.ads.common.lib.utils.examples.CodeSampleParams;
-import com.google.api.client.util.Lists;
-
-import adwords.axis.v201802.basicoperations.AddAdGroups.AddAdGroupsParams;
 
 import br.com.digicom.AdsService;
 import br.com.digicom.modelo.AnuncioAds;
@@ -103,8 +97,8 @@ public class CampanhaAdsService extends AdsService {
 		Campaign campaign = new Campaign();
 		campaign.setName(campanha.getNome() + "__" + System.currentTimeMillis());
 		campaign.setStatus(CampaignStatus.PAUSED);
-		campaign.setStartDate(new DateTime().plusDays(1).toString("yyyyMMdd"));
-		campaign.setEndDate(new DateTime().plusDays(8).toString("yyyyMMdd"));
+		campaign.setStartDate(this.converteData(this.getProximaSegunda()));
+		campaign.setEndDate(this.converteData(this.getProximaSexta()));
 		campaign.setAdvertisingChannelType(AdvertisingChannelType.SEARCH);
 		campaign.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
 		campaign.setBudget(budget);
@@ -124,6 +118,9 @@ public class CampanhaAdsService extends AdsService {
 					campaignResult.getId());
 			this.criaSegmentacaoLocal(campaignResult.getId(), adWordsServices, session);
 			this.criarGrupoAnuncio(campanha, campaignResult.getId(), adWordsServices, session);
+			campanha.setIdAds("" + campaignResult.getId());
+			campanha.setDataInicial(campaign.getStartDate());
+			campanha.setDataFinal(campaign.getEndDate());
 		}
 
 	}
@@ -328,7 +325,7 @@ public class CampanhaAdsService extends AdsService {
 
 	}
 
-	protected void runExample2(AdWordsServicesInterface adWordsServices, AdWordsSession session)
+	protected void runExampleNaoUsado(AdWordsServicesInterface adWordsServices, AdWordsSession session)
 			throws RemoteException, ApiException {
 		BudgetServiceInterface budgetService = adWordsServices.get(session, BudgetServiceInterface.class);
 
@@ -371,8 +368,8 @@ public class CampanhaAdsService extends AdsService {
 		campaign.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
 
 		// You can optionally provide these field(s).
-		campaign.setStartDate(new DateTime().plusDays(1).toString("yyyyMMdd"));
-		campaign.setEndDate(new DateTime().plusDays(8).toString("yyyyMMdd"));
+		campaign.setStartDate(converteData(getProximaSegunda()));
+		campaign.setEndDate(converteData(getProximaSexta()));
 		campaign.setFrequencyCap(new FrequencyCap(5L, TimeUnit.DAY, Level.ADGROUP));
 
 		// Only the budgetId should be sent, all other fields will be ignored by
@@ -410,6 +407,7 @@ public class CampanhaAdsService extends AdsService {
 		for (Campaign campaignResult : result.getValue()) {
 			System.out.printf("Campanha com nome name '%s' e ID %d foi criada.%n", campaignResult.getName(),
 					campaignResult.getId());
+			campanha.setIdAds("" + campaignResult.getId());
 		}
 
 	}
@@ -419,5 +417,32 @@ public class CampanhaAdsService extends AdsService {
 		this.campanha = campanha;
 		super.executa();
 	}
+	
+	public Calendar getProximaSegunda() {
+		Calendar date1 = Calendar.getInstance();
+		date1.add(Calendar.DATE, 1);
+
+		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+		    date1.add(Calendar.DATE, 1);
+		}
+		return date1;
+	}
+	
+	private String converteData(Calendar data) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		return sdf.format(data.getTime());
+	}
+	
+	public Calendar getProximaSexta() {
+		Calendar date1 = Calendar.getInstance();
+		date1.add(Calendar.DATE, 1);
+
+		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY) {
+		    date1.add(Calendar.DATE, 1);
+		}
+		return date1;
+		
+	}
+	
 
 }

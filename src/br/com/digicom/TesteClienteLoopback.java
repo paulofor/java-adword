@@ -48,6 +48,7 @@ public class TesteClienteLoopback {
 				//System.out.println("Lista Interna:" + objects.get(0).getAnuncioAds().size());
 				IntegracaoMundo integra = new IntegracaoMundo();
 				integra.criaCampanha(objects);
+				rep.s.;
 			} 
         });
                 
