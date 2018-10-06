@@ -119,8 +119,8 @@ public class CampanhaAdsService extends AdsService {
 			this.criaSegmentacaoLocal(campaignResult.getId(), adWordsServices, session);
 			this.criarGrupoAnuncio(campanha, campaignResult.getId(), adWordsServices, session);
 			campanha.setIdAds("" + campaignResult.getId());
-			campanha.setDataInicial(campaign.getStartDate());
-			campanha.setDataFinal(campaign.getEndDate());
+			campanha.setDataInicial(this.converteDataInicioDia(this.getProximaSegunda()));
+			campanha.setDataFinal(this.converteDataFinalDia(this.getProximaSexta()));
 		}
 
 	}
@@ -432,6 +432,18 @@ public class CampanhaAdsService extends AdsService {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		return sdf.format(data.getTime());
 	}
+	private String converteDataInicioDia(Calendar data) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dia = sdf.format(data.getTime());
+		return dia;
+	}
+	private String converteDataFinalDia(Calendar data) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dia = sdf.format(data.getTime());
+		return dia;
+	}
+	
+	
 	
 	public Calendar getProximaSexta() {
 		Calendar date1 = Calendar.getInstance();

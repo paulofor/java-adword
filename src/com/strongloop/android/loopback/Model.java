@@ -106,6 +106,7 @@ public class Model extends VirtualObject {
 
             @Override
             public void onSuccess(JSONObject response) {
+            	System.out.println("Resposta-Servidor:" + response);
                 Object id = response.opt("id");
                 if (id != null) {
                     setId(id);
