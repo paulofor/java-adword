@@ -35,8 +35,16 @@ import com.google.api.ads.common.lib.conf.ConfigurationLoadException;
 import com.google.api.ads.common.lib.exception.OAuthException;
 import com.google.api.ads.common.lib.exception.ValidationException;
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.Authenticator.RequestorType;
 
 /**
  * This example downloads a criteria performance report with AWQL.
@@ -47,6 +55,7 @@ import java.io.IOException;
 public class DownloadCriteriaReportWithAwql {
 
   public static void main(String[] args) {
+	  setProxy();
     AdWordsSession session;
     try {
       // Generate a refreshable OAuth2 credential.
@@ -171,4 +180,35 @@ public class DownloadCriteriaReportWithAwql {
     
     System.out.printf("Report successfully downloaded to: %s%n", reportFile);
   }
+  
+  
+
+  protected static HttpTransport setProxy() {
+		System.setProperty("https.proxyHost", "10.21.7.10");
+		System.setProperty("https.proxyPort", "82");
+		System.setProperty("https.proxyUser", "tr626987");
+		System.setProperty("https.proxyPassword", "eureka07");
+
+		System.setProperty("http.proxyHost", "10.21.7.10");
+		System.setProperty("http.proxyPort", "82");
+		System.setProperty("http.proxyUser", "tr626987");
+		System.setProperty("http.proxyPassword", "eureka07");
+		
+		
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.21.7.10", 82));
+		HttpTransport httpTransport = new NetHttpTransport.Builder().setProxy(proxy).build();
+		Authenticator.setDefault(new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				// check that the pasword-requesting site is the proxy server
+				if (this.getRequestingHost().contains("10.21.7.10") && this.getRequestingPort() == 82
+						&& this.getRequestorType().equals(RequestorType.PROXY)) {
+					return new PasswordAuthentication("tr626987", "eureka07".toCharArray());
+				}
+				return super.getPasswordAuthentication();
+			}
+		});
+		return httpTransport;
+	}
+
 }

@@ -207,7 +207,7 @@ public class CampanhaAdsService extends AdsService {
 			expandedTextAdGroupAd.setAd(expandedTextAd);
 
 			// Optional: set the status.
-			expandedTextAdGroupAd.setStatus(AdGroupAdStatus.PAUSED);
+			expandedTextAdGroupAd.setStatus(AdGroupAdStatus.ENABLED);
 
 			// Create the operation.
 			AdGroupAdOperation adGroupAdOperation = new AdGroupAdOperation();
