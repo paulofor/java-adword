@@ -4,16 +4,14 @@ import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 import com.beust.jcommander.Parameter;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroup;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAd;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdOperation;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdReturnValue;
+import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdRotationMode;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAdStatus;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupCriterion;
@@ -24,6 +22,7 @@ import com.google.api.ads.adwords.axis.v201802.cm.AdGroupOperation;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupReturnValue;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupStatus;
+import com.google.api.ads.adwords.axis.v201802.cm.AdRotationMode;
 import com.google.api.ads.adwords.axis.v201802.cm.AdvertisingChannelType;
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
 import com.google.api.ads.adwords.axis.v201802.cm.BiddableAdGroupCriterion;
@@ -73,8 +72,8 @@ public class CampanhaAdsService extends AdsService {
 	private CampanhaAds campanha = null;
 
 	@Override
-	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session) throws RemoteException,
-			ApiException {
+	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session)
+			throws RemoteException, ApiException {
 
 		CampaignServiceInterface campaignService = adWordsServices.get(session, CampaignServiceInterface.class);
 
@@ -97,7 +96,7 @@ public class CampanhaAdsService extends AdsService {
 		Campaign campaign = new Campaign();
 		campaign.setName(campanha.getNome() + "__" + System.currentTimeMillis());
 		campaign.setStatus(CampaignStatus.PAUSED);
-		campaign.setStartDate(this.converteData(this.getProximaSegunda()));
+		campaign.setStartDate(this.converteData(this.getDataInicial()));
 		campaign.setEndDate(this.converteData(this.getProximaSexta()));
 		campaign.setAdvertisingChannelType(AdvertisingChannelType.SEARCH);
 		campaign.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
@@ -119,7 +118,7 @@ public class CampanhaAdsService extends AdsService {
 			this.criaSegmentacaoLocal(campaignResult.getId(), adWordsServices, session);
 			this.criarGrupoAnuncio(campanha, campaignResult.getId(), adWordsServices, session);
 			campanha.setIdAds("" + campaignResult.getId());
-			campanha.setDataInicial(this.converteDataInicioDia(this.getProximaSegunda()));
+			campanha.setDataInicial(this.converteDataInicioDia(this.getDataInicial()));
 			campanha.setDataFinal(this.converteDataFinalDia(this.getProximaSexta()));
 		}
 
@@ -150,8 +149,8 @@ public class CampanhaAdsService extends AdsService {
 			operations.add(operation);
 		}
 
-		CampaignCriterionReturnValue result = campaignCriterionService.mutate((CampaignCriterionOperation[]) operations
-				.toArray(new CampaignCriterionOperation[operations.size()]));
+		CampaignCriterionReturnValue result = campaignCriterionService.mutate(
+				(CampaignCriterionOperation[]) operations.toArray(new CampaignCriterionOperation[operations.size()]));
 	}
 
 	private Long criaBudget(Budget budget, AdWordsServicesInterface adWordsServices, AdWordsSession session)
@@ -205,6 +204,11 @@ public class CampanhaAdsService extends AdsService {
 			AdGroupAd expandedTextAdGroupAd = new AdGroupAd();
 			expandedTextAdGroupAd.setAdGroupId(idGrupo);
 			expandedTextAdGroupAd.setAd(expandedTextAd);
+			
+		    // Set the rotation mode.
+		    AdGroupAdRotationMode rotationMode = new AdGroupAdRotationMode(AdRotationMode.OPTIMIZE);
+		    expandedTextAdGroupAd.setAdGroupAdRotationMode(rotationMode);
+
 
 			// Optional: set the status.
 			expandedTextAdGroupAd.setStatus(AdGroupAdStatus.ENABLED);
@@ -217,7 +221,8 @@ public class CampanhaAdsService extends AdsService {
 			operations.add(adGroupAdOperation);
 		}
 		// Add ads.
-		AdGroupAdReturnValue result = adGroupAdService.mutate(operations.toArray(new AdGroupAdOperation[operations.size()]));
+		AdGroupAdReturnValue result = adGroupAdService
+				.mutate(operations.toArray(new AdGroupAdOperation[operations.size()]));
 
 		// Display ads.
 		for (AdGroupAd adGroupAdResult : result.getValue()) {
@@ -238,36 +243,34 @@ public class CampanhaAdsService extends AdsService {
 		List<AdGroupCriterionOperation> listaOperacao = new ArrayList<AdGroupCriterionOperation>();
 
 		for (PalavraChaveAds palavra : campanha.getPalavraChaveAds()) {
+
 			// Create keywords.
 			Keyword keyword1 = new Keyword();
 			keyword1.setText(palavra.getPalavra());
 			keyword1.setMatchType(KeywordMatchType.BROAD);
-
-			// Keyword keyword2 = new Keyword();
-			// keyword2.setText("space hotel");
-			// keyword2.setMatchType(KeywordMatchType.EXACT);
-
 			// Create biddable ad group criterion.
 			BiddableAdGroupCriterion keywordBiddableAdGroupCriterion1 = new BiddableAdGroupCriterion();
 			keywordBiddableAdGroupCriterion1.setAdGroupId(idGrupo);
 			keywordBiddableAdGroupCriterion1.setCriterion(keyword1);
-			// NegativeAdGroupCriterion keywordNegativeAdGroupCriterion2 = new
-			// NegativeAdGroupCriterion();
-			// keywordNegativeAdGroupCriterion2.setAdGroupId(idGrupo);
-			// keywordNegativeAdGroupCriterion2.setCriterion(keyword2);
-
-			/*
-			 * String encodedFinalUrl =
-			 * String.format("http://example.com/mars/cruise/?kw=%s",
-			 * URLEncoder.encode(keyword1.getText(), UTF_8.name()));
-			 * keywordBiddableAdGroupCriterion1.setFinalUrls(new UrlList(new
-			 * String[] {encodedFinalUrl}));
-			 */
 			// Create operations.
 			AdGroupCriterionOperation keywordAdGroupCriterionOperation1 = new AdGroupCriterionOperation();
 			keywordAdGroupCriterionOperation1.setOperand(keywordBiddableAdGroupCriterion1);
 			keywordAdGroupCriterionOperation1.setOperator(Operator.ADD);
 			listaOperacao.add(keywordAdGroupCriterionOperation1);
+
+			// Create keywords.
+			Keyword keyword2 = new Keyword();
+			keyword2.setText(palavra.getPalavra());
+			keyword2.setMatchType(KeywordMatchType.PHRASE);
+			// Create biddable ad group criterion.
+			BiddableAdGroupCriterion keywordBiddableAdGroupCriterion2 = new BiddableAdGroupCriterion();
+			keywordBiddableAdGroupCriterion2.setAdGroupId(idGrupo);
+			keywordBiddableAdGroupCriterion2.setCriterion(keyword2);
+			// Create operations.
+			AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new AdGroupCriterionOperation();
+			keywordAdGroupCriterionOperation2.setOperand(keywordBiddableAdGroupCriterion2);
+			keywordAdGroupCriterionOperation2.setOperator(Operator.ADD);
+			listaOperacao.add(keywordAdGroupCriterionOperation2);
 		}
 		// AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new
 		// AdGroupCriterionOperation();
@@ -283,9 +286,10 @@ public class CampanhaAdsService extends AdsService {
 
 		// Display results.
 		for (AdGroupCriterion adGroupCriterionResult : result.getValue()) {
-			System.out.printf("Keyword ad group criterion with ad group ID %d, criterion ID %d, "
-					+ "text '%s', and match type '%s' was added.%n", adGroupCriterionResult.getAdGroupId(),
-					adGroupCriterionResult.getCriterion().getId(),
+			System.out.printf(
+					"Keyword ad group criterion with ad group ID %d, criterion ID %d, "
+							+ "text '%s', and match type '%s' was added.%n",
+					adGroupCriterionResult.getAdGroupId(), adGroupCriterionResult.getCriterion().getId(),
 					((Keyword) adGroupCriterionResult.getCriterion()).getText(),
 					((Keyword) adGroupCriterionResult.getCriterion()).getMatchType());
 		}
@@ -368,7 +372,7 @@ public class CampanhaAdsService extends AdsService {
 		campaign.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
 
 		// You can optionally provide these field(s).
-		campaign.setStartDate(converteData(getProximaSegunda()));
+		campaign.setStartDate(converteData(getDataInicial()));
 		campaign.setEndDate(converteData(getProximaSexta()));
 		campaign.setFrequencyCap(new FrequencyCap(5L, TimeUnit.DAY, Level.ADGROUP));
 
@@ -417,44 +421,43 @@ public class CampanhaAdsService extends AdsService {
 		this.campanha = campanha;
 		super.executa();
 	}
-	
-	public Calendar getProximaSegunda() {
+
+	public Calendar getDataInicial() {
 		Calendar date1 = Calendar.getInstance();
 		date1.add(Calendar.DATE, 1);
 
-		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-		    date1.add(Calendar.DATE, 1);
+		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+			date1.add(Calendar.DATE, 1);
 		}
 		return date1;
 	}
-	
+
 	private String converteData(Calendar data) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		return sdf.format(data.getTime());
 	}
+
 	private String converteDataInicioDia(Calendar data) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String dia = sdf.format(data.getTime());
 		return dia;
 	}
+
 	private String converteDataFinalDia(Calendar data) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String dia = sdf.format(data.getTime());
 		return dia;
 	}
-	
-	
-	
+
 	public Calendar getProximaSexta() {
-		Calendar date1 = Calendar.getInstance();
+		Calendar date1 = getDataInicial();
 		date1.add(Calendar.DATE, 1);
 
 		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY) {
-		    date1.add(Calendar.DATE, 1);
+			date1.add(Calendar.DATE, 1);
 		}
 		return date1;
-		
+
 	}
-	
 
 }
