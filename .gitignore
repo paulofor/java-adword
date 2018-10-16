@@ -1,5 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+bin/*
 /src/ads.properties
 /srv/Copy of ads.properties
 

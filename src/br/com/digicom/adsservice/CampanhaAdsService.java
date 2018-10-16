@@ -79,7 +79,7 @@ public class CampanhaAdsService extends AdsService {
 
 		// BiddingStrategyConfiguration
 		BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
-		biddingStrategyConfiguration.setBiddingStrategyType(BiddingStrategyType.TARGET_SPEND);
+		biddingStrategyConfiguration.setBiddingStrategyType(BiddingStrategyType.ENHANCED_CPC);
 
 		// Money
 		Money budgetAmount = new Money();
@@ -205,10 +205,7 @@ public class CampanhaAdsService extends AdsService {
 			expandedTextAdGroupAd.setAdGroupId(idGrupo);
 			expandedTextAdGroupAd.setAd(expandedTextAd);
 			
-		    // Set the rotation mode.
-		    AdGroupAdRotationMode rotationMode = new AdGroupAdRotationMode(AdRotationMode.OPTIMIZE);
-		    expandedTextAdGroupAd.setAdGroupAdRotationMode(rotationMode);
-
+		   
 
 			// Optional: set the status.
 			expandedTextAdGroupAd.setStatus(AdGroupAdStatus.ENABLED);
@@ -247,7 +244,7 @@ public class CampanhaAdsService extends AdsService {
 			// Create keywords.
 			Keyword keyword1 = new Keyword();
 			keyword1.setText(palavra.getPalavra());
-			keyword1.setMatchType(KeywordMatchType.BROAD);
+			keyword1.setMatchType(KeywordMatchType.PHRASE);
 			// Create biddable ad group criterion.
 			BiddableAdGroupCriterion keywordBiddableAdGroupCriterion1 = new BiddableAdGroupCriterion();
 			keywordBiddableAdGroupCriterion1.setAdGroupId(idGrupo);
@@ -258,19 +255,18 @@ public class CampanhaAdsService extends AdsService {
 			keywordAdGroupCriterionOperation1.setOperator(Operator.ADD);
 			listaOperacao.add(keywordAdGroupCriterionOperation1);
 
-			// Create keywords.
+			/*
 			Keyword keyword2 = new Keyword();
 			keyword2.setText(palavra.getPalavra());
 			keyword2.setMatchType(KeywordMatchType.PHRASE);
-			// Create biddable ad group criterion.
 			BiddableAdGroupCriterion keywordBiddableAdGroupCriterion2 = new BiddableAdGroupCriterion();
 			keywordBiddableAdGroupCriterion2.setAdGroupId(idGrupo);
 			keywordBiddableAdGroupCriterion2.setCriterion(keyword2);
-			// Create operations.
 			AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new AdGroupCriterionOperation();
 			keywordAdGroupCriterionOperation2.setOperand(keywordBiddableAdGroupCriterion2);
 			keywordAdGroupCriterionOperation2.setOperator(Operator.ADD);
 			listaOperacao.add(keywordAdGroupCriterionOperation2);
+			*/
 		}
 		// AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new
 		// AdGroupCriterionOperation();
@@ -309,7 +305,11 @@ public class CampanhaAdsService extends AdsService {
 		adGroup.setName("Grupo Unico" + System.currentTimeMillis());
 		adGroup.setStatus(AdGroupStatus.ENABLED);
 		adGroup.setCampaignId(idCampanha);
+		 // Set the rotation mode.
+	    AdGroupAdRotationMode rotationMode = new AdGroupAdRotationMode(AdRotationMode.ROTATE_FOREVER);
+	    adGroup.setAdGroupAdRotationMode(rotationMode);
 
+		
 		AdGroupOperation operation = new AdGroupOperation();
 		operation.setOperand(adGroup);
 		operation.setOperator(Operator.ADD);
@@ -424,11 +424,11 @@ public class CampanhaAdsService extends AdsService {
 
 	public Calendar getDataInicial() {
 		Calendar date1 = Calendar.getInstance();
-		date1.add(Calendar.DATE, 1);
+		//date1.add(Calendar.DATE, 1);
 
-		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-			date1.add(Calendar.DATE, 1);
-		}
+		//while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+		//	date1.add(Calendar.DATE, 1);
+		//}
 		return date1;
 	}
 
