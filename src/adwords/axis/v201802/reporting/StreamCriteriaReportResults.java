@@ -145,6 +145,15 @@ public class StreamCriteriaReportResults {
             + "WHERE Status IN [ENABLED, PAUSED] "
             + "DURING LAST_7_DAYS";
 
+    query = "SELECT Id, Name " 
+    		 + "FROM CRITERIA_PERFORMANCE_REPORT "
+    + "WHERE Status = 'ENABLED' "
+    + "ORDER BY Name DESC "
+    + "LIMIT 0,50 ";
+    
+    
+    
+    
     // Optional: Set the reporting configuration of the session to suppress header, column name, or
     // summary rows in the report output. You can also configure this via your ads.properties
     // configuration file. See AdWordsSession.Builder.from(Configuration) for details.
