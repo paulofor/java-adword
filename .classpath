@@ -37,8 +37,8 @@
 	<classpathentry kind="lib" path="lib/commons-io-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/async-http-client-1.9.38.jar"/>
 	<classpathentry kind="lib" path="lib/netty-3.10.5.Final.jar"/>
-	<classpathentry kind="lib" path="lib/ads-lib-4.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/ads-lib-axis-4.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/adwords-axis-4.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/ads-lib-4.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/ads-lib-axis-4.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/adwords-axis-4.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

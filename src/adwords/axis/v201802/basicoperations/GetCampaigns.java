@@ -34,6 +34,9 @@ import com.google.api.ads.common.lib.conf.ConfigurationLoadException;
 import com.google.api.ads.common.lib.exception.OAuthException;
 import com.google.api.ads.common.lib.exception.ValidationException;
 import com.google.api.client.auth.oauth2.Credential;
+
+import br.com.digicom.adsservice.ProxyServer;
+
 import java.rmi.RemoteException;
 
 /**
@@ -47,6 +50,7 @@ public class GetCampaigns {
   private static final int PAGE_SIZE = 100;
 
   public static void main(String[] args) {
+	  ProxyServer.setProxy();
     AdWordsSession session;
     try {
       // Generate a refreshable OAuth2 credential.
@@ -113,6 +117,9 @@ public class GetCampaigns {
    */
   public static void runExample(
       AdWordsServicesInterface adWordsServices, AdWordsSession session) throws RemoteException {
+	  
+	  
+	  
     // Get the CampaignService.
     CampaignServiceInterface campaignService =
         adWordsServices.get(session, CampaignServiceInterface.class);
@@ -147,7 +154,7 @@ public class GetCampaigns {
           System.out.println("Nome: " + campaign.getName());
           System.out.println("Data Ini: " + campaign.getStartDate());
           System.out.println("Data Final: " + campaign.getEndDate());
-          System.out.println("Orçamento: " + campaign.getBudget().getAmount().getMicroAmount()/1000);
+          System.out.println("Orcamento: " + campaign.getBudget().getAmount().getMicroAmount()/1000);
           System.out.println("CampaignField.BiddingStrategyType: " + campaign.getBiddingStrategyConfiguration().getBiddingStrategyType());
           
         }

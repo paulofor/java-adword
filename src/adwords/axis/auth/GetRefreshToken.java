@@ -69,8 +69,8 @@ public class GetRefreshToken {
 
   private static Credential getOAuth2Credential(GoogleClientSecrets clientSecrets)
       throws IOException {
-	  //HttpTransport trans = setProxy();
-	  HttpTransport trans = new NetHttpTransport();
+	  HttpTransport trans = setProxy();
+	  //HttpTransport trans = new NetHttpTransport();
     GoogleAuthorizationCodeFlow authorizationFlow = new GoogleAuthorizationCodeFlow.Builder(trans,
         new JacksonFactory(),
         clientSecrets,
@@ -152,7 +152,7 @@ public class GetRefreshToken {
   }
   
   
-  protected static HttpTransport setProxy2() {
+  protected static HttpTransport setProxy() {
 		System.setProperty("https.proxyHost", "10.21.7.10");
 		System.setProperty("https.proxyPort", "82");
 		System.setProperty("https.proxyUser", "tr626987");
