@@ -26,62 +26,38 @@ import com.google.common.collect.Maps;
 import com.google.common.primitives.Longs;
 
 import br.com.digicom.AdsService;
+import br.com.digicom.modelo.CampanhaAds;
 
 public class CampanhaResultService extends AdsService {
+	
+	private CampanhaAds campanha = null;
 
 	@Override
 	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session)
 			throws RemoteException, ApiException {
-		// TODO Auto-generated method stub
-		// Create the query.
-		String query = "SELECT Id, AdNetworkType1, Impressions " + "FROM CRITERIA_PERFORMANCE_REPORT "
-				+ "WHERE Status IN [ENABLED] " + "DURING LAST_7_DAYS";
-		
-		query = "SELECT Id, Criteria, AdGroupName, Impressions FROM KEYWORDS_PERFORMANCE_REPORT DURING LAST_7_DAYS";
 
-		// Optional: Set the reporting configuration of the session to suppress header,
-		// column name, or
-		// summary rows in the report output. You can also configure this via your
-		// ads.properties
-		// configuration file. See AdWordsSession.Builder.from(Configuration) for
-		// details.
-		// In addition, you can set whether you want to explicitly include or exclude
-		// zero impression
-		// rows.
+
 		ReportingConfiguration reportingConfiguration = new ReportingConfiguration.Builder()
-				// Skip all header and summary lines since the loop below expects
-				// every field to be present in each line.
 				.skipReportHeader(true).skipColumnHeader(true).skipReportSummary(true)
-				// Enable to include rows with zero impressions.
 				.includeZeroImpressions(false).build();
 		session.setReportingConfiguration(reportingConfiguration);
 
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
+		
+	    String query = "Select  CampaignId, CampaignName, Impressions , Clicks, Cost, CampaignStatus, EndDate " 
+	    		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
+	    		+ "Where CampaignId = " + campanha.getIdAds();
 		BufferedReader reader = null;
 		try {
-			// Set the property api.adwords.reportDownloadTimeout or call
-			// ReportDownloader.setReportDownloadTimeout to set a timeout (in milliseconds)
-			// for CONNECT and READ in report downloads.
 			final ReportDownloadResponse response = reportDownloader.downloadReport(query, DownloadFormat.CSV);
-
-			// Read the response as a BufferedReader.
 			reader = new BufferedReader(new InputStreamReader(response.getInputStream(), UTF_8));
-
-			// Map to store total impressions by ad network type 1.
 			Map<String, Long> impressionsByAdNetworkType1 = Maps.newTreeMap();
-
-			// Stream the results one line at a time and perform any line-specific
-			// processing.
 			String line;
 			Splitter splitter = Splitter.on(',');
 			while ((line = reader.readLine()) != null) {
 				System.out.println(line);
-
-				// Split the line into a list of field values.
 				List<String> values = splitter.splitToList(line);
-
-				// Update the total impressions for the ad network type 1 value.
 				String adNetworkType1 = values.get(1);
 				Long impressions = Longs.tryParse(values.get(2));
 				if (impressions != null) {
@@ -91,29 +67,29 @@ public class CampanhaResultService extends AdsService {
 				}
 			}
 
-			// Print the impressions totals by ad network type 1.
 			System.out.println();
-			System.out.printf("Total impressions by ad network type 1:%n%s%n",
-					Joiner.on(SystemUtils.LINE_SEPARATOR).join(impressionsByAdNetworkType1.entrySet()));
+			System.out.printf("Total impressions by ad network type 1:%n%s%n",	Joiner.on(SystemUtils.LINE_SEPARATOR).join(impressionsByAdNetworkType1.entrySet()));
 		} catch (ReportException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ReportDownloadResponseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
+	}
+	
+	public void atualizaResultado(CampanhaAds campanha) {
+		// TODO Auto-generated method stub
+		this.campanha = campanha;
+		super.executa();
 	}
 
 }

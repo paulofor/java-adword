@@ -62,7 +62,7 @@ import org.apache.commons.lang.SystemUtils;
 public class StreamCriteriaReportResults {
 
   public static void main(String[] args) {
-	  //setProxy();
+	  setProxy();
     AdWordsSession session;
     try {
       // Generate a refreshable OAuth2 credential.
@@ -147,7 +147,7 @@ public class StreamCriteriaReportResults {
     
     query = "Select  CampaignId, CampaignName, Impressions , Clicks, Cost, CampaignStatus, EndDate " 
     		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
-    		+ "DURING LAST_14_DAYS";
+    		+ "Where CampaignId = 1597208602";
 
 
     
