@@ -116,7 +116,7 @@ public class GetCampaignsWithAwql {
 
     int offset = 0;
 
-    String query = "SELECT Id, Name, Status ORDER BY Name";
+    String query = "SELECT Id, Name, Status, Impressions ORDER BY Name";
 
     CampaignPage page = null;
     do {
@@ -127,8 +127,7 @@ public class GetCampaignsWithAwql {
       // Display campaigns.
       if (page.getEntries() != null) {
         for (Campaign campaign : page.getEntries()) {
-          System.out.printf("Campaign with name '%s' and ID %d was found.%n", campaign.getName(),
-              campaign.getId());
+          System.out.printf("%s %s %n", campaign.getName(),  campaign.getStatus());
         }
       } else {
         System.out.println("No campaigns were found.");

@@ -49,7 +49,7 @@ import java.rmi.RemoteException;
 public class GetReportFields {
 
   public static void main(String[] args) {
-	  setProxy();
+	  //setProxy();
     AdWordsSession session;
     try {
       // Generate a refreshable OAuth2 credential.

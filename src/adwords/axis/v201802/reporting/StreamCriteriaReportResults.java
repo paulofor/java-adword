@@ -62,7 +62,7 @@ import org.apache.commons.lang.SystemUtils;
 public class StreamCriteriaReportResults {
 
   public static void main(String[] args) {
-	  setProxy();
+	  //setProxy();
     AdWordsSession session;
     try {
       // Generate a refreshable OAuth2 credential.
@@ -140,16 +140,16 @@ public class StreamCriteriaReportResults {
       throws ReportDownloadResponseException, ReportException, IOException  {
     // Create the query.
     String query =
-        "SELECT Id, AdNetworkType1, Impressions "
-            + "FROM CRITERIA_PERFORMANCE_REPORT "
-            + "WHERE Status IN [ENABLED, PAUSED] "
+        "SELECT AccountDescriptiveName "
+            + "FROM CAMPAIGN_PERFORMANCE_REPORT "
             + "DURING LAST_7_DAYS";
+    
+    
+    query = "Select  CampaignId, CampaignName, Impressions , Clicks, Cost, CampaignStatus, EndDate " 
+    		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
+    		+ "DURING LAST_14_DAYS";
 
-    query = "SELECT Id, Name " 
-    		 + "FROM CRITERIA_PERFORMANCE_REPORT "
-    + "WHERE Status = 'ENABLED' "
-    + "ORDER BY Name DESC "
-    + "LIMIT 0,50 ";
+
     
     
     
