@@ -61,7 +61,7 @@ public class CampanhaResultService extends AdsService {
 				Integer impressao = Integer.parseInt(values.get(0));
 				Integer click = Integer.parseInt(values.get(1));
 				Double custo = Double.parseDouble(values.get(2));
-				custo = custo / 1000;
+				custo = custo / 1000000;
 				campanha.setOrcamentoTotalExecutado(custo);
 				campanha.setQuantidadeImpressao(impressao);
 				campanha.setQuantidadeClique(click);
