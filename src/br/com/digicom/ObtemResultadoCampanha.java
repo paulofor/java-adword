@@ -12,6 +12,9 @@ public class ObtemResultadoCampanha {
 		campanha.setIdAds("1597208602");
 		CampanhaResultService srv = new CampanhaResultService();
 		srv.atualizaResultado(campanha);
+		
+		IntegracaoMundo facade = new IntegracaoMundo();
+		facade.atualizaCampanha(campanha);
 	}
 
 }

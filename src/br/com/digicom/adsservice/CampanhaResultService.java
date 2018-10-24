@@ -45,7 +45,7 @@ public class CampanhaResultService extends AdsService {
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
 		
-	    String query = "Select  CampaignId, CampaignName, Impressions , Clicks, Cost, CampaignStatus, EndDate " 
+	    String query = "Select  Impressions , Clicks, Cost, CampaignStatus, EndDate " 
 	    		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
 	    		+ "Where CampaignId = " + campanha.getIdAds();
 		BufferedReader reader = null;
@@ -58,18 +58,16 @@ public class CampanhaResultService extends AdsService {
 			while ((line = reader.readLine()) != null) {
 				System.out.println(line);
 				List<String> values = splitter.splitToList(line);
-				String adNetworkType1 = values.get(1);
-				Long impressions = Longs.tryParse(values.get(2));
-				if (impressions != null) {
-					Long impressionsTotal = impressionsByAdNetworkType1.get(adNetworkType1);
-					impressionsTotal = impressionsTotal == null ? 0L : impressionsTotal;
-					impressionsByAdNetworkType1.put(adNetworkType1, impressionsTotal + impressions);
-				}
+				Integer impressao = Integer.parseInt(values.get(0));
+				Integer click = Integer.parseInt(values.get(1));
+				Double custo = Double.parseDouble(values.get(2));
+				custo = custo / 1000;
+				campanha.setOrcamentoTotalExecutado(custo);
+				campanha.setQuantidadeImpressao(impressao);
+				campanha.setQuantidadeClique(click);
 			}
 
-			System.out.println();
-			System.out.printf("Total impressions by ad network type 1:%n%s%n",	Joiner.on(SystemUtils.LINE_SEPARATOR).join(impressionsByAdNetworkType1.entrySet()));
-		} catch (ReportException e) {
+			} catch (ReportException e) {
 			e.printStackTrace();
 		} catch (ReportDownloadResponseException e) {
 			e.printStackTrace();
@@ -87,7 +85,6 @@ public class CampanhaResultService extends AdsService {
 	}
 	
 	public void atualizaResultado(CampanhaAds campanha) {
-		// TODO Auto-generated method stub
 		this.campanha = campanha;
 		super.executa();
 	}
