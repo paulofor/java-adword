@@ -84,17 +84,7 @@ public abstract class AdsService {
 		try {
 			runExample(adWordsServices, session);
 		} catch (ApiException apiException) {
-			// ApiException is the base class for most exceptions thrown by an
-			// API request. Instances
-			// of this exception have a message and a collection of ApiErrors
-			// that indicate the
-			// type and underlying cause of the exception. Every exception
-			// object in the adwords.axis
-			// packages will return a meaningful value from toString
-			//
-			// ApiException extends RemoteException, so this catch block must
-			// appear before the
-			// catch block for RemoteException.
+
 			apiException.printStackTrace();
 			System.err.println("Request failed due to ApiException. Underlying ApiErrors:");
 			if (apiException.getErrors() != null) {

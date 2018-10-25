@@ -145,9 +145,9 @@ public class StreamCriteriaReportResults {
             + "DURING LAST_7_DAYS";
     
     
-    query = "Select  CampaignId, CampaignName, Impressions , Clicks, Cost, CampaignStatus, EndDate " 
-    		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
-    		+ "Where CampaignId = 1597208602";
+    //query = "Select  CampaignId, CampaignName, Impressions , Clicks, Cost, CampaignStatus, EndDate " 
+    //		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
+    //		+ "Where CampaignId = 1597208602";
 
 
     
@@ -197,21 +197,12 @@ public class StreamCriteriaReportResults {
         // Split the line into a list of field values.
         List<String> values = splitter.splitToList(line);
 
-        // Update the total impressions for the ad network type 1 value.
-        String adNetworkType1 = values.get(1);
-        Long impressions = Longs.tryParse(values.get(2));
-        if (impressions != null) {
-          Long impressionsTotal = impressionsByAdNetworkType1.get(adNetworkType1);
-          impressionsTotal = impressionsTotal == null ? 0L : impressionsTotal;
-          impressionsByAdNetworkType1.put(adNetworkType1, impressionsTotal + impressions);
-        }
+        
       }
 
       // Print the impressions totals by ad network type 1.
       System.out.println();
-      System.out.printf(
-          "Total impressions by ad network type 1:%n%s%n",
-          Joiner.on(SystemUtils.LINE_SEPARATOR).join(impressionsByAdNetworkType1.entrySet()));
+      
     } finally {
       if (reader != null) {
         reader.close();

@@ -28,7 +28,7 @@ import com.google.common.primitives.Longs;
 import br.com.digicom.AdsService;
 import br.com.digicom.modelo.CampanhaAds;
 
-public class CampanhaResultService extends AdsService {
+public class AnuncioResultService extends AdsService {
 	
 	private CampanhaAds campanha = null;
 
@@ -45,25 +45,26 @@ public class CampanhaResultService extends AdsService {
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
 		
-	    String query = "Select  Impressions , Clicks, Cost, CampaignStatus, EndDate " 
-	    		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
-	    		+ "Where CampaignId = " + campanha.getIdAds();
+	    String query = "Select Impressions , Clicks, Cost "
+	    		+ "FROM AD_PERFORMANCE_REPORT  where Id = ";
+	    		
 		BufferedReader reader = null;
 		try {
 			final ReportDownloadResponse response = reportDownloader.downloadReport(query, DownloadFormat.CSV);
 			reader = new BufferedReader(new InputStreamReader(response.getInputStream(), UTF_8));
+			Map<String, Long> impressionsByAdNetworkType1 = Maps.newTreeMap();
 			String line;
 			Splitter splitter = Splitter.on(',');
 			while ((line = reader.readLine()) != null) {
 				System.out.println(line);
 				List<String> values = splitter.splitToList(line);
-				Integer impressao = Integer.parseInt(values.get(0));
-				Integer click = Integer.parseInt(values.get(1));
-				Double custo = Double.parseDouble(values.get(2));
-				custo = custo / 1000000;
-				campanha.setOrcamentoTotalExecutado(custo);
-				campanha.setQuantidadeImpressao(impressao);
-				campanha.setQuantidadeClique(click);
+				//Integer impressao = Integer.parseInt(values.get(0));
+				//Integer click = Integer.parseInt(values.get(1));
+				//Double custo = Double.parseDouble(values.get(2));
+				//custo = custo / 1000000;
+				//campanha.setOrcamentoTotalExecutado(custo);
+				//campanha.setQuantidadeImpressao(impressao);
+				//campanha.setQuantidadeClique(click);
 			}
 
 			} catch (ReportException e) {
