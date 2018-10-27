@@ -9,7 +9,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.SystemUtils;
+import br.com.digicom.AdsService;
+import br.com.digicom.modelo.AnuncioAds;
+import br.com.digicom.modelo.CampanhaAds;
 
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
@@ -20,17 +22,12 @@ import com.google.api.ads.adwords.lib.utils.ReportDownloadResponse;
 import com.google.api.ads.adwords.lib.utils.ReportDownloadResponseException;
 import com.google.api.ads.adwords.lib.utils.ReportException;
 import com.google.api.ads.adwords.lib.utils.v201802.ReportDownloaderInterface;
-import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
-import com.google.common.primitives.Longs;
-
-import br.com.digicom.AdsService;
-import br.com.digicom.modelo.CampanhaAds;
 
 public class AnuncioResultService extends AdsService {
 	
-	private CampanhaAds campanha = null;
+	private AnuncioAds anuncio = null;
 
 	@Override
 	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session)
@@ -46,27 +43,25 @@ public class AnuncioResultService extends AdsService {
 
 		
 	    String query = "Select Impressions , Clicks, Cost "
-	    		+ "FROM AD_PERFORMANCE_REPORT  where Id = ";
+	    		+ "FROM AD_PERFORMANCE_REPORT where Id = " ;
 	    		
 		BufferedReader reader = null;
 		try {
 			final ReportDownloadResponse response = reportDownloader.downloadReport(query, DownloadFormat.CSV);
 			reader = new BufferedReader(new InputStreamReader(response.getInputStream(), UTF_8));
-			Map<String, Long> impressionsByAdNetworkType1 = Maps.newTreeMap();
 			String line;
 			Splitter splitter = Splitter.on(',');
 			while ((line = reader.readLine()) != null) {
 				System.out.println(line);
 				List<String> values = splitter.splitToList(line);
-				//Integer impressao = Integer.parseInt(values.get(0));
-				//Integer click = Integer.parseInt(values.get(1));
-				//Double custo = Double.parseDouble(values.get(2));
-				//custo = custo / 1000000;
-				//campanha.setOrcamentoTotalExecutado(custo);
-				//campanha.setQuantidadeImpressao(impressao);
-				//campanha.setQuantidadeClique(click);
+				Integer impressao = Integer.parseInt(values.get(0));
+				Integer click = Integer.parseInt(values.get(1));
+				Double custo = Double.parseDouble(values.get(2));
+				custo = custo / 1000000;
+				anuncio.setCusto(custo);
+				anuncio.setQuantidadeImpressao(impressao);
+				anuncio.setQuantidadeClique(click);
 			}
-
 			} catch (ReportException e) {
 			e.printStackTrace();
 		} catch (ReportDownloadResponseException e) {
@@ -84,8 +79,8 @@ public class AnuncioResultService extends AdsService {
 		}
 	}
 	
-	public void atualizaResultado(CampanhaAds campanha) {
-		this.campanha = campanha;
+	public void atualizaResultado(AnuncioAds anuncio) {
+		this.anuncio = anuncio;
 		super.executa();
 	}
 

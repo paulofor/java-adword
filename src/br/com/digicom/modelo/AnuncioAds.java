@@ -5,7 +5,7 @@ import com.strongloop.android.loopback.Model;
 public class AnuncioAds extends Model {
 
 	private Integer id;
-	private Integer idAds;
+	private String idAds;
 	private Integer projetoCanvasMySqlId;
 
 	private String titulo1;
@@ -13,6 +13,10 @@ public class AnuncioAds extends Model {
 	private String titulo3;
 	private String descricao1;
 	private String descricao2;
+	
+	private Double custo;
+	private Integer impressao;
+	private Integer click;
 
 	public String getTitulo1() {
 		return titulo1;
@@ -62,11 +66,11 @@ public class AnuncioAds extends Model {
 		this.id = id;
 	}
 
-	public Integer getIdAds() {
+	public String getIdAds() {
 		return idAds;
 	}
 
-	public void setIdAds(Integer idAds) {
+	public void setIdAds(String idAds) {
 		this.idAds = idAds;
 	}
 
@@ -80,6 +84,28 @@ public class AnuncioAds extends Model {
 	
 	public String toString() {
 		return "titulo1 = " + titulo1 + ", titulo2 = " + titulo2 + ", titulo3 = " + titulo3;
+	}
+
+	
+	public void setCusto(Double custo) {
+		this.custo = custo;
+	}
+
+	public void setQuantidadeImpressao(Integer impressao) {
+		this.impressao = impressao;
+	}
+
+	public void setQuantidadeClique(Integer click) {
+		this.click = click;
+	}
+	public Integer getQuantidadeClique() {
+		return this.click;
+	}
+	public Integer getQuantidadeImpressao() {
+		return this.impressao;
+	}
+	public Double getCusto() {
+		return this.custo;
 	}
 
 }

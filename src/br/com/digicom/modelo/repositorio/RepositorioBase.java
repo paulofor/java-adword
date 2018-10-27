@@ -4,17 +4,16 @@ package br.com.digicom.modelo.repositorio;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.strongloop.android.loopback.ModelRepository;
-import com.strongloop.android.loopback.callbacks.JsonArrayParser;
-import com.strongloop.android.loopback.callbacks.JsonObjectParser;
-import com.strongloop.android.loopback.callbacks.ListCallback;
-import com.strongloop.android.loopback.callbacks.ObjectCallback;
-import com.strongloop.android.remoting.adapters.RestContractItem;
-
 import br.com.digicom.modelo.AnuncioAds;
 import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
 import br.com.digicom.modelo.ModeloCampanhaAds;
 import br.com.digicom.modelo.PalavraChaveAds;
+
+import com.strongloop.android.loopback.ModelRepository;
+import com.strongloop.android.loopback.callbacks.JsonArrayParser;
+import com.strongloop.android.loopback.callbacks.ListCallback;
+import com.strongloop.android.remoting.adapters.RestContractItem;
 
 public class RepositorioBase {
 
@@ -36,8 +35,27 @@ public class RepositorioBase {
 	        invokeStaticMethod("listaParaResultado", params,
 	                new JsonArrayParser<CampanhaAds>(this, callback));
 	    }
-		
 	}
+	
+	
+
+	public static class CampanhaAnuncioResultadoRepository extends ModelRepository<CampanhaAnuncioResultado> {
+		public CampanhaAnuncioResultadoRepository() {
+			super("CampanhaAnuncioResultado", CampanhaAnuncioResultado.class);
+		}
+		public void listaParaResultadoPorIdCampanha(final Integer idCampanha, final ListCallback<CampanhaAnuncioResultado> callback) {
+			RestContractItem contrato = new RestContractItem("CampanhaAds/:id/campanhaAnuncioResultados","GET");
+			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAnuncioResultado.listaParaResultadoPorIdCampanha");
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        params.put("id", idCampanha);
+	        params.put("filter", "{ \"include\" : \"anuncioAds\" }");
+	        invokeStaticMethod("listaParaResultadoPorIdCampanha", params,
+	                new JsonArrayParser<CampanhaAnuncioResultado>(this, callback));
+	    }
+	}
+	
+	
+	
 	
 	public static class AnuncioAdRepository extends ModelRepository<AnuncioAds> {
 		public AnuncioAdRepository() {
