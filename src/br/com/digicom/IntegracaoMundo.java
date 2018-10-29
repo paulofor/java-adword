@@ -6,6 +6,7 @@ import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 import br.com.digicom.adsservice.CampanhaAdsService;
 import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
 
 public class IntegracaoMundo {
 
@@ -48,6 +49,22 @@ public class IntegracaoMundo {
 
 		});
 
+	}
+
+	public void atualizaAnuncio(CampanhaAnuncioResultado item) {
+		item.save(new VoidCallback() {
+			@Override
+			public void onSuccess() {
+				// TODO Auto-generated method stub
+				System.out.print("sucesso");
+			}
+			@Override
+			public void onError(Throwable t) {
+				// TODO Auto-generated method stub
+				t.printStackTrace();
+			}
+
+		});
 	}
 
 }

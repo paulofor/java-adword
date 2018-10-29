@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.SystemUtils;
 
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
@@ -20,17 +17,15 @@ import com.google.api.ads.adwords.lib.utils.ReportDownloadResponse;
 import com.google.api.ads.adwords.lib.utils.ReportDownloadResponseException;
 import com.google.api.ads.adwords.lib.utils.ReportException;
 import com.google.api.ads.adwords.lib.utils.v201802.ReportDownloaderInterface;
-import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
-import com.google.common.primitives.Longs;
 
 import br.com.digicom.AdsService;
 import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
 
 public class CampanhaResultService extends AdsService {
 	
-	private CampanhaAds campanha = null;
+	private CampanhaAds campanhaResult = null;
 
 	@Override
 	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session)
@@ -47,7 +42,7 @@ public class CampanhaResultService extends AdsService {
 		
 	    String query = "Select  Impressions , Clicks, Cost, CampaignStatus, EndDate " 
 	    		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
-	    		+ "Where CampaignId = " + campanha.getIdAds();
+	    		+ "Where CampaignId = " + campanhaResult.getIdAds();
 		BufferedReader reader = null;
 		try {
 			final ReportDownloadResponse response = reportDownloader.downloadReport(query, DownloadFormat.CSV);
@@ -61,9 +56,9 @@ public class CampanhaResultService extends AdsService {
 				Integer click = Integer.parseInt(values.get(1));
 				Double custo = Double.parseDouble(values.get(2));
 				custo = custo / 1000000;
-				campanha.setOrcamentoTotalExecutado(custo);
-				campanha.setQuantidadeImpressao(impressao);
-				campanha.setQuantidadeClique(click);
+				campanhaResult.setOrcamentoTotalExecutado(custo);
+				campanhaResult.setQuantidadeImpressao(impressao);
+				campanhaResult.setQuantidadeClique(click);
 			}
 
 			} catch (ReportException e) {
@@ -84,7 +79,7 @@ public class CampanhaResultService extends AdsService {
 	}
 	
 	public void atualizaResultado(CampanhaAds campanha) {
-		this.campanha = campanha;
+		this.campanhaResult = campanha;
 		super.executa();
 	}
 

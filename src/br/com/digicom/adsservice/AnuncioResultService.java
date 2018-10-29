@@ -7,11 +7,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Map;
-
-import br.com.digicom.AdsService;
-import br.com.digicom.modelo.AnuncioAds;
-import br.com.digicom.modelo.CampanhaAds;
 
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
@@ -23,11 +18,13 @@ import com.google.api.ads.adwords.lib.utils.ReportDownloadResponseException;
 import com.google.api.ads.adwords.lib.utils.ReportException;
 import com.google.api.ads.adwords.lib.utils.v201802.ReportDownloaderInterface;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
+
+import br.com.digicom.AdsService;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
 
 public class AnuncioResultService extends AdsService {
 	
-	private AnuncioAds anuncio = null;
+	private CampanhaAnuncioResultado anuncio = null;
 
 	@Override
 	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session)
@@ -43,7 +40,7 @@ public class AnuncioResultService extends AdsService {
 
 		
 	    String query = "Select Impressions , Clicks, Cost "
-	    		+ "FROM AD_PERFORMANCE_REPORT where Id = " ;
+	    		+ "FROM AD_PERFORMANCE_REPORT where Id = " + anuncio.getAnuncioAds().getIdAds() ;
 	    		
 		BufferedReader reader = null;
 		try {
@@ -79,7 +76,7 @@ public class AnuncioResultService extends AdsService {
 		}
 	}
 	
-	public void atualizaResultado(AnuncioAds anuncio) {
+	public void atualizaResultado(CampanhaAnuncioResultado anuncio) {
 		this.anuncio = anuncio;
 		super.executa();
 	}

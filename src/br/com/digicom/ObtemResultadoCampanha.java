@@ -2,13 +2,14 @@ package br.com.digicom;
 
 import java.util.List;
 
+import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.ListCallback;
+
+import br.com.digicom.adsservice.AnuncioResultService;
 import br.com.digicom.adsservice.CampanhaResultService;
 import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.CampanhaAnuncioResultado;
 import br.com.digicom.modelo.repositorio.RepositorioBase;
-
-import com.strongloop.android.loopback.RestAdapter;
-import com.strongloop.android.loopback.callbacks.ListCallback;
 
 public class ObtemResultadoCampanha {
 	
@@ -69,6 +70,12 @@ public class ObtemResultadoCampanha {
 
 	
 	private static void processaAnuncio(CampanhaAnuncioResultado item) {
-		System.out.println("Anuncio: ");
+		System.out.println("Atualizar anuncio " + item.getAnuncioAds().getIdAds());
+		AnuncioResultService srv = new AnuncioResultService();
+		srv.atualizaResultado(item);
+		
+
+		IntegracaoMundo facade = new IntegracaoMundo();
+		facade.atualizaAnuncio(item);
 	} 
 }

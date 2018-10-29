@@ -20,6 +20,8 @@ public class RepositorioBase {
 	public static class CampanhaAdRepository extends ModelRepository<CampanhaAds> {
 		public CampanhaAdRepository() {
 			super("CampanhaAd", CampanhaAds.class);
+			RestContractItem contrato = new RestContractItem(" /CampanhaAnuncioResultados/:id","PUT");
+			this.getRestAdapter().getContract().addItem(contrato,"CampanhaAnuncioResultado.prototype.save");
 		}
 		public void listaPendente(final ListCallback<CampanhaAds> callback) {
 			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaPublicar","GET");
