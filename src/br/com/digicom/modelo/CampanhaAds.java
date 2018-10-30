@@ -10,8 +10,8 @@ import com.strongloop.android.remoting.BeanUtil;
 public class CampanhaAds extends Model{
 	
 	
-	private List<AnuncioAds> anuncioAds;
 	private List<PalavraChaveAds> palavraChaveAds;
+	private List<CampanhaAnuncioResultado> anuncioAds;
 	
 	private String nome;
 	private Integer id;
@@ -53,16 +53,16 @@ public class CampanhaAds extends Model{
 	}
 
 	
-	public List<AnuncioAds> getAnuncioAds() {
+	public List<CampanhaAnuncioResultado> getAnuncioAds() {
 		return anuncioAds;
 	}
 
-	public void setAnuncioAds(List<AnuncioAds> anuncioAds) {
-		this.anuncioAds = new ArrayList<AnuncioAds>();
+	public void setAnuncioAds(List<CampanhaAnuncioResultado> anuncioAds) {
+		this.anuncioAds = new ArrayList<CampanhaAnuncioResultado>();
 		for (int i=0; i<anuncioAds.size(); i++) {
 			Object objeto = new AnuncioAds();
 			BeanUtil.setProperties(objeto, (Map<String, ? extends Object>) anuncioAds.get(i), true);
-			this.anuncioAds.add((AnuncioAds) objeto);
+			this.anuncioAds.add((CampanhaAnuncioResultado) objeto);
 		}
 	}
 

@@ -70,7 +70,7 @@ public class ObtemResultadoCampanha {
 
 	
 	private static void processaAnuncio(CampanhaAnuncioResultado item) {
-		System.out.println("Atualizar anuncio " + item.getAnuncioAds().getIdAds());
+		System.out.println("Atualizar anuncio " + item.getIdAds());
 		AnuncioResultService srv = new AnuncioResultService();
 		srv.atualizaResultado(item);
 		

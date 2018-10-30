@@ -40,7 +40,7 @@ public class AnuncioResultService extends AdsService {
 
 		
 	    String query = "Select Impressions , Clicks, Cost "
-	    		+ "FROM AD_PERFORMANCE_REPORT where Id = " + anuncio.getAnuncioAds().getIdAds() ;
+	    		+ "FROM AD_PERFORMANCE_REPORT where Id = " + anuncio.getIdAds() ;
 	    		
 		BufferedReader reader = null;
 		try {

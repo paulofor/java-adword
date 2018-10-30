@@ -16,19 +16,33 @@ public class IntegracaoMundo {
 			servico.cria(campanha);
 			System.out.println("IdAds: " + campanha.getIdAds());
 			campanha.save(new VoidCallback() {
-
 				@Override
 				public void onSuccess() {
-					// TODO Auto-generated method stub
-					System.out.print("sucesso");
+					System.out.print("sucesso - alteracao campanha");
 				}
-
 				@Override
 				public void onError(Throwable t) {
 					// TODO Auto-generated method stub
 					t.printStackTrace();
 				}
-
+			});
+			salvaAnuncioCampanha(campanha);
+		}
+	}
+	
+	private void salvaAnuncioCampanha(CampanhaAds campanha){
+		for (CampanhaAnuncioResultado anuncio : campanha.getAnuncioAds()) {
+			System.out.println("IDS Anuncio: " + anuncio.getIdAds());
+			anuncio.save(new VoidCallback() {
+				@Override
+				public void onSuccess() {
+					System.out.print("sucesso - alteracao ressultado");
+				}
+				@Override
+				public void onError(Throwable t) {
+					// TODO Auto-generated method stub
+					t.printStackTrace();
+				}
 			});
 		}
 	}

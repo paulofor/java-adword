@@ -5,7 +5,6 @@ import com.strongloop.android.loopback.Model;
 public class AnuncioAds extends Model {
 
 	private Integer id;
-	private String idAds;
 	private Integer projetoCanvasMySqlId;
 
 	private String titulo1;
@@ -66,14 +65,7 @@ public class AnuncioAds extends Model {
 		this.id = id;
 	}
 
-	public String getIdAds() {
-		return idAds;
-	}
-
-	public void setIdAds(String idAds) {
-		this.idAds = idAds;
-	}
-
+	
 	public Integer getProjetoCanvasMySqlId() {
 		return projetoCanvasMySqlId;
 	}

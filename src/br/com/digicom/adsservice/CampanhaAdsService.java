@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import br.com.digicom.AdsService;
+import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.PalavraChaveAds;
+
 import com.beust.jcommander.Parameter;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroup;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAd;
@@ -61,11 +66,6 @@ import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import com.google.api.ads.adwords.lib.utils.examples.ArgumentNames;
 import com.google.api.ads.common.lib.utils.examples.CodeSampleParams;
-
-import br.com.digicom.AdsService;
-import br.com.digicom.modelo.AnuncioAds;
-import br.com.digicom.modelo.CampanhaAds;
-import br.com.digicom.modelo.PalavraChaveAds;
 
 public class CampanhaAdsService extends AdsService {
 
@@ -191,13 +191,13 @@ public class CampanhaAdsService extends AdsService {
 
 		List<AdGroupAdOperation> operations = new ArrayList<>();
 
-		List<AnuncioAds> anuncios = campanha.getAnuncioAds();
-		for (AnuncioAds anuncio : anuncios) {
+		List<CampanhaAnuncioResultado> anuncios = campanha.getAnuncioAds();
+		for (CampanhaAnuncioResultado anuncio : anuncios) {
 			// Create expanded text ad.
 			ExpandedTextAd expandedTextAd = new ExpandedTextAd();
-			expandedTextAd.setHeadlinePart1(anuncio.getTitulo1());
-			expandedTextAd.setHeadlinePart2(anuncio.getTitulo2());
-			expandedTextAd.setDescription(anuncio.getDescricao1());
+			expandedTextAd.setHeadlinePart1(anuncio.getAnuncioAds().getTitulo1());
+			expandedTextAd.setHeadlinePart2(anuncio.getAnuncioAds().getTitulo2());
+			expandedTextAd.setDescription(anuncio.getAnuncioAds().getDescricao1());
 			expandedTextAd.setFinalUrls(new String[] { campanha.getUrlAlvo() });
 
 			// Create ad group ad.
@@ -222,10 +222,14 @@ public class CampanhaAdsService extends AdsService {
 				.mutate(operations.toArray(new AdGroupAdOperation[operations.size()]));
 
 		// Display ads.
+		int posicao = 0;
 		for (AdGroupAd adGroupAdResult : result.getValue()) {
 			ExpandedTextAd newAd = (ExpandedTextAd) adGroupAdResult.getAd();
 			System.out.printf("Expanded text ad with ID %d and headline '%s - %s' was added.%n", newAd.getId(),
 					newAd.getHeadlinePart1(), newAd.getHeadlinePart2());
+			// Nao tenho certeza da ordem
+			campanha.getAnuncioAds().get(posicao).setIdAds("" + newAd.getId());
+			posicao++;
 		}
 
 	}
@@ -424,11 +428,10 @@ public class CampanhaAdsService extends AdsService {
 
 	public Calendar getDataInicial() {
 		Calendar date1 = Calendar.getInstance();
-		//date1.add(Calendar.DATE, 1);
-
-		//while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-		//	date1.add(Calendar.DATE, 1);
-		//}
+		date1.add(Calendar.DATE, 1);
+		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+			date1.add(Calendar.DATE, 1);
+		}
 		return date1;
 	}
 
