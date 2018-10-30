@@ -1,13 +1,12 @@
 package br.com.digicom.desen;
 
-import br.com.digicom.adsservice.AnuncioResultService;
+import br.com.digicom.adsservice.GenericoService;
 
 public class TestaResultadoAnuncio {
 
 	public static void main(String[] args) {
-		AnuncioResultService srv = new AnuncioResultService();
-		srv.atualizaResultado(null);
-
+		GenericoService srv = new GenericoService();
+		srv.executa();
 	}
 
 }
