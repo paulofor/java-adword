@@ -69,8 +69,13 @@ public class ModelRepository<T extends Model> extends RestRepository<T> {
 		super(className, modelClass != null ? modelClass : (Class<T>) Model.class);
 
 		this.nameForRestUrl = nameForRestUrl != null ? nameForRestUrl : English.plural(className);
+		this.nameForRestUrl = verificaNomeUrl(this.nameForRestUrl);
 	}
 
+	
+	protected String verificaNomeUrl(String nome) {
+		return nome;
+	}
 	/**
 	 * Returns the name of the REST url
 	 * 
@@ -97,9 +102,10 @@ public class ModelRepository<T extends Model> extends RestRepository<T> {
 				className + ".prototype.remove");
 		contract.addItem(new RestContractItem("/" + nameForRestUrl + "/:id", "GET"), className + ".findById");
 		contract.addItem(new RestContractItem("/" + nameForRestUrl, "GET"), className + ".all");
-
 		return contract;
 	}
+	
+	
 
 	/**
 	 * @deprecated Use {link ModelRepository#createObject} instead.

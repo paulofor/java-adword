@@ -21,7 +21,6 @@ public class RepositorioBase {
 		public CampanhaAdRepository() {
 			super("CampanhaAd", CampanhaAds.class);
 			RestContractItem contrato = new RestContractItem(" /CampanhaAnuncioResultados/:id","PUT");
-			this.getRestAdapter().getContract().addItem(contrato,"CampanhaAnuncioResultado.prototype.save");
 		}
 		public void listaPendente(final ListCallback<CampanhaAds> callback) {
 			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaPublicar","GET");
@@ -54,6 +53,11 @@ public class RepositorioBase {
 	        invokeStaticMethod("listaParaResultadoPorIdCampanha", params,
 	                new JsonArrayParser<CampanhaAnuncioResultado>(this, callback));
 	    }
+		@Override
+		protected String verificaNomeUrl(String nome) {
+			return "CampanhaAnuncioResultados";
+		}
+		
 	}
 	
 	
