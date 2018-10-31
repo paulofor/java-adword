@@ -30,7 +30,7 @@ public class CriaCampanhas {
 			@Override
 			public void onSuccess(List<CampanhaAds> objects) {
 				// TODO Auto-generated method stub
-				System.out.println("Sucesso" + objects.size());
+				System.out.println("Sucesso - ResultadoInterno:" + objects.get(0).getCampanhaAnuncioResultados().size());
 				//System.out.println("Lista Interna:" + objects.get(0).getAnuncioAds().size());
 				IntegracaoMundo integra = new IntegracaoMundo();
 				integra.criaCampanha(objects);

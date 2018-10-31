@@ -191,7 +191,7 @@ public class CampanhaAdsService extends AdsService {
 
 		List<AdGroupAdOperation> operations = new ArrayList<>();
 
-		List<CampanhaAnuncioResultado> anuncios = campanha.getAnuncioAds();
+		List<CampanhaAnuncioResultado> anuncios = campanha.getCampanhaAnuncioResultados();
 		for (CampanhaAnuncioResultado anuncio : anuncios) {
 			// Create expanded text ad.
 			ExpandedTextAd expandedTextAd = new ExpandedTextAd();
@@ -228,7 +228,7 @@ public class CampanhaAdsService extends AdsService {
 			System.out.printf("Expanded text ad with ID %d and headline '%s - %s' was added.%n", newAd.getId(),
 					newAd.getHeadlinePart1(), newAd.getHeadlinePart2());
 			// Nao tenho certeza da ordem
-			campanha.getAnuncioAds().get(posicao).setIdAds("" + newAd.getId());
+			campanha.getCampanhaAnuncioResultados().get(posicao).setIdAds("" + newAd.getId());
 			posicao++;
 		}
 

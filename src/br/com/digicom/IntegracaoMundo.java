@@ -31,7 +31,7 @@ public class IntegracaoMundo {
 	}
 	
 	private void salvaAnuncioCampanha(CampanhaAds campanha){
-		for (CampanhaAnuncioResultado anuncio : campanha.getAnuncioAds()) {
+		for (CampanhaAnuncioResultado anuncio : campanha.getCampanhaAnuncioResultados()) {
 			System.out.println("IDS Anuncio: " + anuncio.getIdAds());
 			anuncio.save(new VoidCallback() {
 				@Override
