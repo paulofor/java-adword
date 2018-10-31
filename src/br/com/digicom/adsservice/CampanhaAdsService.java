@@ -79,7 +79,7 @@ public class CampanhaAdsService extends AdsService {
 
 		// BiddingStrategyConfiguration
 		BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
-		biddingStrategyConfiguration.setBiddingStrategyType(BiddingStrategyType.ENHANCED_CPC);
+		biddingStrategyConfiguration.setBiddingStrategyType(BiddingStrategyType.TARGET_SPEND);
 
 		// Money
 		Money budgetAmount = new Money();
