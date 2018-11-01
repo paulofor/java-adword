@@ -60,6 +60,7 @@ import com.google.api.ads.adwords.axis.v201802.cm.ManualCpcBiddingScheme;
 import com.google.api.ads.adwords.axis.v201802.cm.Money;
 import com.google.api.ads.adwords.axis.v201802.cm.NetworkSetting;
 import com.google.api.ads.adwords.axis.v201802.cm.Operator;
+import com.google.api.ads.adwords.axis.v201802.cm.Platform;
 import com.google.api.ads.adwords.axis.v201802.cm.Setting;
 import com.google.api.ads.adwords.axis.v201802.cm.TimeUnit;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
@@ -138,6 +139,8 @@ public class CampanhaAdsService extends AdsService {
 		Language lingua = new Language();
 		lingua.setId(1014L);
 
+		
+
 		List operations = new ArrayList();
 		for (Criterion criterion : new Criterion[] { pais, lingua }) {
 			CampaignCriterionOperation operation = new CampaignCriterionOperation();
@@ -148,7 +151,20 @@ public class CampanhaAdsService extends AdsService {
 			operation.setOperator(Operator.ADD);
 			operations.add(operation);
 		}
+		
+		
+		Platform mobile = new Platform();
+		mobile.setId(30001L);
+	    CampaignCriterion campaignCriterionDevice = new CampaignCriterion();
+	    campaignCriterionDevice.setCampaignId(idCampanha);
+	    campaignCriterionDevice.setCriterion(mobile);
+	    campaignCriterionDevice.setBidModifier(-0.80);
+	    CampaignCriterionOperation operation = new CampaignCriterionOperation();
+	    operation.setOperand(campaignCriterionDevice);
+	    operation.setOperator(Operator.SET);
+	    //operations.add(operation);
 
+	    
 		CampaignCriterionReturnValue result = campaignCriterionService.mutate(
 				(CampaignCriterionOperation[]) operations.toArray(new CampaignCriterionOperation[operations.size()]));
 	}
@@ -204,8 +220,6 @@ public class CampanhaAdsService extends AdsService {
 			AdGroupAd expandedTextAdGroupAd = new AdGroupAd();
 			expandedTextAdGroupAd.setAdGroupId(idGrupo);
 			expandedTextAdGroupAd.setAd(expandedTextAd);
-			
-		   
 
 			// Optional: set the status.
 			expandedTextAdGroupAd.setStatus(AdGroupAdStatus.ENABLED);
@@ -260,17 +274,17 @@ public class CampanhaAdsService extends AdsService {
 			listaOperacao.add(keywordAdGroupCriterionOperation1);
 
 			/*
-			Keyword keyword2 = new Keyword();
-			keyword2.setText(palavra.getPalavra());
-			keyword2.setMatchType(KeywordMatchType.PHRASE);
-			BiddableAdGroupCriterion keywordBiddableAdGroupCriterion2 = new BiddableAdGroupCriterion();
-			keywordBiddableAdGroupCriterion2.setAdGroupId(idGrupo);
-			keywordBiddableAdGroupCriterion2.setCriterion(keyword2);
-			AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new AdGroupCriterionOperation();
-			keywordAdGroupCriterionOperation2.setOperand(keywordBiddableAdGroupCriterion2);
-			keywordAdGroupCriterionOperation2.setOperator(Operator.ADD);
-			listaOperacao.add(keywordAdGroupCriterionOperation2);
-			*/
+			 * Keyword keyword2 = new Keyword(); keyword2.setText(palavra.getPalavra());
+			 * keyword2.setMatchType(KeywordMatchType.PHRASE); BiddableAdGroupCriterion
+			 * keywordBiddableAdGroupCriterion2 = new BiddableAdGroupCriterion();
+			 * keywordBiddableAdGroupCriterion2.setAdGroupId(idGrupo);
+			 * keywordBiddableAdGroupCriterion2.setCriterion(keyword2);
+			 * AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new
+			 * AdGroupCriterionOperation();
+			 * keywordAdGroupCriterionOperation2.setOperand(keywordBiddableAdGroupCriterion2
+			 * ); keywordAdGroupCriterionOperation2.setOperator(Operator.ADD);
+			 * listaOperacao.add(keywordAdGroupCriterionOperation2);
+			 */
 		}
 		// AdGroupCriterionOperation keywordAdGroupCriterionOperation2 = new
 		// AdGroupCriterionOperation();
@@ -309,11 +323,10 @@ public class CampanhaAdsService extends AdsService {
 		adGroup.setName("Grupo Unico" + System.currentTimeMillis());
 		adGroup.setStatus(AdGroupStatus.ENABLED);
 		adGroup.setCampaignId(idCampanha);
-		 // Set the rotation mode.
-	    AdGroupAdRotationMode rotationMode = new AdGroupAdRotationMode(AdRotationMode.ROTATE_FOREVER);
-	    adGroup.setAdGroupAdRotationMode(rotationMode);
+		// Set the rotation mode.
+		AdGroupAdRotationMode rotationMode = new AdGroupAdRotationMode(AdRotationMode.ROTATE_FOREVER);
+		adGroup.setAdGroupAdRotationMode(rotationMode);
 
-		
 		AdGroupOperation operation = new AdGroupOperation();
 		operation.setOperand(adGroup);
 		operation.setOperator(Operator.ADD);
