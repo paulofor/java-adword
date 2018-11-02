@@ -217,8 +217,10 @@ public class RestAdapter extends Adapter {
             try {
                 String responseBody = response.getResponseBody();
                 Log.getLogger().info("Success (string): " + response);
+                //System.out.println("Resposta Servidor: " + response);
                 callback.onSuccess(responseBody);
             } catch (Throwable t) {
+            	t.printStackTrace();
                 callback.onError(t);
             }
 
@@ -336,6 +338,8 @@ public class RestAdapter extends Adapter {
             }
 
             BoundRequestBuilder request = prepareRequest(method, baseUrl + path);
+            
+            System.out.println("Request: "+ request.toString());
 
             String contentType = null;
             String charset = "utf-8";
@@ -397,6 +401,7 @@ public class RestAdapter extends Adapter {
 
                     // TODO: Make sure that encoding works
                     request.setBody(s);
+                    System.out.println("Body: " + s);
                     //body = new StringEntity(s, charset);
                 }
             }

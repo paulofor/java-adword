@@ -91,6 +91,9 @@ public class VirtualObject {
     public void invokeMethod(String method,
             Map<String, ? extends Object> parameters,
             Adapter.Callback callback) {
+    	if (repository==null) {
+    		throw new RuntimeException("Sem repositorio para " + this);
+    	}
         Adapter adapter = repository.getAdapter();
         if (adapter == null) {
             throw new IllegalArgumentException(

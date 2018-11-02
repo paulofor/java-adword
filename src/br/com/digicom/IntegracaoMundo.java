@@ -2,13 +2,20 @@ package br.com.digicom;
 
 import java.util.List;
 
-import com.strongloop.android.loopback.callbacks.VoidCallback;
-
 import br.com.digicom.adsservice.CampanhaAdsService;
 import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.repositorio.RepositorioBase;
+
+import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
+import com.strongloop.android.remoting.Repository;
 
 public class IntegracaoMundo {
+	
+	RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
+	
+
 
 	public void criaCampanha(List<CampanhaAds> objects) {
 		CampanhaAdsService servico = new CampanhaAdsService();
@@ -31,8 +38,11 @@ public class IntegracaoMundo {
 	}
 	
 	private void salvaAnuncioCampanha(CampanhaAds campanha){
+		int pos = 0;
+		RepositorioBase.CampanhaAnuncioResultadoRepository rep = adapter.createRepository(RepositorioBase.CampanhaAnuncioResultadoRepository.class);
 		for (CampanhaAnuncioResultado anuncio : campanha.getCampanhaAnuncioResultados()) {
-			System.out.println("IDS Anuncio: " + anuncio.getIdAds());
+			System.out.println((pos++) + " - IDS Anuncio: " + anuncio.getIdAds());
+			anuncio.setRepository(rep);
 			anuncio.save(new VoidCallback() {
 				@Override
 				public void onSuccess() {
