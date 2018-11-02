@@ -158,11 +158,11 @@ public class CampanhaAdsService extends AdsService {
 	    CampaignCriterion campaignCriterionDevice = new CampaignCriterion();
 	    campaignCriterionDevice.setCampaignId(idCampanha);
 	    campaignCriterionDevice.setCriterion(mobile);
-	    campaignCriterionDevice.setBidModifier(-0.80);
+	    campaignCriterionDevice.setBidModifier(0.10);
 	    CampaignCriterionOperation operation = new CampaignCriterionOperation();
 	    operation.setOperand(campaignCriterionDevice);
 	    operation.setOperator(Operator.SET);
-	    //operations.add(operation);
+	    operations.add(operation);
 
 	    
 		CampaignCriterionReturnValue result = campaignCriterionService.mutate(
@@ -262,7 +262,7 @@ public class CampanhaAdsService extends AdsService {
 			// Create keywords.
 			Keyword keyword1 = new Keyword();
 			keyword1.setText(palavra.getPalavra());
-			keyword1.setMatchType(KeywordMatchType.PHRASE);
+			keyword1.setMatchType(KeywordMatchType.BROAD);
 			// Create biddable ad group criterion.
 			BiddableAdGroupCriterion keywordBiddableAdGroupCriterion1 = new BiddableAdGroupCriterion();
 			keywordBiddableAdGroupCriterion1.setAdGroupId(idGrupo);
