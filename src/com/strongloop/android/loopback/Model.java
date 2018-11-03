@@ -47,6 +47,9 @@ public class Model extends VirtualObject {
     /* package private */ void setId(Object id) {
         this.id = id;
     }
+    protected void setIdObjeto(Object id) {
+    	this.id = id;
+    }
 
     /**
      * Gets the value associated with a given key.

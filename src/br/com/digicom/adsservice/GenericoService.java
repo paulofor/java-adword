@@ -38,9 +38,13 @@ public class GenericoService extends AdsService {
 
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
-		
+		/*
 	    String query = "Select CampaignId, Id, Clicks, Cost "
 	    		+ "FROM AD_PERFORMANCE_REPORT";
+	    */
+		String query = "Select Id, Clicks, Cost, Impressions, QualityScore " +
+				" FROM KEYWORDS_PERFORMANCE_REPORT";
+	    	
 	    		
 		BufferedReader reader = null;
 		try {

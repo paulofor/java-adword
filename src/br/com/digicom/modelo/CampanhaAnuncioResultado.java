@@ -19,6 +19,10 @@ public class CampanhaAnuncioResultado extends Model {
 	private AnuncioAds anuncioAds;
 	
 	
+	public void setId(Integer id) {
+		this.setIdObjeto(id);
+	}
+	
 	public Map<String, ? extends Object> toMap() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("idAds", idAds);
