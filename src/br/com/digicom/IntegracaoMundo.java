@@ -34,6 +34,7 @@ public class IntegracaoMundo {
 				}
 			});
 			salvaAnuncioCampanha(campanha);
+			salvaPalavraChaveCampanha(campanha);
 		}
 	}
 	
@@ -44,6 +45,25 @@ public class IntegracaoMundo {
 			System.out.println((pos++) + " - IDS Anuncio: " + anuncio.getIdAds());
 			anuncio.setRepository(rep);
 			anuncio.save(new VoidCallback() {
+				@Override
+				public void onSuccess() {
+					System.out.print("sucesso - alteracao ressultado");
+				}
+				@Override
+				public void onError(Throwable t) {
+					// TODO Auto-generated method stub
+					t.printStackTrace();
+				}
+			});
+		}
+	}
+	private void salvaPalavraChaveCampanha(CampanhaAds campanha){
+		int pos = 0;
+		RepositorioBase.PalavraChaveResultadoRepository rep = adapter.createRepository(RepositorioBase.PalavraChaveResultadoRepository.class);
+		for (CampanhaPalavraChaveResultado palavraChave : campanha.getCampanhaAnuncioResultados()) {
+			System.out.println((pos++) + " - IDS PalavraChave: " + palavraChave.getIdAds());
+			palavraChave.setRepository(rep);
+			palavraChave.save(new VoidCallback() {
 				@Override
 				public void onSuccess() {
 					System.out.print("sucesso - alteracao ressultado");
