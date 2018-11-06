@@ -42,9 +42,12 @@ public class GenericoService extends AdsService {
 	    String query = "Select CampaignId, Id, Clicks, Cost "
 	    		+ "FROM AD_PERFORMANCE_REPORT";
 	    */
-		String query = "Select Id, Clicks, Cost, Impressions, QualityScore " +
-				" FROM KEYWORDS_PERFORMANCE_REPORT";
-	    	
+		String query = "Select Id, Labels, Criteria, Clicks, Cost, Impressions " +
+				" FROM KEYWORDS_PERFORMANCE_REPORT where CampaignId = 1620493862";
+		//query = "Select Query, KeywordTextMatchingQuery, QueryTargetingStatus, KeywordId " +
+		//		" FROM SEARCH_QUERY_PERFORMANCE_REPORT where CampaignId = 1620493862";
+		//query = "Select SearchQuery " +
+		//		" FROM PAID_ORGANIC_QUERY_REPORT where CampaignId = 1620493862";
 	    		
 		BufferedReader reader = null;
 		try {
