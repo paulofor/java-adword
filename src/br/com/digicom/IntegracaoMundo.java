@@ -2,14 +2,14 @@ package br.com.digicom;
 
 import java.util.List;
 
+import com.strongloop.android.loopback.RestAdapter;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
+
 import br.com.digicom.adsservice.CampanhaAdsService;
 import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
 import br.com.digicom.modelo.repositorio.RepositorioBase;
-
-import com.strongloop.android.loopback.RestAdapter;
-import com.strongloop.android.loopback.callbacks.VoidCallback;
-import com.strongloop.android.remoting.Repository;
 
 public class IntegracaoMundo {
 	
@@ -33,7 +33,7 @@ public class IntegracaoMundo {
 					t.printStackTrace();
 				}
 			});
-			salvaAnuncioCampanha(campanha);
+			//salvaAnuncioCampanha(campanha);
 			salvaPalavraChaveCampanha(campanha);
 		}
 	}
@@ -59,8 +59,8 @@ public class IntegracaoMundo {
 	}
 	private void salvaPalavraChaveCampanha(CampanhaAds campanha){
 		int pos = 0;
-		RepositorioBase.PalavraChaveResultadoRepository rep = adapter.createRepository(RepositorioBase.PalavraChaveResultadoRepository.class);
-		for (CampanhaPalavraChaveResultado palavraChave : campanha.getCampanhaAnuncioResultados()) {
+		RepositorioBase.CampanhaPalavraChaveResultadoRepository rep = adapter.createRepository(RepositorioBase.CampanhaPalavraChaveResultadoRepository.class);
+		for (CampanhaPalavraChaveResultado palavraChave : campanha.getCampanhaPalavraChaveResultados()) {
 			System.out.println((pos++) + " - IDS PalavraChave: " + palavraChave.getIdAds());
 			palavraChave.setRepository(rep);
 			palavraChave.save(new VoidCallback() {

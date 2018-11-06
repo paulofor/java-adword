@@ -31,7 +31,7 @@ public class BeanUtil {
             // Try to use the exact setter
             if (value != null) {
             	// String entrando aqui !!!!!
-            	System.out.println("Setter: " + setterName + "(" + value.getClass() + ")");
+            	System.out.println("Setter: " + setterName + "(" + value.getClass() + ") @ " + objectClass.getSimpleName());
                 try {
                     if (includeSuperClasses) {
                         setter = objectClass.getMethod(setterName, value.getClass());

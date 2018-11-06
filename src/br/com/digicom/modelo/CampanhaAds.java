@@ -10,7 +10,7 @@ import com.strongloop.android.remoting.BeanUtil;
 public class CampanhaAds extends Model{
 	
 	
-	private List<PalavraChaveAds> palavraChaveAds;
+	private List<CampanhaPalavraChaveResultado> campanhaPalavraChaveResultados;
 	private List<CampanhaAnuncioResultado> campanhaAnuncioResultados;
 	
 	private String nome;
@@ -33,6 +33,20 @@ public class CampanhaAds extends Model{
 	
 	
 	
+	public List<CampanhaPalavraChaveResultado> getCampanhaPalavraChaveResultados() {
+		return campanhaPalavraChaveResultados;
+	}
+
+	public void setCampanhaPalavraChaveResultados(List<CampanhaPalavraChaveResultado> campanhaPalavraChaveResultados) {
+		this.campanhaPalavraChaveResultados = new ArrayList<CampanhaPalavraChaveResultado>();
+		for (int i=0; i<campanhaPalavraChaveResultados.size(); i++) {
+			Object objeto = new CampanhaPalavraChaveResultado();
+			BeanUtil.setProperties(objeto, (Map<String, ? extends Object>) campanhaPalavraChaveResultados.get(i), true);
+			this.campanhaPalavraChaveResultados.add((CampanhaPalavraChaveResultado) objeto);
+		}
+		System.out.println(this + " tam: " + this.campanhaPalavraChaveResultados.size());
+	}
+
 	public List<CampanhaAnuncioResultado> getCampanhaAnuncioResultados() {
 		return campanhaAnuncioResultados;
 	}
@@ -55,18 +69,7 @@ public class CampanhaAds extends Model{
 		this.urlAlvo = urlAlvo;
 	}
 
-	public List<PalavraChaveAds> getPalavraChaveAds() {
-		return this.palavraChaveAds;
-	}
-
-	public void setPalavraChaveAds(List<PalavraChaveAds> palavraChaveAds) {
-		this.palavraChaveAds = new ArrayList<PalavraChaveAds>();
-		for (int i=0; i<palavraChaveAds.size(); i++) {
-			Object objeto = new PalavraChaveAds();
-			BeanUtil.setProperties(objeto, (Map<String, ? extends Object>) palavraChaveAds.get(i), true);
-			this.palavraChaveAds.add((PalavraChaveAds) objeto);
-		}
-	}
+	
 
 	
 	/*

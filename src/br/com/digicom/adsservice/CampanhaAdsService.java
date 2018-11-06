@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.digicom.AdsService;
-import br.com.digicom.modelo.CampanhaAds;
-import br.com.digicom.modelo.CampanhaAnuncioResultado;
-import br.com.digicom.modelo.PalavraChaveAds;
-
 import com.beust.jcommander.Parameter;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroup;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupAd;
@@ -67,6 +62,12 @@ import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import com.google.api.ads.adwords.lib.utils.examples.ArgumentNames;
 import com.google.api.ads.common.lib.utils.examples.CodeSampleParams;
+
+import br.com.digicom.AdsService;
+import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
+import br.com.digicom.modelo.PalavraChaveAds;
 
 public class CampanhaAdsService extends AdsService {
 
@@ -257,11 +258,12 @@ public class CampanhaAdsService extends AdsService {
 
 		List<AdGroupCriterionOperation> listaOperacao = new ArrayList<AdGroupCriterionOperation>();
 
-		for (PalavraChaveAds palavra : campanha.getPalavraChaveAds()) {
+		List<CampanhaPalavraChaveResultado> palavras = campanha.getCampanhaPalavraChaveResultados();
+		for (CampanhaPalavraChaveResultado palavra : palavras) {
 
 			// Create keywords.
 			Keyword keyword1 = new Keyword();
-			keyword1.setText(palavra.getPalavra());
+			keyword1.setText(palavra.getPalavraChaveAds().getPalavra());
 			keyword1.setMatchType(KeywordMatchType.BROAD);
 			// Create biddable ad group criterion.
 			BiddableAdGroupCriterion keywordBiddableAdGroupCriterion1 = new BiddableAdGroupCriterion();
@@ -299,6 +301,7 @@ public class CampanhaAdsService extends AdsService {
 		AdGroupCriterionReturnValue result = adGroupCriterionService.mutate(operations);
 
 		// Display results.
+		int posicao = 0;
 		for (AdGroupCriterion adGroupCriterionResult : result.getValue()) {
 			System.out.printf(
 					"Keyword ad group criterion with ad group ID %d, criterion ID %d, "
@@ -306,6 +309,8 @@ public class CampanhaAdsService extends AdsService {
 					adGroupCriterionResult.getAdGroupId(), adGroupCriterionResult.getCriterion().getId(),
 					((Keyword) adGroupCriterionResult.getCriterion()).getText(),
 					((Keyword) adGroupCriterionResult.getCriterion()).getMatchType());
+			campanha.getCampanhaPalavraChaveResultados().get(posicao).setIdAds("" +  adGroupCriterionResult.getCriterion().getId());
+			posicao++;
 		}
 
 	}

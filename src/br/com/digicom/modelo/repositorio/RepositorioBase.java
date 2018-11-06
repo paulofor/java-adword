@@ -4,23 +4,24 @@ package br.com.digicom.modelo.repositorio;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.digicom.modelo.AnuncioAds;
-import br.com.digicom.modelo.CampanhaAds;
-import br.com.digicom.modelo.CampanhaAnuncioResultado;
-import br.com.digicom.modelo.ModeloCampanhaAds;
-import br.com.digicom.modelo.PalavraChaveAds;
-
 import com.strongloop.android.loopback.ModelRepository;
 import com.strongloop.android.loopback.callbacks.JsonArrayParser;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.remoting.adapters.RestContractItem;
+
+import br.com.digicom.modelo.AnuncioAds;
+import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
+import br.com.digicom.modelo.ModeloCampanhaAds;
+import br.com.digicom.modelo.PalavraChaveAds;
 
 public class RepositorioBase {
 
 	public static class CampanhaAdRepository extends ModelRepository<CampanhaAds> {
 		public CampanhaAdRepository() {
 			super("CampanhaAd", CampanhaAds.class);
-			RestContractItem contrato = new RestContractItem(" /CampanhaAnuncioResultados/:id","PUT");
+			//RestContractItem contrato = new RestContractItem(" /CampanhaAnuncioResultados/:id","PUT");
 		}
 		public void listaPendente(final ListCallback<CampanhaAds> callback) {
 			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaPublicar","GET");
@@ -59,10 +60,29 @@ public class RepositorioBase {
 		}
 		
 	}
+	public static class CampanhaPalavraChaveResultadoRepository extends ModelRepository<CampanhaPalavraChaveResultado> {
+		public CampanhaPalavraChaveResultadoRepository() {
+			super("CampanhaPalavraChaveResultado", CampanhaPalavraChaveResultado.class);
+		}
+		public void listaParaResultadoPorIdCampanha(final Integer idCampanha, final ListCallback<CampanhaPalavraChaveResultado> callback) {
+			RestContractItem contrato = new RestContractItem("CampanhaAds/:id/campanhaPalavraChaveResultados","GET");
+			this.getRestAdapter().getContract().addItem(contrato, "CampanhaPalavraChaveResultado.listaParaResultadoPorIdCampanha");
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        params.put("id", idCampanha);
+	        params.put("filter", "{ \"include\" : \"palavraChaveAds\" }");
+	        invokeStaticMethod("listaParaResultadoPorIdCampanha", params,
+	                new JsonArrayParser<CampanhaPalavraChaveResultado>(this, callback));
+	    }
+		@Override
+		protected String verificaNomeUrl(String nome) {
+			return "CampanhaPalavraChaveResultados";
+		}
+		
+	}
 	
 	
 	
-	
+	/*
 	public static class AnuncioAdRepository extends ModelRepository<AnuncioAds> {
 		public AnuncioAdRepository() {
 			super("AnuncioAd", AnuncioAds.class);
@@ -80,4 +100,5 @@ public class RepositorioBase {
 			super("PalavraChaveAd", PalavraChaveAds.class);
 		}
 	}
+	*/
 }
