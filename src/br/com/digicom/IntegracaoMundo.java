@@ -33,7 +33,7 @@ public class IntegracaoMundo {
 					t.printStackTrace();
 				}
 			});
-			//salvaAnuncioCampanha(campanha);
+			salvaAnuncioCampanha(campanha);
 			salvaPalavraChaveCampanha(campanha);
 		}
 	}

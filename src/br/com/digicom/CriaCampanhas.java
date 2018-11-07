@@ -20,7 +20,7 @@ public class CriaCampanhas {
 		RepositorioBase.CampanhaAdRepository rep = adapter.createRepository(RepositorioBase.CampanhaAdRepository.class);
 		
 		
-		rep.listaPendente(new ListCallback<CampanhaAds>() { 
+		rep.listaPendente(50, new ListCallback<CampanhaAds>() { 
             
 			@Override
 			public void onError(Throwable t) {

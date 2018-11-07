@@ -31,12 +31,12 @@ public abstract class AdsService {
 		System.setProperty("https.proxyHost", "10.21.7.10");
 		System.setProperty("https.proxyPort", "82");
 		System.setProperty("https.proxyUser", "tr626987");
-		System.setProperty("https.proxyPassword", "eureka07");
+		System.setProperty("https.proxyPassword", "mclaren3");
 
 		System.setProperty("http.proxyHost", "10.21.7.10");
 		System.setProperty("http.proxyPort", "82");
 		System.setProperty("http.proxyUser", "tr626987");
-		System.setProperty("http.proxyPassword", "eureka07");
+		System.setProperty("http.proxyPassword", "mclaren3");
 		
 		
 		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.21.7.10", 82));
@@ -47,7 +47,7 @@ public abstract class AdsService {
 				// check that the pasword-requesting site is the proxy server
 				if (this.getRequestingHost().contains("10.21.7.10") && this.getRequestingPort() == 82
 						&& this.getRequestorType().equals(RequestorType.PROXY)) {
-					return new PasswordAuthentication("tr626987", "eureka07".toCharArray());
+					return new PasswordAuthentication("tr626987", "mclaren3".toCharArray());
 				}
 				return super.getPasswordAuthentication();
 			}
@@ -58,7 +58,7 @@ public abstract class AdsService {
 	protected void executa() {
 		AdWordsSession session;
 		try {
-			//setProxy();
+			setProxy();
 			// Generate a refreshable OAuth2 credential.
 			Credential oAuth2Credential = new OfflineCredentials.Builder()
 					.forApi(Api.ADWORDS).fromFile().build()

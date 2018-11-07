@@ -30,6 +30,14 @@ public class RepositorioBase {
 	        invokeStaticMethod("listaParaPublicar", params,
 	                new JsonArrayParser<CampanhaAds>(this, callback));
 	    }
+		public void listaPendente(int id, final ListCallback<CampanhaAds> callback) {
+			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaPublicarTeste","GET");
+			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAd.listaParaPublicarTeste");
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        params.put("idCampanha", id);
+	        invokeStaticMethod("listaParaPublicarTeste", params,
+	                new JsonArrayParser<CampanhaAds>(this, callback));
+	    }
 		public void listaParaResultado(final ListCallback<CampanhaAds> callback) {
 			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaResultado","GET");
 			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAd.listaParaResultado");

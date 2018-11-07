@@ -29,7 +29,7 @@ public class CampanhaPalavraChaveResultado extends Model {
 		map.put("quantidadeClique", (quantidadeClique!=null?quantidadeClique:0));
 		map.put("custo", (custo!=null?custo:0));
 		map.put("id", this.getId());
-		map.put("anuncioAdsId", this.getPalavraChaveAdsId());
+		map.put("palavraChaveAdsId", this.getPalavraChaveAdsId());
 		map.put("campanhaAdsId", this.getCampanhaAdsId());
 		return map;
 	}
