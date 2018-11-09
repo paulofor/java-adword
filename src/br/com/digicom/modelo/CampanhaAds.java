@@ -18,6 +18,11 @@ public class CampanhaAds extends Model{
 	private String idAds;
 	private String dataFinal;
 	private String dataInicial;
+	private String dataPublicacao;
+	private String dataResultado;
+	private String dataFechamento;
+	
+	
 	private Integer quantidadeImpressao;
 	private Integer quantidadeClique;
 	private Integer quantidadeConversao;
@@ -205,6 +210,30 @@ public class CampanhaAds extends Model{
 	
 	public String toString() {
 		return "nome: " + this.nome + " , id: " + this.id;
+	}
+
+	public String getDataPublicacao() {
+		return dataPublicacao;
+	}
+
+	public void setDataPublicacao(String dataPublicacao) {
+		this.dataPublicacao = dataPublicacao;
+	}
+
+	public String getDataResultado() {
+		return dataResultado;
+	}
+
+	public void setDataResultado(String dataResultado) {
+		this.dataResultado = dataResultado;
+	}
+
+	public String getDataFechamento() {
+		return dataFechamento;
+	}
+
+	public void setDataFechamento(String dataFechamento) {
+		this.dataFechamento = dataFechamento;
 	}
 	
 

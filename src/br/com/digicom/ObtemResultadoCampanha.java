@@ -6,9 +6,12 @@ import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 
 import br.com.digicom.adsservice.AnuncioResultService;
+import br.com.digicom.adsservice.CampanhaAdsService;
 import br.com.digicom.adsservice.CampanhaResultService;
+import br.com.digicom.adsservice.PalavraChaveResultService;
 import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
 import br.com.digicom.modelo.repositorio.RepositorioBase;
 
 public class ObtemResultadoCampanha {
@@ -22,7 +25,7 @@ public class ObtemResultadoCampanha {
 	private static void processa() {
 		System.out.println("Ola Mundo");
 		RepositorioBase.CampanhaAdRepository rep = adapter.createRepository(RepositorioBase.CampanhaAdRepository.class);
-		rep.listaParaResultado(new ListCallback<CampanhaAds>() { 
+		rep.listaParaResultado(44, new ListCallback<CampanhaAds>() { 
 			@Override
 			public void onError(Throwable t) {
 				t.printStackTrace();
@@ -32,7 +35,8 @@ public class ObtemResultadoCampanha {
 				System.out.println("Lista pra resultado contendo " + objects.size() + " campanhas.");
 				for (CampanhaAds item : objects) {
 					processaAnuncios(item);
-					//processaCampanha(item);
+					processaCampanha(item);
+					processaPalavraChave(item);
 				}
 			} 
         });
@@ -42,6 +46,7 @@ public class ObtemResultadoCampanha {
 		System.out.println("Atualizar campanha " + campanha.getNome());
 		CampanhaResultService srv = new CampanhaResultService();
 		srv.atualizaResultado(campanha);
+		campanha.setDataResultado(CampanhaAdsService.getDataAtualLoopback());
 		
 		IntegracaoMundo facade = new IntegracaoMundo();
 		facade.atualizaCampanha(campanha);
@@ -65,7 +70,24 @@ public class ObtemResultadoCampanha {
 			}
 			
         });
-		
+	}
+	
+	private static void processaPalavraChave(CampanhaAds campanha) {
+		RepositorioBase.CampanhaPalavraChaveResultadoRepository rep = adapter.createRepository(RepositorioBase.CampanhaPalavraChaveResultadoRepository.class);
+		rep.listaParaResultadoPorIdCampanha(campanha.getId(), new ListCallback<CampanhaPalavraChaveResultado>() { 
+			@Override
+			public void onError(Throwable t) {
+				t.printStackTrace();
+			}
+			@Override
+			public void onSuccess(List<CampanhaPalavraChaveResultado> objects) {
+				System.out.println("Lista pra resultado contendo " + objects.size() + " anuncios.");
+				for (CampanhaPalavraChaveResultado item : objects) {
+					processaPalavraChave(item);
+				}
+			}
+			
+        });
 	}
 
 	
@@ -77,5 +99,15 @@ public class ObtemResultadoCampanha {
 
 		IntegracaoMundo facade = new IntegracaoMundo();
 		facade.atualizaAnuncio(item);
+	} 
+	
+	private static void processaPalavraChave(CampanhaPalavraChaveResultado item) {
+		System.out.println("Atualizar palavra-chave " + item.getIdAds());
+		PalavraChaveResultService srv = new PalavraChaveResultService();
+		srv.atualizaResultado(item);
+		
+
+		IntegracaoMundo facade = new IntegracaoMundo();
+		facade.atualizaPalavraChave(item);
 	} 
 }

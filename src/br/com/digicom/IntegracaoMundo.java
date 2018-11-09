@@ -1,5 +1,6 @@
 package br.com.digicom;
 
+import java.util.Calendar;
 import java.util.List;
 
 import com.strongloop.android.loopback.RestAdapter;
@@ -22,6 +23,7 @@ public class IntegracaoMundo {
 		for (CampanhaAds campanha : objects) {
 			servico.cria(campanha);
 			System.out.println("IdAds: " + campanha.getIdAds());
+			campanha.setDataPublicacao(CampanhaAdsService.getDataAtualLoopback());
 			campanha.save(new VoidCallback() {
 				@Override
 				public void onSuccess() {
@@ -96,6 +98,22 @@ public class IntegracaoMundo {
 	}
 
 	public void atualizaAnuncio(CampanhaAnuncioResultado item) {
+		item.save(new VoidCallback() {
+			@Override
+			public void onSuccess() {
+				// TODO Auto-generated method stub
+				System.out.print("sucesso");
+			}
+			@Override
+			public void onError(Throwable t) {
+				// TODO Auto-generated method stub
+				t.printStackTrace();
+			}
+
+		});
+	}
+	
+	public void atualizaPalavraChave(CampanhaPalavraChaveResultado item) {
 		item.save(new VoidCallback() {
 			@Override
 			public void onSuccess() {

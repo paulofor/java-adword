@@ -39,6 +39,10 @@ public class PalavraChaveResultService extends AdsService {
 
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
+		palavraChave.setQuantidadeClique(0);
+		palavraChave.setCusto(0D);
+		palavraChave.setQuantidadeImpressao(0);
+		
 		
 	    String query = "Select Impressions , Clicks, Cost "
 	    		+ "FROM KEYWORDS_PERFORMANCE_REPORT where Id = " + palavraChave.getIdAds() ;

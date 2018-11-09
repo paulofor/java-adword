@@ -55,6 +55,9 @@ import com.google.api.ads.common.lib.utils.examples.CodeSampleParams;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.common.base.Joiner;
 import com.google.common.primitives.Ints;
+
+import br.com.digicom.adsservice.ProxyServer;
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +78,7 @@ public class GetKeywordIdeas {
   }
 
   public static void main(String[] args) {
+	  ProxyServer.setProxy();
     AdWordsSession session;
     try {
       // Generate a refreshable OAuth2 credential.
@@ -152,6 +156,7 @@ public class GetKeywordIdeas {
       AdWordsServicesInterface adWordsServices, AdWordsSession session, @Nullable Long adGroupId)
       throws RemoteException {
     // Get the TargetingIdeaService.
+	  
     TargetingIdeaServiceInterface targetingIdeaService =
         adWordsServices.get(session, TargetingIdeaServiceInterface.class);
 
@@ -176,7 +181,7 @@ public class GetKeywordIdeas {
     // Create related to query search parameter.
     RelatedToQuerySearchParameter relatedToQuerySearchParameter =
         new RelatedToQuerySearchParameter();
-    relatedToQuerySearchParameter.setQueries(new String[] {"bakery", "pastries", "birthday cake"});
+    relatedToQuerySearchParameter.setQueries(new String[] {"venda","loja"});
     searchParameters.add(relatedToQuerySearchParameter);
 
     // Language setting (optional).
@@ -235,7 +240,7 @@ public class GetKeywordIdeas {
       System.out.printf("Keyword with text '%s', average monthly search volume %d, "
           + "average CPC %d, and competition %.2f "
           + "was found with categories: %s%n", keyword.getValue(), averageMonthlySearches,
-          averageCpc.getMicroAmount(), competition,
+          (averageCpc.getMicroAmount() ) , competition,
           categoriesString);
     }
 

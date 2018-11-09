@@ -339,7 +339,7 @@ public class RestAdapter extends Adapter {
 
             BoundRequestBuilder request = prepareRequest(method, baseUrl + path);
             
-            System.out.println("Request: "+ request.toString());
+            System.out.println(baseUrl + path + " (" + method + ")");
 
             String contentType = null;
             String charset = "utf-8";
