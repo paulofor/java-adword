@@ -4,25 +4,30 @@ package br.com.digicom.modelo.repositorio;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
+
 import com.strongloop.android.loopback.ModelRepository;
 import com.strongloop.android.loopback.callbacks.JsonArrayParser;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.remoting.adapters.RestContractItem;
 
-import br.com.digicom.modelo.AnuncioAds;
-import br.com.digicom.modelo.CampanhaAds;
-import br.com.digicom.modelo.CampanhaAnuncioResultado;
-import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
-import br.com.digicom.modelo.ModeloCampanhaAds;
-import br.com.digicom.modelo.PalavraChaveAds;
-
 public class RepositorioBase {
+	
+	
+	public static class PalavraChaveRaizRepository extends ModelRepository<PalavraChaveRaiz> {
+		public PalavraChaveRaizRepository() {
+			super("PalavraChaveRaiz", CampanhaAds.class);
+		}
+	}
+	
 
 	public static class CampanhaAdRepository extends ModelRepository<CampanhaAds> {
 		public CampanhaAdRepository() {
 			super("CampanhaAd", CampanhaAds.class);
-			//RestContractItem contrato = new RestContractItem(" /CampanhaAnuncioResultados/:id","PUT");
 		}
+		
 		public void listaPendente(final ListCallback<CampanhaAds> callback) {
 			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaPublicar","GET");
 			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAd.listaParaPublicar");
