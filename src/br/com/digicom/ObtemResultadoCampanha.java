@@ -6,13 +6,13 @@ import com.strongloop.android.loopback.RestAdapter;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 
 import br.com.digicom.adsservice.AnuncioResultService;
-import br.com.digicom.adsservice.CampanhaAdsService;
 import br.com.digicom.adsservice.CampanhaResultService;
 import br.com.digicom.adsservice.PalavraChaveResultService;
 import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.CampanhaAnuncioResultado;
 import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
 import br.com.digicom.modelo.repositorio.RepositorioBase;
+import br.com.digicom.modelo.util.Util;
 
 public class ObtemResultadoCampanha {
 	
@@ -46,7 +46,7 @@ public class ObtemResultadoCampanha {
 		System.out.println("Atualizar campanha " + campanha.getNome());
 		CampanhaResultService srv = new CampanhaResultService();
 		srv.atualizaResultado(campanha);
-		campanha.setDataResultado(CampanhaAdsService.getDataAtualLoopback());
+		campanha.setDataResultado(Util.getDataAtualLoopback());
 		
 		IntegracaoMundo facade = new IntegracaoMundo();
 		facade.atualizaCampanha(campanha);

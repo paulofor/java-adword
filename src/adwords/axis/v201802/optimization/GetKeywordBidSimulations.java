@@ -37,6 +37,9 @@ import com.google.api.ads.common.lib.exception.OAuthException;
 import com.google.api.ads.common.lib.exception.ValidationException;
 import com.google.api.ads.common.lib.utils.examples.CodeSampleParams;
 import com.google.api.client.auth.oauth2.Credential;
+
+import br.com.digicom.adsservice.ProxyServer;
+
 import java.rmi.RemoteException;
 
 /**
@@ -59,6 +62,7 @@ public class GetKeywordBidSimulations {
   }
 
   public static void main(String[] args) {
+	  ProxyServer.setProxy();
     AdWordsSession session;
     try {
       // Generate a refreshable OAuth2 credential.

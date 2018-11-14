@@ -174,14 +174,13 @@ public class GetKeywordIdeas {
     // Set selector paging (required for targeting idea service).
     Paging paging = new Paging();
     paging.setStartIndex(0);
-    paging.setNumberResults(10);
+    paging.setNumberResults(30);
     selector.setPaging(paging);
 
     List<SearchParameter> searchParameters = new ArrayList<>();
     // Create related to query search parameter.
-    RelatedToQuerySearchParameter relatedToQuerySearchParameter =
-        new RelatedToQuerySearchParameter();
-    relatedToQuerySearchParameter.setQueries(new String[] {"venda","loja"});
+    RelatedToQuerySearchParameter relatedToQuerySearchParameter = new RelatedToQuerySearchParameter();
+    relatedToQuerySearchParameter.setQueries(new String[] {"mais vendas"});
     searchParameters.add(relatedToQuerySearchParameter);
 
     // Language setting (optional).
@@ -191,7 +190,7 @@ public class GetKeywordIdeas {
     //   https://developers.google.com/adwords/api/docs/reference/latest/TargetingIdeaService.LanguageSearchParameter
     LanguageSearchParameter languageParameter = new LanguageSearchParameter();
     Language english = new Language();
-    english.setId(1000L);
+    english.setId(1014L);
     languageParameter.setLanguages(new Language[] {english});
     searchParameters.add(languageParameter);
 
@@ -237,10 +236,11 @@ public class GetKeywordIdeas {
           ((MoneyAttribute) data.get(AttributeType.AVERAGE_CPC)).getValue();
       Double competition =
           ((DoubleAttribute) data.get(AttributeType.COMPETITION)).getValue();
+
       System.out.printf("Keyword with text '%s', average monthly search volume %d, "
-          + "average CPC %d, and competition %.2f "
+          + "average CPC  %.4f, and competition %.2f "
           + "was found with categories: %s%n", keyword.getValue(), averageMonthlySearches,
-          (averageCpc.getMicroAmount() ) , competition,
+          (averageCpc.getMicroAmount().doubleValue() / 1000000 ) , competition,
           categoriesString);
     }
 

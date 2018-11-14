@@ -453,10 +453,7 @@ public class CampanhaAdsService extends AdsService {
 		return date1;
 	}
 
-	public static String getDataAtualLoopback() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return sdf.format(Calendar.getInstance().getTime());
-	}
+
 	
 	private String converteData(Calendar data) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");

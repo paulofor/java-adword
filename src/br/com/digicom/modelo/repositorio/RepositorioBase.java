@@ -4,22 +4,30 @@ package br.com.digicom.modelo.repositorio;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.digicom.modelo.CampanhaAds;
-import br.com.digicom.modelo.CampanhaAnuncioResultado;
-import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
-
 import com.strongloop.android.loopback.ModelRepository;
 import com.strongloop.android.loopback.callbacks.JsonArrayParser;
 import com.strongloop.android.loopback.callbacks.ListCallback;
 import com.strongloop.android.remoting.adapters.RestContractItem;
+
+import br.com.digicom.modelo.CampanhaAds;
+import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
+import br.com.digicom.modelo.PalavraChaveRaiz;
 
 public class RepositorioBase {
 	
 	
 	public static class PalavraChaveRaizRepository extends ModelRepository<PalavraChaveRaiz> {
 		public PalavraChaveRaizRepository() {
-			super("PalavraChaveRaiz", CampanhaAds.class);
+			super("PalavraChaveRaiz", PalavraChaveRaiz.class);
 		}
+		public void listaParaConsulta(final ListCallback<PalavraChaveRaiz> callback) {
+			RestContractItem contrato = new RestContractItem("PalavraChaveRaizs/listaParaConsultaTeste","GET");
+			this.getRestAdapter().getContract().addItem(contrato, "PalavraChaveRaiz.listaParaConsulta");
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        invokeStaticMethod("listaParaConsulta", params,
+	                new JsonArrayParser<PalavraChaveRaiz>(this, callback));
+	    }
 	}
 	
 

@@ -1,6 +1,5 @@
 package br.com.digicom;
 
-import java.util.Calendar;
 import java.util.List;
 
 import com.strongloop.android.loopback.RestAdapter;
@@ -11,6 +10,7 @@ import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.CampanhaAnuncioResultado;
 import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
 import br.com.digicom.modelo.repositorio.RepositorioBase;
+import br.com.digicom.modelo.util.Util;
 
 public class IntegracaoMundo {
 	
@@ -23,7 +23,7 @@ public class IntegracaoMundo {
 		for (CampanhaAds campanha : objects) {
 			servico.cria(campanha);
 			System.out.println("IdAds: " + campanha.getIdAds());
-			campanha.setDataPublicacao(CampanhaAdsService.getDataAtualLoopback());
+			campanha.setDataPublicacao(Util.getDataAtualLoopback());
 			campanha.save(new VoidCallback() {
 				@Override
 				public void onSuccess() {
