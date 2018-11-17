@@ -13,6 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import br.com.digicom.modelo.ItemListaLoopback;
+
 /**
  * Utility methods for converting JSON objects to Java collection objects
  * (and vice versa).
@@ -38,8 +40,7 @@ public class JsonUtil {
             Map<?,?> map = ((Map<?,?>)object);
             JSONObject json = new JSONObject();
             for (Map.Entry<?,?> entry : map.entrySet()) {
-                json.put(String.valueOf(entry.getKey()),
-                		toJson(entry.getValue()));
+                json.put(String.valueOf(entry.getKey()), toJson(entry.getValue()));
             }
             return json;
         }
@@ -70,6 +71,9 @@ public class JsonUtil {
                 object instanceof Boolean ||
                 object instanceof String) {
             return object;
+        }
+        else if (object instanceof ItemListaLoopback) {
+            return ((ItemListaLoopback) object).toJson();
         }
         else {
             return object.toString();

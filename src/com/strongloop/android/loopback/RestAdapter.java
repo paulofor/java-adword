@@ -87,6 +87,7 @@ public class RestAdapter extends com.strongloop.android.remoting.adapters.RestAd
 			repository = repositoryClass.newInstance();
 			repository.setAdapter(this);
 		} catch (Exception e) {
+			e.printStackTrace();
 			IllegalArgumentException ex = new IllegalArgumentException();
 			ex.initCause(e);
 			throw ex;

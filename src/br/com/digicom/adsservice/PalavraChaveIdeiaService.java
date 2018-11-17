@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import br.com.digicom.AdsService;
+import br.com.digicom.modelo.PalavraChaveEstatistica;
+import br.com.digicom.modelo.PalavraChaveRaiz;
+import br.com.digicom.modelo.util.Util;
+
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
 import com.google.api.ads.adwords.axis.v201802.cm.Language;
 import com.google.api.ads.adwords.axis.v201802.cm.Money;
@@ -12,6 +17,8 @@ import com.google.api.ads.adwords.axis.v201802.cm.NetworkSetting;
 import com.google.api.ads.adwords.axis.v201802.cm.Paging;
 import com.google.api.ads.adwords.axis.v201802.o.Attribute;
 import com.google.api.ads.adwords.axis.v201802.o.AttributeType;
+import com.google.api.ads.adwords.axis.v201802.o.CompetitionSearchParameter;
+import com.google.api.ads.adwords.axis.v201802.o.CompetitionSearchParameterLevel;
 import com.google.api.ads.adwords.axis.v201802.o.DoubleAttribute;
 import com.google.api.ads.adwords.axis.v201802.o.IdeaType;
 import com.google.api.ads.adwords.axis.v201802.o.IntegerSetAttribute;
@@ -32,11 +39,6 @@ import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import com.google.api.ads.common.lib.utils.Maps;
 import com.google.common.base.Joiner;
 import com.google.common.primitives.Ints;
-
-import br.com.digicom.AdsService;
-import br.com.digicom.modelo.PalavraChaveEstatistica;
-import br.com.digicom.modelo.PalavraChaveRaiz;
-import br.com.digicom.modelo.util.Util;
 
 public class PalavraChaveIdeiaService extends AdsService {
 	
@@ -74,7 +76,15 @@ public class PalavraChaveIdeiaService extends AdsService {
 		//relatedToQuerySearchParameter.setQueries(new String[] { "mais vendas" });
 		relatedToQuerySearchParameter.setQueries(listaPalavra);
 		searchParameters.add(relatedToQuerySearchParameter);
+		
+		//CompetitionSearchParameter indice = new CompetitionSearchParameter();
+		//indice.setLevels(1, CompetitionSearchParameterLevel.LOW);
+	    //CompetitionSearchParameter competitionSearchParameter = new CompetitionSearchParameter();
+	    //CompetitionSearchParameterLevel[] levels = {CompetitionSearchParameterLevel.MEDIUM,CompetitionSearchParameterLevel.HIGH};
+	    //competitionSearchParameter.setLevels(levels);
+		//searchParameters.add(competitionSearchParameter);
 
+		
 		// Language setting (optional).
 		// The ID can be found in the documentation:
 		// https://developers.google.com/adwords/api/docs/appendix/languagecodes
@@ -98,8 +108,7 @@ public class PalavraChaveIdeiaService extends AdsService {
 		networkSearchParameter.setNetworkSetting(networkSetting);
 		searchParameters.add(networkSearchParameter);
 		
-		selector.setSearchParameters(
-			        searchParameters.toArray(new SearchParameter[searchParameters.size()]));
+		selector.setSearchParameters(searchParameters.toArray(new SearchParameter[searchParameters.size()]));
 
 		// Get keyword ideas.
 		TargetingIdeaPage page = targetingIdeaService.get(selector);
@@ -129,7 +138,7 @@ public class PalavraChaveIdeiaService extends AdsService {
 			estat.setMediaCpc(mediaCpc);
 			estat.setPalavraChaveGoogleId(keyword.getValue());
 			estat.setVolumePesquisa(averageMonthlySearches);
-			estat.setPalavraChaveRaizId(this.palavraRaiz.getPalavra());
+			estat.setPalavraChaveRaizId(((Integer) this.palavraRaiz.getId()).longValue());
 		
 			
 			System.out.printf("%d Keyword with text '%s', average monthly search volume %d, "

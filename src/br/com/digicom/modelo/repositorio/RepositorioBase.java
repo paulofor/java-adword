@@ -2,17 +2,21 @@ package br.com.digicom.modelo.repositorio;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import com.strongloop.android.loopback.ModelRepository;
-import com.strongloop.android.loopback.callbacks.JsonArrayParser;
-import com.strongloop.android.loopback.callbacks.ListCallback;
-import com.strongloop.android.remoting.adapters.RestContractItem;
 
 import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.CampanhaAnuncioResultado;
 import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
+import br.com.digicom.modelo.PalavraChaveEstatistica;
 import br.com.digicom.modelo.PalavraChaveRaiz;
+
+import com.strongloop.android.loopback.ModelRepository;
+import com.strongloop.android.loopback.callbacks.EmptyResponseParser;
+import com.strongloop.android.loopback.callbacks.JsonArrayParser;
+import com.strongloop.android.loopback.callbacks.ListCallback;
+import com.strongloop.android.loopback.callbacks.VoidCallback;
+import com.strongloop.android.remoting.adapters.RestContractItem;
 
 public class RepositorioBase {
 	
@@ -22,12 +26,34 @@ public class RepositorioBase {
 			super("PalavraChaveRaiz", PalavraChaveRaiz.class);
 		}
 		public void listaParaConsulta(final ListCallback<PalavraChaveRaiz> callback) {
-			RestContractItem contrato = new RestContractItem("PalavraChaveRaizs/listaParaConsultaTeste","GET");
+			RestContractItem contrato = new RestContractItem("PalavraChaveRaizs/listaParaConsulta","GET");
 			this.getRestAdapter().getContract().addItem(contrato, "PalavraChaveRaiz.listaParaConsulta");
 	        Map<String, Object> params = new HashMap<String, Object>();
 	        invokeStaticMethod("listaParaConsulta", params,
 	                new JsonArrayParser<PalavraChaveRaiz>(this, callback));
 	    }
+		@Override
+		protected String verificaNomeUrl(String nome) {
+			return "PalavraChaveRaizs";
+		}
+	}
+	
+	public static class PalavraChaveEstatisticaRepository extends ModelRepository<PalavraChaveEstatistica> {
+
+		public PalavraChaveEstatisticaRepository() {
+			super("PalavraChaveEstatistica", PalavraChaveEstatistica.class);
+		}
+		
+		public void insereLista(List<PalavraChaveEstatistica> listaItem, final VoidCallback voidCallback) {
+			RestContractItem contrato = new RestContractItem("PalavraChaveEstatisticas/insereLista","POST");
+			this.getRestAdapter().getContract().addItem(contrato, "PalavraChaveEstatistica.insereLista");
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        params.put("listaResultados", listaItem);
+	        invokeStaticMethod("insereLista", params, new EmptyResponseParser(voidCallback));
+	    }
+	    
+		
+		
 	}
 	
 
