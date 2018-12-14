@@ -38,12 +38,13 @@ public class GenericoService extends AdsService {
 
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
-		/*
-	    String query = "Select CampaignId, Id, Clicks, Cost "
-	    		+ "FROM AD_PERFORMANCE_REPORT";
-	    */
-		String query = "Select Id, Labels, Criteria, Clicks, Cost, Impressions " +
-				" FROM KEYWORDS_PERFORMANCE_REPORT where CampaignId = 1620493862";
+		
+	    String query = "Select CampaignName, Date, CampaignId, Id, Cost, Headline, Ctr, Clicks "
+	    		+ "FROM AD_PERFORMANCE_REPORT ";
+	    
+	   
+		//String query = "Select Id, Labels, Criteria, Clicks, Cost, Impressions " +
+		//		" FROM KEYWORDS_PERFORMANCE_REPORT where CampaignId = 1620493862";
 		//query = "Select Query, KeywordTextMatchingQuery, QueryTargetingStatus, KeywordId " +
 		//		" FROM SEARCH_QUERY_PERFORMANCE_REPORT where CampaignId = 1620493862";
 		//query = "Select SearchQuery " +
@@ -55,8 +56,9 @@ public class GenericoService extends AdsService {
 			reader = new BufferedReader(new InputStreamReader(response.getInputStream(), UTF_8));
 			String line;
 			Splitter splitter = Splitter.on(',');
+			int x = 0;
 			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
+				System.out.println((++x) + " = " + line);
 				List<String> values = splitter.splitToList(line);
 
 			}
