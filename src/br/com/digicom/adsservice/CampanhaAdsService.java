@@ -447,7 +447,7 @@ public class CampanhaAdsService extends AdsService {
 	public Calendar getDataInicial() {
 		Calendar date1 = Calendar.getInstance();
 		date1.add(Calendar.DATE, 1);
-		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
 			date1.add(Calendar.DATE, 1);
 		}
 		return date1;
@@ -477,7 +477,7 @@ public class CampanhaAdsService extends AdsService {
 		Calendar date1 = getDataInicial();
 		date1.add(Calendar.DATE, 1);
 
-		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY) {
+		while (date1.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
 			date1.add(Calendar.DATE, 1);
 		}
 		return date1;
