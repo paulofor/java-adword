@@ -93,7 +93,6 @@ public class CampanhaAnuncioResultado extends Model {
 	public void setAnuncioAds(Object anuncioAds) {
 		this.anuncioAds = new AnuncioAds();
 		BeanUtil.setProperties(this.anuncioAds, (Map<String, ? extends Object>) anuncioAds, true);
-
 	}
 
 	

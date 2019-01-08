@@ -14,7 +14,6 @@ public class CampanhaAds extends Model{
 	private List<CampanhaAnuncioResultado> campanhaAnuncioResultados;
 	
 	private String nome;
-	private Integer id;
 	private String idAds;
 	private String dataFinal;
 	private String dataInicial;
@@ -34,8 +33,19 @@ public class CampanhaAds extends Model{
 	
 	private String listaCampanha ;
 	private String urlAlvo;
-
 	
+	private SetupCampanha setupCampanha;
+	
+	
+	public SetupCampanha getSetupCampanha() {
+		return setupCampanha;
+	}
+
+
+	public void setSetupCampanha(Object setupCampanha) {
+		this.setupCampanha = new SetupCampanha();
+		BeanUtil.setProperties(this.setupCampanha, (Map<String, ? extends Object>) setupCampanha, true);
+	}
 	
 	
 	public List<CampanhaPalavraChaveResultado> getCampanhaPalavraChaveResultados() {
@@ -49,7 +59,7 @@ public class CampanhaAds extends Model{
 			BeanUtil.setProperties(objeto, (Map<String, ? extends Object>) campanhaPalavraChaveResultados.get(i), true);
 			this.campanhaPalavraChaveResultados.add((CampanhaPalavraChaveResultado) objeto);
 		}
-		System.out.println(this + " tam: " + this.campanhaPalavraChaveResultados.size());
+		
 	}
 
 	public List<CampanhaAnuncioResultado> getCampanhaAnuncioResultados() {
@@ -63,7 +73,7 @@ public class CampanhaAds extends Model{
 			BeanUtil.setProperties(objeto, (Map<String, ? extends Object>) campanhaAnuncioResultados.get(i), true);
 			this.campanhaAnuncioResultados.add((CampanhaAnuncioResultado) objeto);
 		}
-		System.out.println(this + " tam: " + this.campanhaAnuncioResultados.size());
+
 	}
 
 	public String getUrlAlvo() {
@@ -74,7 +84,11 @@ public class CampanhaAds extends Model{
 		this.urlAlvo = urlAlvo;
 	}
 
-	
+
+	public String toString() {
+		return "Campanha: " + this.nome + "( #" + this.getId() + ") - Anuncios: " + this.campanhaAnuncioResultados.size() +
+				", Palavra-Chave: " + this.campanhaPalavraChaveResultados.size();
+	}
 
 	
 	/*
@@ -101,13 +115,7 @@ public class CampanhaAds extends Model{
 		this.listaCampanha = listaCampanha;
 	}
 
-	public Integer getId() {
-		return id;
-	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getIdAds() {
 		return idAds;
@@ -208,9 +216,7 @@ public class CampanhaAds extends Model{
 	}
 
 	
-	public String toString() {
-		return "nome: " + this.nome + " , id: " + this.id;
-	}
+	
 
 	public String getDataPublicacao() {
 		return dataPublicacao;
