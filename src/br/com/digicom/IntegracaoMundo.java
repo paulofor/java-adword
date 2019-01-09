@@ -13,10 +13,8 @@ import br.com.digicom.modelo.repositorio.RepositorioBase;
 import br.com.digicom.modelo.util.Util;
 
 public class IntegracaoMundo {
-	
-	RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
-	
 
+	RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
 
 	public void criaCampanha(List<CampanhaAds> objects) {
 		CampanhaAdsService servico = new CampanhaAdsService();
@@ -29,6 +27,7 @@ public class IntegracaoMundo {
 				public void onSuccess() {
 					System.out.print("sucesso - alteracao campanha");
 				}
+
 				@Override
 				public void onError(Throwable t) {
 					// TODO Auto-generated method stub
@@ -39,43 +38,52 @@ public class IntegracaoMundo {
 			salvaPalavraChaveCampanha(campanha);
 		}
 	}
-	
-	private void salvaAnuncioCampanha(CampanhaAds campanha){
+
+	private void salvaAnuncioCampanha(CampanhaAds campanha) {
 		int pos = 0;
-		RepositorioBase.CampanhaAnuncioResultadoRepository rep = adapter.createRepository(RepositorioBase.CampanhaAnuncioResultadoRepository.class);
+		RepositorioBase.CampanhaAnuncioResultadoRepository rep = adapter
+				.createRepository(RepositorioBase.CampanhaAnuncioResultadoRepository.class);
 		for (CampanhaAnuncioResultado anuncio : campanha.getCampanhaAnuncioResultados()) {
 			System.out.println((pos++) + " - IDS Anuncio: " + anuncio.getIdAds());
-			anuncio.setRepository(rep);
-			anuncio.save(new VoidCallback() {
-				@Override
-				public void onSuccess() {
-					System.out.print("sucesso - alteracao ressultado");
-				}
-				@Override
-				public void onError(Throwable t) {
-					// TODO Auto-generated method stub
-					t.printStackTrace();
-				}
-			});
+			if (anuncio.getIdAds() != null) {
+				anuncio.setRepository(rep);
+				anuncio.save(new VoidCallback() {
+					@Override
+					public void onSuccess() {
+						System.out.print("sucesso - alteracao ressultado");
+					}
+
+					@Override
+					public void onError(Throwable t) {
+						// TODO Auto-generated method stub
+						t.printStackTrace();
+					}
+				});
+			}
 		}
 	}
-	private void salvaPalavraChaveCampanha(CampanhaAds campanha){
+
+	private void salvaPalavraChaveCampanha(CampanhaAds campanha) {
 		int pos = 0;
-		RepositorioBase.CampanhaPalavraChaveResultadoRepository rep = adapter.createRepository(RepositorioBase.CampanhaPalavraChaveResultadoRepository.class);
+		RepositorioBase.CampanhaPalavraChaveResultadoRepository rep = adapter
+				.createRepository(RepositorioBase.CampanhaPalavraChaveResultadoRepository.class);
 		for (CampanhaPalavraChaveResultado palavraChave : campanha.getCampanhaPalavraChaveResultados()) {
 			System.out.println((pos++) + " - IDS PalavraChave: " + palavraChave.getIdAds());
-			palavraChave.setRepository(rep);
-			palavraChave.save(new VoidCallback() {
-				@Override
-				public void onSuccess() {
-					System.out.print("sucesso - alteracao ressultado");
-				}
-				@Override
-				public void onError(Throwable t) {
-					// TODO Auto-generated method stub
-					t.printStackTrace();
-				}
-			});
+			if (palavraChave.getIdAds() != null) {
+				palavraChave.setRepository(rep);
+				palavraChave.save(new VoidCallback() {
+					@Override
+					public void onSuccess() {
+						System.out.print("sucesso - alteracao ressultado");
+					}
+
+					@Override
+					public void onError(Throwable t) {
+						// TODO Auto-generated method stub
+						t.printStackTrace();
+					}
+				});
+			}
 		}
 	}
 
@@ -87,6 +95,7 @@ public class IntegracaoMundo {
 				// TODO Auto-generated method stub
 				System.out.print("sucesso");
 			}
+
 			@Override
 			public void onError(Throwable t) {
 				// TODO Auto-generated method stub
@@ -104,6 +113,7 @@ public class IntegracaoMundo {
 				// TODO Auto-generated method stub
 				System.out.print("sucesso");
 			}
+
 			@Override
 			public void onError(Throwable t) {
 				// TODO Auto-generated method stub
@@ -112,7 +122,7 @@ public class IntegracaoMundo {
 
 		});
 	}
-	
+
 	public void atualizaPalavraChave(CampanhaPalavraChaveResultado item) {
 		item.save(new VoidCallback() {
 			@Override
@@ -120,6 +130,7 @@ public class IntegracaoMundo {
 				// TODO Auto-generated method stub
 				System.out.print("sucesso");
 			}
+
 			@Override
 			public void onError(Throwable t) {
 				// TODO Auto-generated method stub

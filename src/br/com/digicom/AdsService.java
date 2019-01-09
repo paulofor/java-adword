@@ -86,13 +86,14 @@ public abstract class AdsService {
 		} catch (ApiException apiException) {
 
 			apiException.printStackTrace();
-			System.err.println("Request failed due to ApiException. Underlying ApiErrors:");
+			//System.err.println("Request failed due to ApiException. Underlying ApiErrors:");
 			if (apiException.getErrors() != null) {
 				int i = 0;
 				for (ApiError apiError : apiException.getErrors()) {
 					System.err.printf("  Error %d: %s%n", i++, apiError);
 				}
 			}
+			System.exit(1);
 		} catch (RemoteException re) {
 			System.err.printf("Request failed unexpectedly due to RemoteException: %s%n",re);
 		}

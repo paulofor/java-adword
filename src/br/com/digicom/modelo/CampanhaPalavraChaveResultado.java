@@ -15,7 +15,8 @@ public class CampanhaPalavraChaveResultado extends Model {
 	private Integer palavraChaveAdsId;
 	private Integer campanhaAdsId;
 	
-	private PalavraChaveAds palavraChaveAds;
+	//private PalavraChaveAds palavraChaveAds;
+	private String palavraChaveGoogleId;
 	
 	
 	public void setId(Integer id) {
@@ -31,6 +32,7 @@ public class CampanhaPalavraChaveResultado extends Model {
 		map.put("id", this.getId());
 		map.put("palavraChaveAdsId", this.getPalavraChaveAdsId());
 		map.put("campanhaAdsId", this.getCampanhaAdsId());
+		map.put("palavraChaveGoogleId", this.getPalavraChaveGoogleId());
 		return map;
 	}
 	
@@ -71,7 +73,16 @@ public class CampanhaPalavraChaveResultado extends Model {
 	public void setCampanhaAdsId(Integer campanhaAdsId) {
 		this.campanhaAdsId = campanhaAdsId;
 	}
+
+	public String getPalavraChaveGoogleId() {
+		return palavraChaveGoogleId;
+	}
+
+	public void setPalavraChaveGoogleId(String palavraChaveGoogleId) {
+		this.palavraChaveGoogleId = palavraChaveGoogleId;
+	}
 	
+	/*
 	public PalavraChaveAds getPalavraChaveAds() {
 		return this.palavraChaveAds;
 	}
@@ -79,6 +90,8 @@ public class CampanhaPalavraChaveResultado extends Model {
 	public void setPalavraChaveAds(Object palavraChaveAds) {
 		this.palavraChaveAds = new PalavraChaveAds();
 		BeanUtil.setProperties(this.palavraChaveAds, (Map<String, ? extends Object>) palavraChaveAds, true);
-
 	}
+	*/
+	
+	
 }

@@ -30,9 +30,11 @@ public class CampanhaAds extends Model{
 	private Double orcamentoTotalExecutado;
 	private Integer paginaValidacaoWebId;
 	private Integer modeloCampanhaId;
+	private Integer setupCampanhaId;
 	
 	private String listaCampanha ;
 	private String urlAlvo;
+	private String urlAlvoMobile;
 	
 	private SetupCampanha setupCampanha;
 	
@@ -87,7 +89,7 @@ public class CampanhaAds extends Model{
 
 	public String toString() {
 		return "Campanha: " + this.nome + "( #" + this.getId() + ") - Anuncios: " + this.campanhaAnuncioResultados.size() +
-				", Palavra-Chave: " + this.campanhaPalavraChaveResultados.size();
+				", Palavra-Chave: " + this.campanhaPalavraChaveResultados.size() + " #Setup= " + this.getSetupCampanhaId();
 	}
 
 	
@@ -240,6 +242,26 @@ public class CampanhaAds extends Model{
 
 	public void setDataFechamento(String dataFechamento) {
 		this.dataFechamento = dataFechamento;
+	}
+
+
+	public String getUrlAlvoMobile() {
+		return urlAlvoMobile;
+	}
+
+
+	public void setUrlAlvoMobile(String urlAlvoMobile) {
+		this.urlAlvoMobile = urlAlvoMobile;
+	}
+
+
+	public Integer getSetupCampanhaId() {
+		return setupCampanhaId;
+	}
+
+
+	public void setSetupCampanhaId(Integer setupCampanhaId) {
+		this.setupCampanhaId = setupCampanhaId;
 	}
 	
 

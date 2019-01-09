@@ -165,11 +165,10 @@ public class CampanhaAdsService extends AdsService {
 			operation.setOperand(campaignCriterionDevice);
 			operation.setOperator(Operator.SET);
 			operations.add(operation);
-
-			CampaignCriterionReturnValue result = campaignCriterionService
-					.mutate((CampaignCriterionOperation[]) operations.toArray(new CampaignCriterionOperation[operations
-							.size()]));
 		}
+		CampaignCriterionReturnValue result = campaignCriterionService
+				.mutate((CampaignCriterionOperation[]) operations.toArray(new CampaignCriterionOperation[operations
+						.size()]));
 	}
 
 	private Long criaBudget(Budget budget, AdWordsServicesInterface adWordsServices, AdWordsSession session)
@@ -218,7 +217,7 @@ public class CampanhaAdsService extends AdsService {
 			expandedTextAd.setHeadlinePart2(anuncio.getAnuncioAds().getTitulo2());
 			expandedTextAd.setDescription(anuncio.getAnuncioAds().getDescricao1());
 			expandedTextAd.setFinalUrls(new String[] { campanha.getUrlAlvo() });
-			expandedTextAd.setFinalMobileUrls(finalMobileUrls)
+			expandedTextAd.setFinalMobileUrls(new String[] { campanha.getUrlAlvoMobile() });
 			
 			
 			// Create ad group ad.
@@ -237,8 +236,7 @@ public class CampanhaAdsService extends AdsService {
 			operations.add(adGroupAdOperation);
 		}
 		// Add ads.
-		AdGroupAdReturnValue result = adGroupAdService
-				.mutate(operations.toArray(new AdGroupAdOperation[operations.size()]));
+		AdGroupAdReturnValue result = adGroupAdService.mutate(operations.toArray(new AdGroupAdOperation[operations.size()]));
 
 		// Display ads.
 		int posicao = 0;
@@ -267,7 +265,7 @@ public class CampanhaAdsService extends AdsService {
 
 			// Create keywords.
 			Keyword keyword1 = new Keyword();
-			keyword1.setText(palavra.getPalavraChaveAds().getPalavra());
+			keyword1.setText(palavra.getPalavraChaveGoogleId());
 			KeywordMatchType tipoMatch = KeywordMatchType
 					.fromString(this.campanha.getSetupCampanha().getMatchPalavra());
 			keyword1.setMatchType(tipoMatch);
