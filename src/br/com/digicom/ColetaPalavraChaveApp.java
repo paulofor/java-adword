@@ -38,11 +38,11 @@ public class ColetaPalavraChaveApp {
 				System.out.println("Lista pra resultado contendo " + objects.size() + " palavras raiz.");
 				for (PalavraChaveRaiz item : objects) {
 					processaPalavraChaveRaiz(item);
-					try {
-						Thread.sleep(45000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					//try {
+					//	Thread.sleep(45000);
+					//} catch (InterruptedException e) {
+					//	e.printStackTrace();
+					//}
 				}
 			} 
         });
