@@ -49,6 +49,9 @@ public class CampanhaAds extends Model{
 		BeanUtil.setProperties(this.setupCampanha, (Map<String, ? extends Object>) setupCampanha, true);
 	}
 	
+	public void resetSetupCampanha() {
+		this.setupCampanha = null;
+	}
 	
 	public List<CampanhaPalavraChaveResultado> getCampanhaPalavraChaveResultados() {
 		return campanhaPalavraChaveResultados;

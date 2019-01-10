@@ -22,6 +22,7 @@ public class IntegracaoMundo {
 			servico.cria(campanha);
 			System.out.println("IdAds: " + campanha.getIdAds());
 			campanha.setDataPublicacao(Util.getDataAtualLoopback());
+			campanha.resetSetupCampanha();
 			campanha.save(new VoidCallback() {
 				@Override
 				public void onSuccess() {

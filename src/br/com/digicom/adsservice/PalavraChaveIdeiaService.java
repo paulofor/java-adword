@@ -10,30 +10,9 @@ import br.com.digicom.modelo.PalavraChaveEstatistica;
 import br.com.digicom.modelo.PalavraChaveRaiz;
 import br.com.digicom.modelo.util.Util;
 
-import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
-import com.google.api.ads.adwords.axis.v201802.cm.Language;
-import com.google.api.ads.adwords.axis.v201802.cm.Money;
-import com.google.api.ads.adwords.axis.v201802.cm.NetworkSetting;
-import com.google.api.ads.adwords.axis.v201802.cm.Paging;
-import com.google.api.ads.adwords.axis.v201802.o.Attribute;
-import com.google.api.ads.adwords.axis.v201802.o.AttributeType;
-import com.google.api.ads.adwords.axis.v201802.o.CompetitionSearchParameter;
-import com.google.api.ads.adwords.axis.v201802.o.CompetitionSearchParameterLevel;
-import com.google.api.ads.adwords.axis.v201802.o.DoubleAttribute;
-import com.google.api.ads.adwords.axis.v201802.o.IdeaType;
-import com.google.api.ads.adwords.axis.v201802.o.IntegerSetAttribute;
-import com.google.api.ads.adwords.axis.v201802.o.LanguageSearchParameter;
-import com.google.api.ads.adwords.axis.v201802.o.LongAttribute;
-import com.google.api.ads.adwords.axis.v201802.o.MoneyAttribute;
-import com.google.api.ads.adwords.axis.v201802.o.NetworkSearchParameter;
-import com.google.api.ads.adwords.axis.v201802.o.RelatedToQuerySearchParameter;
-import com.google.api.ads.adwords.axis.v201802.o.RequestType;
-import com.google.api.ads.adwords.axis.v201802.o.SearchParameter;
-import com.google.api.ads.adwords.axis.v201802.o.StringAttribute;
-import com.google.api.ads.adwords.axis.v201802.o.TargetingIdea;
-import com.google.api.ads.adwords.axis.v201802.o.TargetingIdeaPage;
-import com.google.api.ads.adwords.axis.v201802.o.TargetingIdeaSelector;
-import com.google.api.ads.adwords.axis.v201802.o.TargetingIdeaServiceInterface;
+import com.google.api.ads.adwords.axis.v201806.cm.*;
+import com.google.api.ads.adwords.axis.v201806.o.*;
+
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
 import com.google.api.ads.common.lib.utils.Maps;
@@ -123,6 +102,9 @@ public class PalavraChaveIdeiaService extends AdsService {
 			Map<AttributeType, Attribute> data = Maps.toMap(targetingIdea.getData());
 			StringAttribute keyword = (StringAttribute) data.get(AttributeType.KEYWORD_TEXT);
 
+			
+			
+			
 			IntegerSetAttribute categories = (IntegerSetAttribute) data.get(AttributeType.CATEGORY_PRODUCTS_AND_SERVICES);
 			String categoriesString = "(none)";
 			if (categories != null && categories.getValue() != null) {
