@@ -286,6 +286,17 @@ public class CampanhaAdsService extends AdsService {
 		adGroup.setName("Grp_" + this.campanha.getNome() + System.currentTimeMillis());
 		adGroup.setStatus(AdGroupStatus.ENABLED);
 		adGroup.setCampaignId(idCampanha);
+		
+		// Create ad group bid.
+		Long valor = (long) (0.28 * 1000000);
+	    BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
+	    Money cpcBidMoney = new Money();
+	    cpcBidMoney.setMicroAmount(valor);
+	    CpcBid bid = new CpcBid();
+	    bid.setBid(cpcBidMoney);
+	    biddingStrategyConfiguration.setBids(new Bids[] {bid});
+	    adGroup.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
+	    
 		// Set the rotation mode.
 		AdRotationMode tipoRotacao = AdRotationMode.fromString(this.campanha.getSetupCampanha().getRotacaoAnuncio());
 		AdGroupAdRotationMode rotationMode = new AdGroupAdRotationMode(tipoRotacao);
