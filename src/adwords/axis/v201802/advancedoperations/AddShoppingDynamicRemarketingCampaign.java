@@ -29,6 +29,7 @@ import com.google.api.ads.adwords.axis.v201802.cm.AdGroupOperation;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupReturnValue;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupServiceInterface;
 import com.google.api.ads.adwords.axis.v201802.cm.AdGroupStatus;
+import com.google.api.ads.adwords.axis.v201802.cm.AdvertisingChannelSubType;
 import com.google.api.ads.adwords.axis.v201802.cm.AdvertisingChannelType;
 import com.google.api.ads.adwords.axis.v201802.cm.ApiError;
 import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
@@ -210,6 +211,8 @@ public class AddShoppingDynamicRemarketingCampaign {
     campaign.setName("Shopping campaign #" + System.currentTimeMillis());
     // Dynamic remarketing campaigns are only available on the Google Display Network.
     campaign.setAdvertisingChannelType(AdvertisingChannelType.DISPLAY);
+    campaign.setAdvertisingChannelSubType(AdvertisingChannelSubType.SEARCH_EXPRESS);
+    //campaign.setAdvertisingChannelSubType(AdvertisingChannelSubType.DISPLAY_EXPRESS);
     campaign.setStatus(CampaignStatus.PAUSED);
 
     Budget budget = new Budget();

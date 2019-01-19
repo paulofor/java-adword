@@ -38,7 +38,65 @@ public class CampanhaAds extends Model{
 	
 	private SetupCampanha setupCampanha;
 	
+	private Double ctr;
+	private Double cpcMedio;
+	private Double conversao;
+	private Double custoConversao;
+	private Double taxaConversao;
 	
+	
+	
+	
+	public Double getCtr() {
+		return ctr;
+	}
+
+
+	public void setCtr(Double ctr) {
+		this.ctr = ctr;
+	}
+
+
+	public Double getCpcMedio() {
+		return cpcMedio;
+	}
+
+
+	public void setCpcMedio(Double cpcMedio) {
+		this.cpcMedio = cpcMedio;
+	}
+
+
+	public Double getConversao() {
+		return conversao;
+	}
+
+
+	public void setConversao(Double conversao) {
+		this.conversao = conversao;
+	}
+
+
+	public Double getCustoConversao() {
+		return custoConversao;
+	}
+
+
+	public void setCustoConversao(Double custoConversao) {
+		this.custoConversao = custoConversao;
+	}
+
+
+	public Double getTaxaConversao() {
+		return taxaConversao;
+	}
+
+
+	public void setTaxaConversao(Double taxaConversao) {
+		this.taxaConversao = taxaConversao;
+	}
+
+
 	public SetupCampanha getSetupCampanha() {
 		return setupCampanha;
 	}

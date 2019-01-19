@@ -55,6 +55,15 @@ public class CampanhaAdsService extends AdsService {
 		campaign.setStartDate(this.converteData(this.getDataInicial()));
 		campaign.setEndDate(this.converteData(this.getDataFinal()));
 		campaign.setAdvertisingChannelType(AdvertisingChannelType.SEARCH);
+		
+		 // Set the campaign network options to Search and Search Network.
+	    NetworkSetting networkSetting = new NetworkSetting();
+	    networkSetting.setTargetGoogleSearch(true);
+	    networkSetting.setTargetSearchNetwork(true);
+	    networkSetting.setTargetContentNetwork(false);
+	    networkSetting.setTargetPartnerSearchNetwork(false);
+	    campaign.setNetworkSetting(networkSetting);
+		
 		campaign.setBiddingStrategyConfiguration(biddingStrategyConfiguration);
 		campaign.setBudget(budget);
 
@@ -283,12 +292,12 @@ public class CampanhaAdsService extends AdsService {
 
 		// Create ad group.
 		AdGroup adGroup = new AdGroup();
-		adGroup.setName("Grp_" + this.campanha.getNome() + System.currentTimeMillis());
+		adGroup.setName("Grp_" + this.campanha.getNome() + "_" + System.currentTimeMillis());
 		adGroup.setStatus(AdGroupStatus.ENABLED);
 		adGroup.setCampaignId(idCampanha);
 		
 		// Create ad group bid.
-		Long valor = (long) (0.28 * 1000000);
+		Long valor = (long) (campanha.getSetupCampanha().getMaxCpcGrupoAnuncio() * 1000000);
 	    BiddingStrategyConfiguration biddingStrategyConfiguration = new BiddingStrategyConfiguration();
 	    Money cpcBidMoney = new Money();
 	    cpcBidMoney.setMicroAmount(valor);

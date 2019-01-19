@@ -25,7 +25,7 @@ public class ObtemResultadoCampanha {
 	private static void processa() {
 		System.out.println("Ola Mundo");
 		RepositorioBase.CampanhaAdRepository rep = adapter.createRepository(RepositorioBase.CampanhaAdRepository.class);
-		rep.listaParaResultado(44, new ListCallback<CampanhaAds>() { 
+		rep.listaParaResultado(new ListCallback<CampanhaAds>() { 
 			@Override
 			public void onError(Throwable t) {
 				t.printStackTrace();
@@ -56,7 +56,7 @@ public class ObtemResultadoCampanha {
 	
 	private static void processaAnuncios(CampanhaAds campanha) {
 		RepositorioBase.CampanhaAnuncioResultadoRepository rep = adapter.createRepository(RepositorioBase.CampanhaAnuncioResultadoRepository.class);
-		rep.listaParaResultadoPorIdCampanha(campanha.getId(), new ListCallback<CampanhaAnuncioResultado>() { 
+		rep.listaParaResultadoPorIdCampanha((Integer) campanha.getId(), new ListCallback<CampanhaAnuncioResultado>() { 
 			@Override
 			public void onError(Throwable t) {
 				t.printStackTrace();
@@ -74,14 +74,14 @@ public class ObtemResultadoCampanha {
 	
 	private static void processaPalavraChave(CampanhaAds campanha) {
 		RepositorioBase.CampanhaPalavraChaveResultadoRepository rep = adapter.createRepository(RepositorioBase.CampanhaPalavraChaveResultadoRepository.class);
-		rep.listaParaResultadoPorIdCampanha(campanha.getId(), new ListCallback<CampanhaPalavraChaveResultado>() { 
+		rep.listaParaResultadoPorIdCampanha((Integer) campanha.getId(), new ListCallback<CampanhaPalavraChaveResultado>() { 
 			@Override
 			public void onError(Throwable t) {
 				t.printStackTrace();
 			}
 			@Override
 			public void onSuccess(List<CampanhaPalavraChaveResultado> objects) {
-				System.out.println("Lista pra resultado contendo " + objects.size() + " anuncios.");
+				System.out.println("Lista pra resultado contendo " + objects.size() + " palavras chaves.");
 				for (CampanhaPalavraChaveResultado item : objects) {
 					processaPalavraChave(item);
 				}

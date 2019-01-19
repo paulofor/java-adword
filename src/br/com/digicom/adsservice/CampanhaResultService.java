@@ -40,7 +40,7 @@ public class CampanhaResultService extends AdsService {
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
 		
-	    String query = "Select  Impressions , Clicks, Cost, CampaignStatus, EndDate " 
+	    String query = "Select  Impressions , Clicks, Cost, CampaignStatus, EndDate, Ctr, AverageCpc , Conversions, ConversionRate, CostPerConversion "
 	    		+ "FROM CAMPAIGN_PERFORMANCE_REPORT "
 	    		+ "Where CampaignId = " + campanhaResult.getIdAds();
 		BufferedReader reader = null;
@@ -50,15 +50,27 @@ public class CampanhaResultService extends AdsService {
 			String line;
 			Splitter splitter = Splitter.on(',');
 			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
+				System.out.println("Linha:" + line);
 				List<String> values = splitter.splitToList(line);
 				Integer impressao = Integer.parseInt(values.get(0));
 				Integer click = Integer.parseInt(values.get(1));
 				Double custo = Double.parseDouble(values.get(2));
 				custo = custo / 1000000;
+				Double ctr = Double.parseDouble(values.get(5).replaceAll("%", ""));
+				Double averageCpc = Double.parseDouble(values.get(6));
+				averageCpc = averageCpc / 1000000;
+				Double converions = Double.parseDouble(values.get(7));
+				Double conversionRate = Double.parseDouble(values.get(8).replaceAll("%", ""));
+				Double costPerConversion = Double.parseDouble(values.get(9));
+				costPerConversion = costPerConversion / 1000000;
 				campanhaResult.setOrcamentoTotalExecutado(custo);
 				campanhaResult.setQuantidadeImpressao(impressao);
 				campanhaResult.setQuantidadeClique(click);
+				campanhaResult.setCtr(ctr);
+				campanhaResult.setCpcMedio(averageCpc);
+				campanhaResult.setConversao(converions);
+				campanhaResult.setTaxaConversao(conversionRate);
+				campanhaResult.setCustoConversao(costPerConversion);
 			}
 
 			} catch (ReportException e) {

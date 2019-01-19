@@ -18,6 +18,66 @@ public class CampanhaAnuncioResultado extends Model {
 
 	private AnuncioAds anuncioAds;
 	
+	private Double ctr;
+	private Double cpcMedio;
+	private Double conversao;
+	private Double custoConversao;
+	private Double taxaConversao;
+	
+	
+	
+	
+	public Double getCtr() {
+		return ctr;
+	}
+
+
+	public void setCtr(Double ctr) {
+		this.ctr = ctr;
+	}
+
+
+	public Double getCpcMedio() {
+		return cpcMedio;
+	}
+
+
+	public void setCpcMedio(Double cpcMedio) {
+		this.cpcMedio = cpcMedio;
+	}
+
+
+	public Double getConversao() {
+		return conversao;
+	}
+
+
+	public void setConversao(Double conversao) {
+		this.conversao = conversao;
+	}
+
+
+	public Double getCustoConversao() {
+		return custoConversao;
+	}
+
+
+	public void setCustoConversao(Double custoConversao) {
+		this.custoConversao = custoConversao;
+	}
+
+
+	public Double getTaxaConversao() {
+		return taxaConversao;
+	}
+
+
+	public void setTaxaConversao(Double taxaConversao) {
+		this.taxaConversao = taxaConversao;
+	}
+
+
+	
 	
 	public void setId(Integer id) {
 		this.setIdObjeto(id);
@@ -32,6 +92,11 @@ public class CampanhaAnuncioResultado extends Model {
 		map.put("id", this.getId());
 		map.put("anuncioAdsId", this.getAnuncioAdsId());
 		map.put("campanhaAdsId", this.getCampanhaAdsId());
+		map.put("ctr", (ctr!=null?ctr:0));
+		map.put("cpcMedio", (cpcMedio!=null?cpcMedio:0));
+		map.put("conversao", (conversao!=null?conversao:0));
+		map.put("custoConversao", (custoConversao!=null?custoConversao:0));
+		map.put("taxaConversao", (taxaConversao!=null?taxaConversao:0));
 		return map;
 	}
 

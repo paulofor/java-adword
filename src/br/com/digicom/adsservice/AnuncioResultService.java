@@ -39,7 +39,7 @@ public class AnuncioResultService extends AdsService {
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
 		
-	    String query = "Select Impressions , Clicks, Cost "
+	    String query = "Select Impressions , Clicks, Cost, Ctr, AverageCpc , Conversions, ConversionRate, CostPerConversion "
 	    		+ "FROM AD_PERFORMANCE_REPORT where Id = " + anuncio.getIdAds() ;
 	    		
 		BufferedReader reader = null;
@@ -55,9 +55,22 @@ public class AnuncioResultService extends AdsService {
 				Integer click = Integer.parseInt(values.get(1));
 				Double custo = Double.parseDouble(values.get(2));
 				custo = custo / 1000000;
+				Double ctr = Double.parseDouble(values.get(3).replaceAll("%", ""));
+				Double averageCpc = Double.parseDouble(values.get(4));
+				averageCpc = averageCpc / 1000000;
+				Double converions = Double.parseDouble(values.get(5));
+				Double conversionRate = Double.parseDouble(values.get(6).replaceAll("%", ""));
+				Double costPerConversion = Double.parseDouble(values.get(7));
+				costPerConversion = costPerConversion / 1000000;
+								
 				anuncio.setCusto(custo);
 				anuncio.setQuantidadeImpressao(impressao);
 				anuncio.setQuantidadeClique(click);
+				anuncio.setCtr(ctr);
+				anuncio.setCpcMedio(averageCpc);
+				anuncio.setConversao(converions);
+				anuncio.setTaxaConversao(conversionRate);
+				anuncio.setCustoConversao(costPerConversion);
 			}
 			} catch (ReportException e) {
 			e.printStackTrace();

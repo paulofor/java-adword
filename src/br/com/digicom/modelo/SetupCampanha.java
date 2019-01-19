@@ -14,8 +14,17 @@ public class SetupCampanha extends Model {
 	private String rotacaoAnuncio;
 	private Long permiteEdicao;
 	
+	private Double maxCpcGrupoAnuncio;
 	
 	
+	
+	
+	public Double getMaxCpcGrupoAnuncio() {
+		return maxCpcGrupoAnuncio;
+	}
+	public void setMaxCpcGrupoAnuncio(Double maxCpcGrupoAnuncio) {
+		this.maxCpcGrupoAnuncio = maxCpcGrupoAnuncio;
+	}
 	public String getNome() {
 		return nome;
 	}

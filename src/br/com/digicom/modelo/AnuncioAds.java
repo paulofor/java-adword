@@ -17,6 +17,9 @@ public class AnuncioAds extends Model {
 	private Integer impressao;
 	private Integer click;
 
+	
+	
+	
 	public String getTitulo1() {
 		return titulo1;
 	}

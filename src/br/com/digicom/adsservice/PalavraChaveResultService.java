@@ -44,7 +44,7 @@ public class PalavraChaveResultService extends AdsService {
 		palavraChave.setQuantidadeImpressao(0);
 		
 		
-	    String query = "Select Impressions , Clicks, Cost "
+	    String query = "Select Impressions , Clicks, Cost, Ctr, AverageCpc , Conversions, ConversionRate, CostPerConversion  "
 	    		+ "FROM KEYWORDS_PERFORMANCE_REPORT where Id = " + palavraChave.getIdAds() ;
 	    		
 		BufferedReader reader = null;
@@ -60,9 +60,24 @@ public class PalavraChaveResultService extends AdsService {
 				Integer click = Integer.parseInt(values.get(1));
 				Double custo = Double.parseDouble(values.get(2));
 				custo = custo / 1000000;
+				Double ctr = Double.parseDouble(values.get(3).replaceAll("%", ""));
+				Double averageCpc = Double.parseDouble(values.get(4));
+				averageCpc = averageCpc / 1000000;
+				Double converions = Double.parseDouble(values.get(5));
+				Double conversionRate = Double.parseDouble(values.get(6).replaceAll("%", ""));
+				Double costPerConversion = Double.parseDouble(values.get(7));
+				costPerConversion = costPerConversion / 1000000;
+				
+				
 				palavraChave.setCusto(custo);
 				palavraChave.setQuantidadeImpressao(impressao);
 				palavraChave.setQuantidadeClique(click);
+				
+				palavraChave.setCtr(ctr);
+				palavraChave.setCpcMedio(averageCpc);
+				palavraChave.setConversao(converions);
+				palavraChave.setTaxaConversao(conversionRate);
+				palavraChave.setCustoConversao(costPerConversion);
 			}
 			} catch (ReportException e) {
 			e.printStackTrace();
