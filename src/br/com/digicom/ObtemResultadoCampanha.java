@@ -83,7 +83,7 @@ public class ObtemResultadoCampanha {
 			public void onSuccess(List<CampanhaPalavraChaveResultado> objects) {
 				System.out.println("Lista pra resultado contendo " + objects.size() + " palavras chaves.");
 				for (CampanhaPalavraChaveResultado item : objects) {
-					processaPalavraChave(item);
+					processaPalavraChave(item, campanha);
 				}
 			}
 			
@@ -101,10 +101,10 @@ public class ObtemResultadoCampanha {
 		facade.atualizaAnuncio(item);
 	} 
 	
-	private static void processaPalavraChave(CampanhaPalavraChaveResultado item) {
+	private static void processaPalavraChave(CampanhaPalavraChaveResultado item, CampanhaAds campanha) {
 		System.out.println("Atualizar palavra-chave " + item.getIdAds());
 		PalavraChaveResultService srv = new PalavraChaveResultService();
-		srv.atualizaResultado(item);
+		srv.atualizaResultado(item, campanha);
 		
 
 		IntegracaoMundo facade = new IntegracaoMundo();

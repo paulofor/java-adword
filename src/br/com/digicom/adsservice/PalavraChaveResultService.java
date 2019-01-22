@@ -20,12 +20,13 @@ import com.google.api.ads.adwords.lib.utils.v201802.ReportDownloaderInterface;
 import com.google.common.base.Splitter;
 
 import br.com.digicom.AdsService;
-import br.com.digicom.modelo.CampanhaAnuncioResultado;
+import br.com.digicom.modelo.CampanhaAds;
 import br.com.digicom.modelo.CampanhaPalavraChaveResultado;
 
 public class PalavraChaveResultService extends AdsService {
 	
 	private CampanhaPalavraChaveResultado palavraChave = null;
+	private CampanhaAds campanha = null;
 
 	@Override
 	protected void runExample(AdWordsServicesInterface adWordsServices, AdWordsSession session)
@@ -45,7 +46,7 @@ public class PalavraChaveResultService extends AdsService {
 		
 		
 	    String query = "Select Impressions , Clicks, Cost, Ctr, AverageCpc , Conversions, ConversionRate, CostPerConversion  "
-	    		+ "FROM KEYWORDS_PERFORMANCE_REPORT where Id = " + palavraChave.getIdAds() ;
+	    		+ "FROM KEYWORDS_PERFORMANCE_REPORT where Id = " + palavraChave.getIdAds() + " and CampaignId = " + campanha.getIdAds();
 	    		
 		BufferedReader reader = null;
 		try {
@@ -96,8 +97,9 @@ public class PalavraChaveResultService extends AdsService {
 		}
 	}
 	
-	public void atualizaResultado(CampanhaPalavraChaveResultado palavraChave) {
+	public void atualizaResultado(CampanhaPalavraChaveResultado palavraChave, CampanhaAds campanha) {
 		this.palavraChave = palavraChave;
+		this.campanha = campanha;
 		super.executa();
 	}
 

@@ -39,12 +39,13 @@ public class GenericoService extends AdsService {
 		ReportDownloaderInterface reportDownloader = adWordsServices.getUtility(session,ReportDownloaderInterface.class);
 
 		
-	    String query = "Select CampaignName, Date, CampaignId, Id, Cost, Headline, Ctr, Clicks "
-	    		+ "FROM AD_PERFORMANCE_REPORT ";
+	    //String query = "Select CampaignName, Date, CampaignId, Id, Cost, Headline, Ctr, Clicks "
+	    //		+ "FROM AD_PERFORMANCE_REPORT ";
 	    
-	   
+	    String query = "Select Impressions , Clicks, Cost, Ctr, AverageCpc , Conversions, ConversionRate, CostPerConversion  "
+	    		+ "FROM KEYWORDS_PERFORMANCE_REPORT where Id = 261010218 and  CampaignId = 1674137918";
 		//String query = "Select Id, Labels, Criteria, Clicks, Cost, Impressions " +
-		//		" FROM KEYWORDS_PERFORMANCE_REPORT where CampaignId = 1620493862";
+		//		" FROM KEYWORDS_PERFORMANCE_REPORT where CampaignId = 1674137918";
 		//query = "Select Query, KeywordTextMatchingQuery, QueryTargetingStatus, KeywordId " +
 		//		" FROM SEARCH_QUERY_PERFORMANCE_REPORT where CampaignId = 1620493862";
 		//query = "Select SearchQuery " +
