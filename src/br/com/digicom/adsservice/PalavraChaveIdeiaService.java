@@ -44,7 +44,7 @@ public class PalavraChaveIdeiaService extends AdsService {
 		// Set selector paging (required for targeting idea service).
 		Paging paging = new Paging();
 		paging.setStartIndex(0);
-		paging.setNumberResults(500);
+		paging.setNumberResults(350);
 		selector.setPaging(paging);
 
 		List<SearchParameter> searchParameters = new ArrayList<>();
@@ -122,12 +122,15 @@ public class PalavraChaveIdeiaService extends AdsService {
 			estat.setVolumePesquisa(averageMonthlySearches);
 			estat.setPalavraChaveRaizId(((Integer) this.palavraRaiz.getId()).longValue());
 		
-			
+			/*
 			System.out.printf("%d Keyword with text '%s', average monthly search volume %d, "
 					+ "average CPC  %.4f, and competition %.2f "
 					+ "was found with categories: %s%n", cont, keyword.getValue(), averageMonthlySearches,
 					mediaCpc , competition,
 			categoriesString);
+			*/
+			
+			System.out.println(estat);
 			
 			listaResultado.add(estat);
 		}

@@ -72,7 +72,7 @@ public class ObtemResultadoCampanha {
         });
 	}
 	
-	private static void processaPalavraChave(CampanhaAds campanha) {
+	private static void processaPalavraChave(final CampanhaAds campanha) {
 		RepositorioBase.CampanhaPalavraChaveResultadoRepository rep = adapter.createRepository(RepositorioBase.CampanhaPalavraChaveResultadoRepository.class);
 		rep.listaParaResultadoPorIdCampanha((Integer) campanha.getId(), new ListCallback<CampanhaPalavraChaveResultado>() { 
 			@Override

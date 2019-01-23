@@ -86,5 +86,9 @@ public class PalavraChaveEstatistica extends Model implements ItemListaLoopback 
 	 * " \"IndiceCompeticao\" : " + this.IndiceCompeticao + " " + " } "; return
 	 * saida; }
 	 */
+	
+	public String toString() {
+		return this.palavraChaveGoogleId + " Vol: " + this.volumePesquisa + " Cpc: " + this.mediaCpc;
+	}
 
 }
