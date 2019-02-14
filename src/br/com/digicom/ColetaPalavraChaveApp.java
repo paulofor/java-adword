@@ -14,10 +14,9 @@ import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 public class ColetaPalavraChaveApp {
 
-	private static RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
+	//private static RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
 
-	// private static RestAdapter adapter = new
-	// RestAdapter("http://localhost:21101/api");
+	private static RestAdapter adapter = new RestAdapter("http://localhost:21101/api");
 
 	/**
 	 * @param args
