@@ -8,19 +8,18 @@ import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import com.google.api.ads.adwords.axis.v201802.cm.ApiException;
+import br.com.digicom.AdsService;
+
+import com.google.api.ads.adwords.axis.v201806.cm.ApiException;
 import com.google.api.ads.adwords.lib.client.AdWordsSession;
 import com.google.api.ads.adwords.lib.client.reporting.ReportingConfiguration;
 import com.google.api.ads.adwords.lib.factory.AdWordsServicesInterface;
-import com.google.api.ads.adwords.lib.jaxb.v201802.DownloadFormat;
+import com.google.api.ads.adwords.lib.jaxb.v201806.DownloadFormat;
 import com.google.api.ads.adwords.lib.utils.ReportDownloadResponse;
 import com.google.api.ads.adwords.lib.utils.ReportDownloadResponseException;
 import com.google.api.ads.adwords.lib.utils.ReportException;
-import com.google.api.ads.adwords.lib.utils.v201802.ReportDownloaderInterface;
+import com.google.api.ads.adwords.lib.utils.v201806.ReportDownloaderInterface;
 import com.google.common.base.Splitter;
-
-import br.com.digicom.AdsService;
-import br.com.digicom.modelo.CampanhaAnuncioResultado;
 
 public class GenericoService extends AdsService {
 	
