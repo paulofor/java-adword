@@ -338,6 +338,7 @@ public class RestAdapter extends Adapter {
             }
 
             BoundRequestBuilder request = prepareRequest(method, baseUrl + path);
+            request.setRequestTimeout(3 * 60000);
             
             System.out.println(baseUrl + path + " (" + method + ")");
 
