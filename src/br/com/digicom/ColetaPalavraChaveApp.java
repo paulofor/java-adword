@@ -14,9 +14,9 @@ import com.strongloop.android.loopback.callbacks.VoidCallback;
 
 public class ColetaPalavraChaveApp {
 
-	//private static RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
+	private static RestAdapter adapter = new RestAdapter("http://validacao.kinghost.net:21101/api");
 
-	private static RestAdapter adapter = new RestAdapter("http://localhost:21101/api");
+	//private static RestAdapter adapter = new RestAdapter("http://localhost:21101/api");
 
 	/**
 	 * @param args
@@ -93,7 +93,7 @@ public class ColetaPalavraChaveApp {
 				public void onError(Throwable t) {
 					System.out.println("Falhou o insereLista de " + item.getPalavra());
 					t.printStackTrace();
-					System.exit(-1);
+					//System.exit(-1);
 				}
 
 				@Override
