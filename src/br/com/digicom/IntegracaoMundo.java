@@ -75,7 +75,7 @@ public class IntegracaoMundo {
 				palavraChave.save(new VoidCallback() {
 					@Override
 					public void onSuccess() {
-						System.out.print("sucesso - alteracao ressultado");
+						System.out.print("sucesso - alteracao resultado id : ");
 					}
 
 					@Override
@@ -88,13 +88,13 @@ public class IntegracaoMundo {
 		}
 	}
 
-	public void atualizaCampanha(CampanhaAds item) {
+	public void atualizaCampanha(final CampanhaAds item) {
 		CampanhaAdsService servico = new CampanhaAdsService();
 		item.save(new VoidCallback() {
 			@Override
 			public void onSuccess() {
 				// TODO Auto-generated method stub
-				System.out.print("sucesso");
+				System.out.print("sucesso" + item.getId());
 			}
 
 			@Override

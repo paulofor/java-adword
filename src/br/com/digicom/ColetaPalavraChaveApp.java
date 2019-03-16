@@ -41,7 +41,7 @@ public class ColetaPalavraChaveApp {
 				for (PalavraChaveRaiz item : objects) {
 					processaPalavraChaveRaiz(item);
 					try {
-						Thread.sleep(45000);
+						Thread.sleep(1000* 60);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

@@ -62,6 +62,15 @@ public class RepositorioBase {
 			super("CampanhaAd", CampanhaAds.class);
 		}
 		
+		public void atualizaResultado(final CampanhaAds campanha, final VoidCallback callback) {
+			RestContractItem contrato = new RestContractItem("CampanhaAds/atualizaResultado","POST");
+			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAd.atualizaResultado");
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        params.put("campanha", campanha);
+	        invokeStaticMethod("atualizaResultado", params, new EmptyResponseParser(callback));
+		}
+		
+		
 		public void listaPendente(final ListCallback<CampanhaAds> callback) {
 			RestContractItem contrato = new RestContractItem("CampanhaAds/listaParaPublicar","GET");
 			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAd.listaParaPublicar");
@@ -91,6 +100,13 @@ public class RepositorioBase {
 	        params.put("idCampanha", id);
 	        invokeStaticMethod("listaParaResultadoTeste", params,
 	                new JsonArrayParser<CampanhaAds>(this, callback));
+	    }
+		public void calculaResultados(int id, final VoidCallback callback) {
+			RestContractItem contrato = new RestContractItem("CampanhaAds/calculaResultados","GET");
+			this.getRestAdapter().getContract().addItem(contrato, "CampanhaAd.calculaResultados");
+	        Map<String, Object> params = new HashMap<String, Object>();
+	        params.put("idCampanha", id);
+	        invokeStaticMethod("calculaResultados", params, new EmptyResponseParser(callback));
 	    }
 	}
 	
